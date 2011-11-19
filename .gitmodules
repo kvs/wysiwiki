@@ -13,3 +13,6 @@
 [submodule "vendor/jquery-ui"]
 	path = vendor/jquery-ui
 	url = git://github.com/jquery/jquery-ui.git
+[submodule "vendor/LABjs"]
+	path = vendor/LABjs
+	url = git://github.com/getify/LABjs.git
