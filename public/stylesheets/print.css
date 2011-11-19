@@ -1,0 +1,47 @@
+#notify, #toolpanel, #editpanel, #footer {
+  display: none !important;
+}
+
+body {
+  background: #fff;
+  font-size: 0.9em;
+  color: #000;
+}
+
+#page {
+  margin: 0;
+  width: auto;
+  background: #fff;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+}
+
+#output {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.print {
+  display: inline !important;
+}
+
+a {
+  text-decoration: none !important;
+  color: #000 !important;
+}
+
+span.linkref.print {
+  vertical-align: super;
+  font-size: 0.5em;
+}
+
+ul.reflist.print {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style-type: none !important;
+}
+ul.reflist.print li {
+  margin: 0 !important;
+  padding: 0 !important;
+}
