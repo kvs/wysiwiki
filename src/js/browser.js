@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  // Determine page-name, and attempt to load it.
+  var pagename = window.location.pathname;
+  $.get("/documents/" + pagename + ".md", function(data) {
+    $("#output > div").first().empty().append(markdown.makeHtml(data));
+  });
   
   // Ace highlighter
   
@@ -340,7 +345,7 @@ $(document).ready(function () {
     if (password !== false) {
       payload.password = password;
     }
-    $.post("/" + pagename + ".json", payload, function (ret) {
+    $.post("/documents/" + pagename + ".json", payload, function (ret) {
       if (ret && ret.status === "success") {
         content = cont;
         notify.showMessage("Saved.", "success");
