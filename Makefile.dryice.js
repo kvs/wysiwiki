@@ -1,4 +1,12 @@
+#!/usr/bin/env node
+//
+// Concatenate and optionally minify JavaScript and CSS
+
 var copy = require('dryice').copy;
+
+var dst_js  = 'public/javascripts';
+var dst_css = 'public/stylesheets';
+
 
 /**
   * Helper functions
@@ -12,17 +20,17 @@ copy.filter.separate.onRead = true;
 /**
   * LABjs 
  **/
-console.log('* javascripts/LAB.min.js');
+console.log('* ' + dst_js + '/LAB.min.js');
 copy({
     source: 'vendor/LABjs/LAB.min.js',
-    dest: 'public/javascripts/LAB.min.js'
+    dest: dst_js + '/LAB.min.js'
 });
 
 
 /**
   * browser.js
  **/
-console.log('* javascripts/browser.js');
+console.log('* ' + dst_js + '/browser.js');
 
 var ace_raw_js = copy.createDataObject();
 var ace_min_js = copy.createDataObject();
@@ -73,7 +81,7 @@ copy({
 // Build un-minified target
 copy({
     source: [ ace_raw_js, browser_js ],
-    dest:   'public/javascripts/browser-uncompressed.js'
+    dest:   dst_js + '/browser-uncompressed.js'
 });
 
 // Minify source, add to Ace-code, and build minified target
@@ -84,14 +92,14 @@ copy({
 });
 copy({
     source: ace_min_js,
-    dest:   'public/javascripts/browser.js'
+    dest:   dst_js + '/browser.js'
 });
 
 
 /**
   * browser.css
  **/
-console.log('* stylesheets/browser.css');
+console.log('* ' + dst_css + '/browser.css');
 
 copy({
     source: ['src/css/browser.css',
@@ -100,5 +108,5 @@ copy({
              'src/css/sprites.css'
     ],
     filter: function (data) { return data + "\n"; },
-    dest: 'public/stylesheets/browser.css'
+    dest: dst_css + '/browser.css'
 });
