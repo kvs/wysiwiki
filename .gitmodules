@@ -1,0 +1,12 @@
+[submodule "vendor/mdext"]
+	path = vendor/mdext
+	url = git://github.com/fivesixty/mdext.git
+[submodule "vendor/ace"]
+	path = vendor/ace
+	url = git://github.com/ajaxorg/ace.git
+[submodule "vendor/store.js"]
+	path = vendor/store.js
+	url = git://github.com/marcuswestin/store.js.git
+[submodule "vendor/quickdiff"]
+	path = vendor/quickdiff
+	url = git://github.com/fivesixty/quickdiff.git
