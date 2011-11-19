@@ -239,30 +239,16 @@ $(document).ready(function () {
   toolpanel.setPasswordReq(passreq || newdocument);
   
   // Toggle editing. If we haven't loaded the content, then load it via AJAX.
-  $("#edit-enable a").click(function () {
-    if (!loaded) {
-      inputarea.val("Loading..");
-      $.getJSON("/" + Page.pagename() + ".json", function (data) {
-        inputarea.val(data.text);
-        loaded = true;
-        Page.setNeedsRedraw();
-      });
-    }
-
-    Page.editing(!Page.editing());
-    return false;
-  });
-  
   var toggleEditOn = function () {
     editpanel.slide(true);
     toolpanel.slide(true);
     page.slide(true);
     if (!loaded) {
       suppress_redraw = true;
-      editor.getSession().setValue("Loading..")
-      $.getJSON("/" + pagename + ".json", function (data) {
-        content = data.text;
-        editor.getSession().setValue(data.text);
+      editor.getSession().setValue("Loading..");
+      $.get("/documents/" + pagename + ".md", function (data) {
+        content = data;
+        editor.getSession().setValue(data);
         editor.renderer.scrollToY(0);
         loaded = true;
         suppress_redraw = false;
