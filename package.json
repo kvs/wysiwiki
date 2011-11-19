@@ -1,9 +1,16 @@
 {
-  "name": "wysiwiki",
-  "version": "0.0.1",
-  "private": true,
+  "name" : "wysiwiki",
+  "description" : "Markdown-based wiki with inline editor and realtime preview",
+  "version" : "0.0.1",
+  "author" : "Kenneth Vestergaard <kvs@binarysolutions.dk>",
+  "main" : "./server",
+
+  "devDependencies": {
+    "dryice": ""
+  }
   "dependencies": {
-    "dryice": "",
+    "mkdirp": "0.0.x",
     "express": ""
   }
+  "engines": { "node": ">= 0.6.0 < 0.7.0" }
 }
