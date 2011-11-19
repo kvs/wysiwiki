@@ -10,3 +10,6 @@
 [submodule "vendor/quickdiff"]
 	path = vendor/quickdiff
 	url = git://github.com/fivesixty/quickdiff.git
+[submodule "vendor/jquery-ui"]
+	path = vendor/jquery-ui
+	url = git://github.com/jquery/jquery-ui.git
