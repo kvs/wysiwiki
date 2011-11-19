@@ -1,0 +1,102 @@
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=IE8" />
+  <meta charset="UTF-8" />
+  <title>Wysiwiki - Frontpage</title>
+
+  <script>
+    var editing = false;
+    var pagename = "front";
+    var passreq = false;
+  </script>
+
+  <link href='https://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,bold,bolditalic' rel='stylesheet' type='text/css' />
+  <link rel="stylesheet" href="/stylesheets/browser.css" />
+  <link rel="stylesheet" href="/stylesheets/print.css" media="print" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <div id="notify" class="drop-shadow"><span class="message"></span></div>
+  <div id="page" class="drop-shadow">
+    <div id="output">
+      <div></div>
+      <div class="clear"></div>
+    </div>
+
+    <div id="footer">Wysiwiki</div>
+  </div>
+
+  <div id="toolpanel" class="readonly">
+    <a id="edit" href="#edit" class="readonly">edit<div id="pencil_24_png" class="sprites"></div></a>
+    <a id="cancel" href="#edit" class="edit">close<div id="cancel_24_png" class="sprites"></div></a>
+    <a id="save" href="#edit" class="edit">save<div id="save_24_png" class="sprites"></div></a>
+    <a id="preview" href="#edit" class="edit">preview<div id="magnifier_24_png" class="sprites"></div></a>
+    <a id="password" href="#edit" class="edit">password<div id="lock_24_png" class="sprites"></div></a>
+  </div>
+  <div id="editpanel">
+    <div id="dragger"></div>
+    <div id="acetools"></div>
+    <div id="ace"></div>
+    <div id="settings">
+      <select><optgroup label="Editor Mode"><option>Markdown</option></optgroup></select>
+      <select id="themeselect">
+        <optgroup label="Editor Themes">
+          <option value="ace/theme/clouds">Clouds</option>
+          <option value="ace/theme/dawn">Dawn</option>
+          <option value="ace/theme/eclipse">Eclipse</option>
+        </optgroup>
+        <optgroup>
+          <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
+          <option value="ace/theme/cobalt">Cobalt</option>
+          <option value="ace/theme/idle_fingers">idleFingers</option>
+          <option value="ace/theme/kr_theme">krTheme</option>
+          <option value="ace/theme/mono_industrial">Mono Industrial</option>
+          <option value="ace/theme/monokai">Monokai</option>
+          <option value="ace/theme/merbivore">Merbivore</option>
+          <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
+          <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
+          <option value="ace/theme/twilight" selected="selected">Twilight</option>
+          <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
+        </optgroup>
+      </select>
+      <select id="tabselect">
+        <optgroup label="Tab Size">
+          <option value="2" selected="selected">Soft: 2</option>
+          <option value="4">Soft: 4</option>
+        </optgroup>
+      </select>
+      <select id="wrapselect"><optgroup label="Wrapping Mode">
+        <option value="soft" selected="selected">Soft Wrap</option>
+        <option value="none">No Wrap</option>
+      </optgroup></select>
+    </div>
+  </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],  
+      jax: ["input/TeX","output/HTML-CSS"],  
+      tex2jax: {inlineMath: [["%%","%%"]]},  
+        "HTML-CSS": {  
+          scale: 100  
+        }
+    });
+
+    if (!editing) {
+      MathJax.Hub.Register.StartupHook("End Typeset",  
+        function (message) {  
+          $("#toolpanel").show("slide", {direction: "up"});  
+        }  
+      );
+    }
+  </script>
+  <script type="text/javascript" src="/javascripts/LAB.min.js"></script>
+  <script type="text/javascript">
+    $LAB
+    .script("//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js")
+    .script("//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js").wait()
+    .script("/javascripts/browser-uncompressed.js")
+    .script("//d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js");
+  </script>
+</body>
+</html>
