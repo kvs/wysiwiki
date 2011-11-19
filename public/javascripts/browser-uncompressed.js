@@ -16853,19 +16853,19 @@ $(document).ready(function () {
   toolpanel.setPasswordReq(passreq || newdocument);
   
   // Toggle editing. If we haven't loaded the content, then load it via AJAX.
-  $("#edit-enable a").click(function () {
-    if (!loaded) {
-      inputarea.val("Loading..");
-      $.getJSON("/" + Page.pagename() + ".json", function (data) {
-        inputarea.val(data.text);
-        loaded = true;
-        Page.setNeedsRedraw();
-      });
-    }
+  // $("#edit-enable a").click(function () {
+  //   if (!loaded) {
+  //     inputarea.val("Loading..");
+  //     $.get("/documents/" + Page.pagename() + ".md", function (data) {
+  //       inputarea.val(data);
+  //       loaded = true;
+  //       Page.setNeedsRedraw();
+  //     });
+  //   }
 
-    Page.editing(!Page.editing());
-    return false;
-  });
+  //   Page.editing(!Page.editing());
+  //   return false;
+  // });
   
   var toggleEditOn = function () {
     editpanel.slide(true);
@@ -16873,10 +16873,10 @@ $(document).ready(function () {
     page.slide(true);
     if (!loaded) {
       suppress_redraw = true;
-      editor.getSession().setValue("Loading..")
-      $.getJSON("/" + pagename + ".json", function (data) {
-        content = data.text;
-        editor.getSession().setValue(data.text);
+      editor.getSession().setValue("Loading..");
+      $.get("/documents/" + pagename + ".md", function (data) {
+        content = data;
+        editor.getSession().setValue(data);
         editor.renderer.scrollToY(0);
         loaded = true;
         suppress_redraw = false;
@@ -17705,65 +17705,6 @@ oop.inherits(MarkdownHighlightRules, TextHighlightRules);
 exports.MarkdownHighlightRules = MarkdownHighlightRules;
 });
 ;
-;
-$("document").ready(function () {
-
-  var preproc = $("<div>"),
-    inputarea = $("#textarea"),
-    outputel = $("#content > div");
-
-  var redraw = function () {
-    preproc.html(markdown.makeHtml(inputarea.val()));
-    var patch = outputel.quickdiff("patch", preproc, ["mathSpan", "mathSpanInline"]);
-
-    if (patch.type !== "identical" && patch.replace.length > 0) {
-      $.each(patch.replace, function (i, el) {
-        if (el.innerHTML) {
-          size_images(el);
-          MathJax.Hub.Typeset(el);
-        }
-      });
-    }
-  };
-
-  var loaded = editing;
-  $("#editor").live("pageshow", function (event, ui) {
-    if (!loaded) {
-      $("#textarea").val("Loading..");
-      $.getJSON("/"+pagename+".json", function (data) {
-        $("#textarea").val(data.text);
-        loaded = true;
-      });
-    }
-  });
-  
-  if (loaded) {
-    $.mobile.changePage("#editor", null, false, true);
-  }
-  
-  $("#reader").live("pageshow", function (event, ui) {
-    if (loaded) {
-      redraw();
-    }
-  });
-  
-  $("#content a").attr("rel", "external");
-  
-  $("#saveform").live("click", function () {
-    $.post("/"+pagename+".json", {text: inputarea.val(), password: $("#password").val()}, function (ret) {
-      if (ret && ret.status === "success") {
-        $('.ui-dialog').dialog('close');
-      } else {
-        if (ret && ret.status === "failure") {
-          $("#formerror").text(ret.message);
-        } else {
-          $("#formerror").text("Unknown response from the server.");
-        }
-      }
-    }, "json");
-    return false;
-  });
-});;
 ;
 define('notepages/notify', function(require, exports, module) {
 
