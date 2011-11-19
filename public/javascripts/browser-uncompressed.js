@@ -16613,6 +16613,11 @@ exports.Highlight = Highlight;
 });;
 ;
 $(document).ready(function () {
+  // Determine page-name, and attempt to load it.
+  var pagename = window.location.pathname;
+  $.get("/documents/" + pagename + ".md", function(data) {
+    $("#output > div").first().empty().append(markdown.makeHtml(data));
+  });
   
   // Ace highlighter
   
@@ -16853,20 +16858,6 @@ $(document).ready(function () {
   toolpanel.setPasswordReq(passreq || newdocument);
   
   // Toggle editing. If we haven't loaded the content, then load it via AJAX.
-  // $("#edit-enable a").click(function () {
-  //   if (!loaded) {
-  //     inputarea.val("Loading..");
-  //     $.get("/documents/" + Page.pagename() + ".md", function (data) {
-  //       inputarea.val(data);
-  //       loaded = true;
-  //       Page.setNeedsRedraw();
-  //     });
-  //   }
-
-  //   Page.editing(!Page.editing());
-  //   return false;
-  // });
-  
   var toggleEditOn = function () {
     editpanel.slide(true);
     toolpanel.slide(true);
@@ -16968,7 +16959,7 @@ $(document).ready(function () {
     if (password !== false) {
       payload.password = password;
     }
-    $.post("/" + pagename + ".json", payload, function (ret) {
+    $.post("/documents/" + pagename + ".json", payload, function (ret) {
       if (ret && ret.status === "success") {
         content = cont;
         notify.showMessage("Saved.", "success");
@@ -17387,11 +17378,11 @@ function MarkdownTools (editor, panel, docroot) {
   return tools;
 };
 ;
-$(document).ready(function () {
-	$.get("/documents/" + pagename + ".md", function(data) {
-		$("#output > div").first().empty().append(markdown.makeHtml(data));
-	});
-});
+// $(document).ready(function () {
+// 	$.get("/documents/" + pagename + ".md", function(data) {
+// 		$("#output > div").first().empty().append(markdown.makeHtml(data));
+// 	});
+// });
 ;
 ;
 /* vim:ts=4:sts=4:sw=4:
