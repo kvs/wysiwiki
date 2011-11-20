@@ -144,7 +144,6 @@ $(document).ready(function () {
     edittools = new MarkdownTools(editor, $("#acetools"), "/images/fugue/"),
     page = $("#page"),
     content = "",
-    password = false,
     newdocument = editing,
     loaded = editing;
   
@@ -206,11 +205,7 @@ $(document).ready(function () {
     }
     toolpanel.slid = show;
   };
-  
-  toolpanel.setPasswordReq = function (flag) {
-    $("#password").toggleClass("passdisable", !flag);
-  }
-  
+    
   page.slide = function (show) {
     if (page.slid === show) return;
     page.slid = show;
@@ -240,9 +235,7 @@ $(document).ready(function () {
   }
   
   var previewing = false, modified = false, origcontent;
-  
-  toolpanel.setPasswordReq(passreq || newdocument);
-  
+    
   // Toggle editing. If we haven't loaded the content, then load it via AJAX.
   var toggleEditOn = function () {
     editpanel.slide(true);
@@ -295,24 +288,9 @@ $(document).ready(function () {
     if (!modified) return false;
     
     if (newdocument) {
-      if (!password) {
-        notify.showConfirm("Saving without password.", doSave);
-      } else {
-        notify.showConfirm("Saving with password.", doSave);
-      }
+      notify.showConfirm("Saving.", doSave);
     } else {
-      if (passreq && !password) {
-        notify.showPassword("Please enter the page password.", function (newpassword) {
-          if (newpassword !== "") {
-            password = hex_sha256(newpassword);
-          } else {
-            password = false;
-          }
-          doSave();
-        });
-      } else {
-        doSave();
-      }
+      doSave();
     }
     
     return false;
@@ -336,20 +314,12 @@ $(document).ready(function () {
   });
     
   var doSave = function () {
-    if (newdocument && password) {
-      passreq = true;
-    }
-    
     var cont = editor.getSession().getValue();
     var payload = {text: cont};
-    if (password !== false) {
-      payload.password = password;
-    }
     $.post("/documents/" + pagename + ".json", payload, function (ret) {
       if (ret && ret.status === "success") {
         content = cont;
         notify.showMessage("Saved.", "success");
-        toolpanel.setPasswordReq(passreq);
         newdocument = false;
         refreshModified();
       } else {
@@ -380,15 +350,5 @@ $(document).ready(function () {
     return false;
   });
   
-  $("#password").click(function () {
-    notify.showPassword("Please enter a page password.", function (newpassword) {
-      if (newpassword !== "") {
-        password = hex_sha256(newpassword);
-      } else {
-        password = false;
-      }
-    });
-    return false;
-  });
   return false;
 });

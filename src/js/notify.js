@@ -101,36 +101,7 @@ function Notify(element) {
         cancel_cb();
       }
     }
-  }
-  
-  this.showPassword = function (text, password_cb) {
-    var self = this;
-    
-    var passbox = $('<input type="password"></input>'),
-      confirm = $('<input type="submit" value="continue"></input>')
-        .click(function (e) {
-          e.preventDefault();
-          if (confirm) {
-            password_cb(passbox.val());
-            self.setFade(0);
-          }
-        }),
-      cancel = $('<input type="button" value="cancel"></input>')
-        .click(function (e) {
-          e.preventDefault();
-          self.setFade(0);
-        }),
-      form = $('<form>').append(passbox).append(cancel).append(confirm),
-      buttons = $('<span class="buttons"></span>').append(form),
-      content = $("<span class=\"confirm\"></span>")
-        .text(text);
-
-    this.display("help", [content, buttons], function () {
-      passbox.focus();
-    });
-    passbox.focus();
-  }
-  
+  }  
 }).call(Notify.prototype);
 
 exports.Notify = Notify;
