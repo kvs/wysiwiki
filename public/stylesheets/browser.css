@@ -211,10 +211,6 @@ a img {
   display: inline-block;
 }
 
-#toolpanel.edit a.passdisable {
-  display: none;
-}
-
 #dragger {
   width: 10px;
   height: 100px;
