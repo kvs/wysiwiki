@@ -16615,6 +16615,10 @@ exports.Highlight = Highlight;
 $(document).ready(function () {
   // Determine page-name, and attempt to load it.
   var pagename = window.location.pathname;
+  if (pagename === "/") {
+    pagename = "index";
+  }
+
   $.get("/documents/" + pagename + ".md", function(data) {
     $("#output > div").first().empty().append(markdown.makeHtml(data));
   });
