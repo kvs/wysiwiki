@@ -5,8 +5,14 @@ $(document).ready(function () {
     pagename = "index";
   }
 
-  $.get("/documents/" + pagename + ".md", function(data) {
+  $.get("/documents/" + pagename + ".md", function (data) {
     $("#output > div").first().empty().append(markdown.makeHtml(data));
+  }).error(function(xhr) {
+    if (xhr.status == 404) {
+      $("#output > div").first().empty().append("<h1>New page</h1>");
+    } else {
+      $("#output > div").first().empty().append("<h1>Error</h1>" + xhr.responseText);
+    }
   });
   
   // Ace highlighter
@@ -254,6 +260,13 @@ $(document).ready(function () {
         editor.renderer.scrollToY(0);
         loaded = true;
         suppress_redraw = false;
+      }).error(function(xhr) {
+        if (xhr.status == 404) {
+          editor.getSession().setValue("# New page");
+        } else {
+          notify.showMessage(xhr.responseText, "warning");
+          editor.getSession().setValue("");
+        }
       });
     }
     editor.focus();
@@ -298,23 +311,6 @@ $(document).ready(function () {
     }
     
     return false;
-  });
-    
-  notify.element.ajaxError(function (event, xhr, settings, thrown) {
-    if (xhr.responseText) {
-      try {
-        var response = $.parseJSON(xhr.responseText);
-        if (response.message) {
-          notify.showMessage(response.message, "warning");
-          return;
-        }
-      } catch (exc) {}
-    }
-    if (thrown) {
-      notify.showMessage(thrown, "warning");
-    } else {
-      notify.showMessage("Communication error.", "warning");
-    }
   });
     
   var doSave = function () {
