@@ -28,13 +28,16 @@ app.configure('production', function() {
 
 
 /**
-  * Default GET request - will just return index.html, since the JavaScript
-  * will handle determining what Markdown-document to load.
+  * Return 404 for all Markdown-documents - if a document exists, it
+  * is handled by the 'static' middleware.
  **/
 app.get(/^\/documents\/(.+)$/, function(req, res) {
-  res.sendfile('public/documents/front.md');
+  res.send(404);
 });
 
+/**
+  * Return index.html for any non-Markdown-document requests.
+ **/
 app.get(/^.+$/, function(req, res) {
   res.sendfile('public/index.html');
 });
