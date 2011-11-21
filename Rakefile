@@ -54,10 +54,4 @@ namespace :juicer do
     end
     File.unlink('public/javascripts/browser-tmp.js')
   end
-
-  desc 'Verify'
-  task :verify do
-    minify = Dir["src/js/*.js"]
-    sh 'juicer verify ' + SOURCES.join(' ')
-  end
 end
