@@ -16501,7 +16501,11 @@ var store = (function(){
 if (typeof module != 'undefined') { module.exports = store }
 ;
 ;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
+/*global define */
+
 define('ace/highlight', function (require, exports, module) {
+"use strict";
 
 // Add a removal event
 (function () {
@@ -16519,7 +16523,9 @@ var TextMode = require("ace/mode/text").Mode;
 var JavaScriptMode = require("ace/mode/javascript").Mode;
 
 function Highlight(element) {
-  if (/(a)|(b)/.exec("b")[1] !== undefined) return;
+  if (/(a)|(b)/.exec("b")[1] !== undefined) {
+    return;
+  }
   
   this.element = $(element);
   this.session = new EditSession("");
@@ -16562,15 +16568,15 @@ function Highlight(element) {
   this.twilightTheme = require("ace/theme/twilight");
   
   this.setMode = function(mode_string) {
-    if (mode_string === this.mode_string) return;
+    if (mode_string === this.mode_string) {
+      return;
+    }
     
     this.mode_string = mode_string;
-    switch (mode_string) {
-      case "javascript":
-        this.mode = this.jsMode;
-        break;
-      default:
-        this.mode = this.textMode;
+    if (mode_string === "javascript") {
+      this.mode = this.jsMode;
+    } else {
+      this.mode = this.textMode;
     }
     this.session.setMode(this.mode);
     this.update();
@@ -16614,22 +16620,31 @@ function Highlight(element) {
 exports.Highlight = Highlight;
 });;
 ;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
+/*global editor require markdown MathJax ace store MarkdownTools size_image size_images */
+
 $(document).ready(function () {
+  "use strict";
+
+  // Determine page-name
+  var pagename = window.location.pathname;
+  if (pagename === "/") {
+    pagename = "index";
+  }
+
   // Ace highlighter
-  
   var Highlight = require("ace/highlight").Highlight;
   
   // Notification script
-  
   var Notify = require("notepages/notify").Notify;
   var notify = new Notify($("#notify"));
   
   notify.onDisplay(function () {
     $(this).css({right:$("#toolpanel").width()/2 - 200});
   });
+
   
   // Render script
-  
   var redrawNeeded = false, preproc, renderDelay = 0, timer;
   
   // If draw latency sufficiently small, use a small delay on rendering.
@@ -16753,15 +16768,15 @@ $(document).ready(function () {
     toolpanel = $("#toolpanel"),
     edittools = new MarkdownTools(editor, $("#acetools"), "/images/fugue/"),
     page = $("#page"),
-    content = "",
-    newdocument = editing,
-    loaded = editing;
+    content = "";
   
   function alignPage() {
     if (page.slid) {
       var leftMargin = (($(window).width()-panels.edit) - ($("#page").width() ))/2;
-      if (leftMargin < 10)
+      if (leftMargin < 10) {
         leftMargin = 10;
+      }
+
       page.stop()
         .css({marginLeft: $("#page").offset().left})
         .animate({marginLeft:leftMargin});
@@ -16783,7 +16798,9 @@ $(document).ready(function () {
       notify.conceal();
     }
   
-    if (editpanel.slid === show) return;
+    if (editpanel.slid === show) {
+      return;
+    }
     
     if (show) {
       editpanel
@@ -16797,7 +16814,9 @@ $(document).ready(function () {
   };
   
   toolpanel.slide = function (show) {
-    if (toolpanel.slid === show) return;
+    if (toolpanel.slid === show) {
+      return;
+    }
     
     if (show) {
       toolpanel
@@ -16817,7 +16836,9 @@ $(document).ready(function () {
   };
     
   page.slide = function (show) {
-    if (page.slid === show) return;
+    if (page.slid === show) {
+      return;
+    }
     page.slid = show;
     
     if (show) {
@@ -16831,9 +16852,9 @@ $(document).ready(function () {
     }
   };
   
-  var suppress_redraw = false;
+  var previewing = false, modified = false, origcontent;
+
   function refreshModified() {
-    if (suppress_redraw) return;
     redrawNeeded = true;
     modified = editor.getSession().getValue() !== content;
     $("#save").css({opacity:modified ? 1 : 0.5});
@@ -16844,9 +16865,7 @@ $(document).ready(function () {
     timer = setTimeout(redraw, renderDelay);
   }
   
-  var previewing = false, modified = false, origcontent;
-    
-  // Toggle editing. If we haven't loaded the content, then load it via AJAX.
+  // Toggle editing
   var toggleEditOn = function () {
     editpanel.slide(true);
     toolpanel.slide(true);
@@ -16856,12 +16875,7 @@ $(document).ready(function () {
   };
   
   $("#edit").click(toggleEditOn);
-  
-  if (editing) {
-    toolpanel.show();
-    toggleEditOn();
-  }
-  
+    
   var doCancel = function () {
     editpanel.slide(false);
     toolpanel.slide(false);
@@ -16872,29 +16886,8 @@ $(document).ready(function () {
     editor.getSession().setValue(content);
     editor.renderer.scrollToY(y);
     refreshModified();
-  }
-  
-  $("#cancel").click(function () {
-    if (!modified) {
-      doCancel()
-    } else {
-      notify.showConfirm("Closing editor will lose unsaved changes.", doCancel);
-    }
-    return false;
-  });
-  $("#save").click(function () {
-    refreshModified();
-    if (!modified) return false;
-    
-    if (newdocument) {
-      notify.showConfirm("Saving.", doSave);
-    } else {
-      doSave();
-    }
-    
-    return false;
-  });
-    
+  };
+
   var doSave = function () {
     var cont = editor.getSession().getValue();
     var payload = {text: cont};
@@ -16902,7 +16895,6 @@ $(document).ready(function () {
       if (ret && ret.status === "success") {
         content = cont;
         notify.showMessage("Saved.", "success");
-        newdocument = false;
         refreshModified();
       } else {
         if (ret && ret.status === "failure") {
@@ -16915,9 +16907,26 @@ $(document).ready(function () {
     
     return false;
   };
-  
-  editor.getSession().on('change', refreshModified);
-  
+
+  $("#cancel").click(function () {
+    if (!modified) {
+      doCancel();
+    } else {
+      notify.showConfirm("Closing editor will lose unsaved changes.", doCancel);
+    }
+    return false;
+  });
+  $("#save").click(function () {
+    refreshModified();
+    if (!modified) {
+      return false;
+    }
+
+    notify.showConfirm("Saving.", doSave);
+
+    return false;
+  });
+
   $("#dragger").drag("start", function (ev, dd) {
     $.data(this, 'startw', editpanel.width());
   }).drag(function(ev, dd) {
@@ -16937,16 +16946,11 @@ $(document).ready(function () {
     content = c;
     editor.getSession().setValue(content);
     editor.renderer.scrollToY(0);
-    loaded = true;
-    redrawNeeded = true;
   }
 
-  // Determine page-name, and attempt to load it.
-  var pagename = window.location.pathname;
-  if (pagename === "/") {
-    pagename = "index";
-  }
+  editor.getSession().on('change', refreshModified);
 
+  // Attempt to load Markdown-page
   $.get("/documents/" + pagename + ".md", function (data) {
     setContent(data);
   }).error(function(xhr) {
@@ -16961,16 +16965,20 @@ $(document).ready(function () {
 });
 ;
 ;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true trailing:true */
+/*global require */
+
 var Range = require("ace/range").Range;
 
 function EditorTools (editor, panel, docroot) {
+  "use strict";
   this.editor = editor;
   this.panel = panel;
   this.utils.editor = this.editor;
   this.docroot = docroot;
 }
 
-EditorTools.prototype = {}
+EditorTools.prototype = {};
 
 EditorTools.prototype.utils = {
   editor: undefined,
@@ -17041,7 +17049,7 @@ EditorTools.prototype.utils = {
   repeatString: function (str, n) {
     return new Array(n + 1).join(str);
   }
-}
+};
 
 EditorTools.prototype.callback = function (callback) {
   var tools = this;
@@ -17052,8 +17060,8 @@ EditorTools.prototype.callback = function (callback) {
     tools.utils.multiline = tools.utils.selection.isMultiLine();
     callback(tools.utils);
     tools.editor.focus();
-  }
-}
+  };
+};
 
 EditorTools.prototype.addButton = function (path, callback, float) {
   var element = $('<div class="button_container"><div class="sprites" id="' + path + '"></div></div>').click(this.callback(callback));
@@ -17061,7 +17069,7 @@ EditorTools.prototype.addButton = function (path, callback, float) {
     element.css({float:"right"});
   }
   this.panel.append(element);
-}
+};
 
 // Markdown
 
@@ -17087,8 +17095,10 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-bold_png',
     function (u) {
-      if (u.multiline) return;
-      
+      if (u.multiline) {
+        return;
+      }
+
       var newtext, match;
 
       if (u.selected) {
@@ -17106,7 +17116,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-italic_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       var newtext, match;
       if (u.selected) {
@@ -17125,7 +17137,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('chain_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.replaceAndOffset("[" + u.selected + "]()", -1);
@@ -17138,7 +17152,7 @@ function MarkdownTools (editor, panel, docroot) {
   tools.addButton('edit-list_png',
     function (u) {
       u.forSelectedLines(function (row, line) {
-        replaceRange = new Range(row, 0, row, line.length);
+        var replaceRange = new Range(row, 0, row, line.length);
         u.session.replace(replaceRange, "*   " + line);
       });
       u.selectRange(u.selectedLineRange());
@@ -17146,9 +17160,9 @@ function MarkdownTools (editor, panel, docroot) {
   
   tools.addButton('edit-list-order_png',
     function (u) {
-      marker = 1;
+      var marker = 1;
       u.forSelectedLines(function (row, line) {
-        replaceRange = new Range(row, 0, row, line.length);
+        var replaceRange = new Range(row, 0, row, line.length);
         var markerText = marker + ".";
         u.session.replace(replaceRange, markerText + u.repeatString(" ", 4-markerText.length) + line);
         marker++;
@@ -17168,7 +17182,9 @@ function MarkdownTools (editor, panel, docroot) {
     */
   tools.addButton('edit-image_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.joinReplaceAndSelect(["!<[alt](", u.selected, " \"", "title", "\")"], 3);
@@ -17179,7 +17195,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-image-center_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.joinReplaceAndSelect(["![alt](", u.selected, " \"", "title", "\")"], 3);
@@ -17190,7 +17208,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-indent_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.joinReplaceAndSelect(["!>[alt](", u.selected, " \"", "title", "\")"], 3);
@@ -17206,14 +17226,16 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-quotation_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
       
       var line = u.currentLine(),
         match = /^(\>?)\s*(.*)$/.exec(line),
         newline;
 
       if (/^\s*$/.test(line)) {
-        newline = "> \n"
+        newline = "> \n";
         u.session.replace(u.selectedLineRange(), newline);
         u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
       } else {
@@ -17290,7 +17312,7 @@ function MarkdownTools (editor, panel, docroot) {
       if (u.selection.start.row !== u.selection.end.row) {
         return;
       }
-      var line = u.currentLine(), match;
+      var line = u.currentLine(), match, newline, newtext;
 
       if (line === u.selected) {
         match = /^[$]{2}(.*?)[$]{2}$/.exec(u.selected);
@@ -17302,7 +17324,7 @@ function MarkdownTools (editor, panel, docroot) {
         u.replaceAndSelectLine(newline);
         u.offsetCursor(2);
       } else if (/^\s*$/.test(line)) {
-        newline = "$$$$\n"
+        newline = "$$$$\n";
         u.session.replace(u.selectedLineRange(), newline);
         u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
       } else if (u.selected) {
@@ -17332,7 +17354,11 @@ function MarkdownTools (editor, panel, docroot) {
   return tools;
 };
 ;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true strict:true undef:true trailing:true */
+/*global define */
+
 define('notepages/notify', function(require, exports, module) {
+"use strict";
 
 function Notify(element) {
   this.element = element;
@@ -17349,11 +17375,11 @@ function Notify(element) {
       self.element.hide("slide", {direction:"up"});
       self.timer = null;
     }, delay);
-  }
+  };
   
   this.onDisplay = function (callback) {
     this.ondisplay = callback;
-  }
+  };
   
   this.display = function (cssclass, contents, on_display) {
     var self = this;
@@ -17382,7 +17408,7 @@ function Notify(element) {
         }
       });
     }
-  }
+  };
   
   this.conceal = function () {
     if (this.cancel) {
@@ -17391,14 +17417,14 @@ function Notify(element) {
     }
     this.element.hide();
     return this;
-  }
+  };
   
   this.showMessage = function (text, icon) {
     var self = this;
     this.display(icon, $("<span class=\"message\"></span>").text(text), function () {
       self.setFade(1500);
     });
-  }
+  };
   
   this.showConfirm = function (text, confirm_cb, cancel_cb) {
     var self = this;
@@ -17434,16 +17460,20 @@ function Notify(element) {
       if (cancel_cb) {
         cancel_cb();
       }
-    }
-  }  
+    };
+  };
 }).call(Notify.prototype);
 
 exports.Notify = Notify;
 });;
 ;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true strict:false undef:true trailing:true */
+/*global define Showdown */
+
 // In a given context, make sure all images (skipping MathJax related images)
 // Are no wider than the page width.
 function size_image(obj) {
+  "use strict";
   setTimeout(function () {
     obj = $(obj);
     if (obj.width() > 640) {
@@ -17454,6 +17484,7 @@ function size_image(obj) {
 }
 
 function size_images(context) {
+  "use strict";
   $("img", context).not(".MathJax_strut").each(function (i, obj) {
     size_image(obj);
   });
@@ -17461,13 +17492,13 @@ function size_images(context) {
 
 // Check all output images once the page has loaded.
 $(window).load(function () {
+  "use strict";
   size_images($("#output")[0]);
 });
 
 // Setup a filter for comparing mathInline spans.
 $.fn.quickdiff("filter", "mathSpanInline",
-  function (node) { return (node.nodeName === "SPAN"
-                            && $(node).hasClass("mathInline")); },
+  function (node) { return (node.nodeName === "SPAN" && $(node).hasClass("mathInline")); },
   function (a, b) {
     var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
     return ("%%" + aHTML + "%%") !== bHTML;
@@ -17475,8 +17506,8 @@ $.fn.quickdiff("filter", "mathSpanInline",
 
 // Setup a filter for comparing math spans.
 $.fn.quickdiff("filter", "mathSpan",
-  function (node) { return (node.nodeName === "SPAN"
-                            && $(node).hasClass("math")); },
+  function (node) { return (node.nodeName === "SPAN" &&
+                            $(node).hasClass("math")); },
   function (a, b) {
     var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
     return ("$$" + aHTML + "$$") !== bHTML;
@@ -17486,13 +17517,14 @@ $.fn.quickdiff("filter", "mathSpan",
 $.fn.quickdiff("filter", "codePre",
   function (node) { return node.nodeName === "PRE"; },
   function (a, b) {
+    var aValue, bValue;
     if ($(a).data("highlighter")) {
-      var aValue = $.trim($(a).data("highlighter").getValue());
+      aValue = $.trim($(a).data("highlighter").getValue());
       
       // Hack to update mode.
       $(a).data("highlighter").setMode($("code", b).attr("class"));
     } else {
-      var aValue = $.trim($(a).text());
+      aValue = $.trim($(a).text());
     }
     bValue = $.trim($(b).text());
     return aValue !== bValue;
