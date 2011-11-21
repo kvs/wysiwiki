@@ -1,4 +1,6 @@
 /*jshint jquery:true browser:true */
+/*global editor require markdown MathJax ace store MarkdownTools */
+
 $(document).ready(function () {
   "use strict";
   // Ace highlighter
