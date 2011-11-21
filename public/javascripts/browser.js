@@ -2859,22 +2859,6 @@ function Highlight(element) {
 exports.Highlight = Highlight;
 });
 $(document).ready(function () {
-  // Determine page-name, and attempt to load it.
-  var pagename = window.location.pathname;
-  if (pagename === "/") {
-    pagename = "index";
-  }
-
-  $.get("/documents/" + pagename + ".md", function (data) {
-    $("#output > div").first().empty().append(markdown.makeHtml(data));
-  }).error(function(xhr) {
-    if (xhr.status == 404) {
-      $("#output > div").first().empty().append("<h1>New page</h1>");
-    } else {
-      $("#output > div").first().empty().append("<h1>Error</h1>" + xhr.responseText);
-    }
-  });
-  
   // Ace highlighter
   
   var Highlight = require("ace/highlight").Highlight;
@@ -3111,24 +3095,6 @@ $(document).ready(function () {
     editpanel.slide(true);
     toolpanel.slide(true);
     page.slide(true);
-    if (!loaded) {
-      suppress_redraw = true;
-      editor.getSession().setValue("Loading..");
-      $.get("/documents/" + pagename + ".md", function (data) {
-        content = data;
-        editor.getSession().setValue(data);
-        editor.renderer.scrollToY(0);
-        loaded = true;
-        suppress_redraw = false;
-      }).error(function(xhr) {
-        if (xhr.status == 404) {
-          editor.getSession().setValue("# New page");
-        } else {
-          notify.showMessage(xhr.responseText, "warning");
-          editor.getSession().setValue("");
-        }
-      });
-    }
     editor.focus();
     return false;
   };
@@ -3208,6 +3174,31 @@ $(document).ready(function () {
     editpanel.slide(previewing, true);
     previewing = !previewing;
     return false;
+  });
+
+  // Set editor content, and force a re-render
+  function setContent(c) {
+    content = c;
+    editor.getSession().setValue(content);
+    editor.renderer.scrollToY(0);
+    loaded = true;
+    redrawNeeded = true;
+  }
+
+  // Determine page-name, and attempt to load it.
+  var pagename = window.location.pathname;
+  if (pagename === "/") {
+    pagename = "index";
+  }
+
+  $.get("/documents/" + pagename + ".md", function (data) {
+    setContent(data);
+  }).error(function(xhr) {
+    if (xhr.status == 404) {
+      setContent("# New page");
+    } else {
+      setContent("# Error\n");
+    }
   });
   
   return false;
