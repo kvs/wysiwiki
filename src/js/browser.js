@@ -1,5 +1,5 @@
 /*jshint jquery:true browser:true */
-/*global editor require markdown MathJax ace store MarkdownTools */
+/*global editor require markdown MathJax ace store MarkdownTools size_image size_images */
 
 $(document).ready(function () {
   "use strict";
