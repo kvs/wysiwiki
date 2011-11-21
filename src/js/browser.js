@@ -217,11 +217,9 @@ $(document).ready(function () {
     }
   };
   
-  var suppress_redraw = false;
   var previewing = false, modified = false, origcontent;
 
   function refreshModified() {
-    if (suppress_redraw) return;
     redrawNeeded = true;
     modified = editor.getSession().getValue() !== content;
     $("#save").css({opacity:modified ? 1 : 0.5});
