@@ -139,8 +139,7 @@ $(document).ready(function () {
     toolpanel = $("#toolpanel"),
     edittools = new MarkdownTools(editor, $("#acetools"), "/images/fugue/"),
     page = $("#page"),
-    content = "",
-    newdocument = editing;
+    content = "";
   
   function alignPage() {
     if (page.slid) {
@@ -241,12 +240,7 @@ $(document).ready(function () {
   };
   
   $("#edit").click(toggleEditOn);
-  
-  if (editing) {
-    toolpanel.show();
-    toggleEditOn();
-  }
-  
+    
   var doCancel = function () {
     editpanel.slide(false);
     toolpanel.slide(false);
@@ -271,11 +265,7 @@ $(document).ready(function () {
     refreshModified();
     if (!modified) return false;
     
-    if (newdocument) {
-      notify.showConfirm("Saving.", doSave);
-    } else {
-      doSave();
-    }
+    notify.showConfirm("Saving.", doSave);
     
     return false;
   });
@@ -287,7 +277,6 @@ $(document).ready(function () {
       if (ret && ret.status === "success") {
         content = cont;
         notify.showMessage("Saved.", "success");
-        newdocument = false;
         refreshModified();
       } else {
         if (ret && ret.status === "failure") {
