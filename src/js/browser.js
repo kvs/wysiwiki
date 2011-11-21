@@ -1,6 +1,8 @@
+/*jshint jquery:true browser:true */
 $(document).ready(function () {
+  "use strict";
   // Ace highlighter
-  
+
   var Highlight = require("ace/highlight").Highlight;
   
   // Notification script
