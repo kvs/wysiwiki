@@ -1,4 +1,8 @@
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true strict:true undef:true trailing:true */
+/*global define */
+
 define('notepages/notify', function(require, exports, module) {
+"use strict";
 
 function Notify(element) {
   this.element = element;
@@ -15,11 +19,11 @@ function Notify(element) {
       self.element.hide("slide", {direction:"up"});
       self.timer = null;
     }, delay);
-  }
+  };
   
   this.onDisplay = function (callback) {
     this.ondisplay = callback;
-  }
+  };
   
   this.display = function (cssclass, contents, on_display) {
     var self = this;
@@ -48,7 +52,7 @@ function Notify(element) {
         }
       });
     }
-  }
+  };
   
   this.conceal = function () {
     if (this.cancel) {
@@ -57,14 +61,14 @@ function Notify(element) {
     }
     this.element.hide();
     return this;
-  }
+  };
   
   this.showMessage = function (text, icon) {
     var self = this;
     this.display(icon, $("<span class=\"message\"></span>").text(text), function () {
       self.setFade(1500);
     });
-  }
+  };
   
   this.showConfirm = function (text, confirm_cb, cancel_cb) {
     var self = this;
@@ -100,8 +104,8 @@ function Notify(element) {
       if (cancel_cb) {
         cancel_cb();
       }
-    }
-  }  
+    };
+  };
 }).call(Notify.prototype);
 
 exports.Notify = Notify;

@@ -1,6 +1,10 @@
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true strict:false undef:true trailing:true */
+/*global define Showdown */
+
 // In a given context, make sure all images (skipping MathJax related images)
 // Are no wider than the page width.
 function size_image(obj) {
+  "use strict";
   setTimeout(function () {
     obj = $(obj);
     if (obj.width() > 640) {
@@ -11,6 +15,7 @@ function size_image(obj) {
 }
 
 function size_images(context) {
+  "use strict";
   $("img", context).not(".MathJax_strut").each(function (i, obj) {
     size_image(obj);
   });
@@ -18,13 +23,13 @@ function size_images(context) {
 
 // Check all output images once the page has loaded.
 $(window).load(function () {
+  "use strict";
   size_images($("#output")[0]);
 });
 
 // Setup a filter for comparing mathInline spans.
 $.fn.quickdiff("filter", "mathSpanInline",
-  function (node) { return (node.nodeName === "SPAN"
-                            && $(node).hasClass("mathInline")); },
+  function (node) { return (node.nodeName === "SPAN" && $(node).hasClass("mathInline")); },
   function (a, b) {
     var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
     return ("%%" + aHTML + "%%") !== bHTML;
@@ -32,8 +37,8 @@ $.fn.quickdiff("filter", "mathSpanInline",
 
 // Setup a filter for comparing math spans.
 $.fn.quickdiff("filter", "mathSpan",
-  function (node) { return (node.nodeName === "SPAN"
-                            && $(node).hasClass("math")); },
+  function (node) { return (node.nodeName === "SPAN" &&
+                            $(node).hasClass("math")); },
   function (a, b) {
     var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
     return ("$$" + aHTML + "$$") !== bHTML;
@@ -43,13 +48,14 @@ $.fn.quickdiff("filter", "mathSpan",
 $.fn.quickdiff("filter", "codePre",
   function (node) { return node.nodeName === "PRE"; },
   function (a, b) {
+    var aValue, bValue;
     if ($(a).data("highlighter")) {
-      var aValue = $.trim($(a).data("highlighter").getValue());
+      aValue = $.trim($(a).data("highlighter").getValue());
       
       // Hack to update mode.
       $(a).data("highlighter").setMode($("code", b).attr("class"));
     } else {
-      var aValue = $.trim($(a).text());
+      aValue = $.trim($(a).text());
     }
     bValue = $.trim($(b).text());
     return aValue !== bValue;

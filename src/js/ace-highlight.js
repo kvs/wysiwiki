@@ -1,4 +1,8 @@
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
+/*global define */
+
 define('ace/highlight', function (require, exports, module) {
+"use strict";
 
 // Add a removal event
 (function () {
@@ -16,7 +20,9 @@ var TextMode = require("ace/mode/text").Mode;
 var JavaScriptMode = require("ace/mode/javascript").Mode;
 
 function Highlight(element) {
-  if (/(a)|(b)/.exec("b")[1] !== undefined) return;
+  if (/(a)|(b)/.exec("b")[1] !== undefined) {
+    return;
+  }
   
   this.element = $(element);
   this.session = new EditSession("");
@@ -59,15 +65,15 @@ function Highlight(element) {
   this.twilightTheme = require("ace/theme/twilight");
   
   this.setMode = function(mode_string) {
-    if (mode_string === this.mode_string) return;
+    if (mode_string === this.mode_string) {
+      return;
+    }
     
     this.mode_string = mode_string;
-    switch (mode_string) {
-      case "javascript":
-        this.mode = this.jsMode;
-        break;
-      default:
-        this.mode = this.textMode;
+    if (mode_string === "javascript") {
+      this.mode = this.jsMode;
+    } else {
+      this.mode = this.textMode;
     }
     this.session.setMode(this.mode);
     this.update();

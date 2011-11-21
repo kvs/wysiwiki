@@ -1,13 +1,17 @@
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true trailing:true */
+/*global require */
+
 var Range = require("ace/range").Range;
 
 function EditorTools (editor, panel, docroot) {
+  "use strict";
   this.editor = editor;
   this.panel = panel;
   this.utils.editor = this.editor;
   this.docroot = docroot;
 }
 
-EditorTools.prototype = {}
+EditorTools.prototype = {};
 
 EditorTools.prototype.utils = {
   editor: undefined,
@@ -78,7 +82,7 @@ EditorTools.prototype.utils = {
   repeatString: function (str, n) {
     return new Array(n + 1).join(str);
   }
-}
+};
 
 EditorTools.prototype.callback = function (callback) {
   var tools = this;
@@ -89,8 +93,8 @@ EditorTools.prototype.callback = function (callback) {
     tools.utils.multiline = tools.utils.selection.isMultiLine();
     callback(tools.utils);
     tools.editor.focus();
-  }
-}
+  };
+};
 
 EditorTools.prototype.addButton = function (path, callback, float) {
   var element = $('<div class="button_container"><div class="sprites" id="' + path + '"></div></div>').click(this.callback(callback));
@@ -98,7 +102,7 @@ EditorTools.prototype.addButton = function (path, callback, float) {
     element.css({float:"right"});
   }
   this.panel.append(element);
-}
+};
 
 // Markdown
 
@@ -124,8 +128,10 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-bold_png',
     function (u) {
-      if (u.multiline) return;
-      
+      if (u.multiline) {
+        return;
+      }
+
       var newtext, match;
 
       if (u.selected) {
@@ -143,7 +149,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-italic_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       var newtext, match;
       if (u.selected) {
@@ -162,7 +170,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('chain_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.replaceAndOffset("[" + u.selected + "]()", -1);
@@ -175,7 +185,7 @@ function MarkdownTools (editor, panel, docroot) {
   tools.addButton('edit-list_png',
     function (u) {
       u.forSelectedLines(function (row, line) {
-        replaceRange = new Range(row, 0, row, line.length);
+        var replaceRange = new Range(row, 0, row, line.length);
         u.session.replace(replaceRange, "*   " + line);
       });
       u.selectRange(u.selectedLineRange());
@@ -183,9 +193,9 @@ function MarkdownTools (editor, panel, docroot) {
   
   tools.addButton('edit-list-order_png',
     function (u) {
-      marker = 1;
+      var marker = 1;
       u.forSelectedLines(function (row, line) {
-        replaceRange = new Range(row, 0, row, line.length);
+        var replaceRange = new Range(row, 0, row, line.length);
         var markerText = marker + ".";
         u.session.replace(replaceRange, markerText + u.repeatString(" ", 4-markerText.length) + line);
         marker++;
@@ -205,7 +215,9 @@ function MarkdownTools (editor, panel, docroot) {
     */
   tools.addButton('edit-image_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.joinReplaceAndSelect(["!<[alt](", u.selected, " \"", "title", "\")"], 3);
@@ -216,7 +228,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-image-center_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.joinReplaceAndSelect(["![alt](", u.selected, " \"", "title", "\")"], 3);
@@ -227,7 +241,9 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-indent_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
 
       if (u.selected) {
         u.joinReplaceAndSelect(["!>[alt](", u.selected, " \"", "title", "\")"], 3);
@@ -243,14 +259,16 @@ function MarkdownTools (editor, panel, docroot) {
     
   tools.addButton('edit-quotation_png',
     function (u) {
-      if (u.multiline) return;
+      if (u.multiline) {
+        return;
+      }
       
       var line = u.currentLine(),
         match = /^(\>?)\s*(.*)$/.exec(line),
         newline;
 
       if (/^\s*$/.test(line)) {
-        newline = "> \n"
+        newline = "> \n";
         u.session.replace(u.selectedLineRange(), newline);
         u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
       } else {
@@ -327,7 +345,7 @@ function MarkdownTools (editor, panel, docroot) {
       if (u.selection.start.row !== u.selection.end.row) {
         return;
       }
-      var line = u.currentLine(), match;
+      var line = u.currentLine(), match, newline, newtext;
 
       if (line === u.selected) {
         match = /^[$]{2}(.*?)[$]{2}$/.exec(u.selected);
@@ -339,7 +357,7 @@ function MarkdownTools (editor, panel, docroot) {
         u.replaceAndSelectLine(newline);
         u.offsetCursor(2);
       } else if (/^\s*$/.test(line)) {
-        newline = "$$$$\n"
+        newline = "$$$$\n";
         u.session.replace(u.selectedLineRange(), newline);
         u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
       } else if (u.selected) {
