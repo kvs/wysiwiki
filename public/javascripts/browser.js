@@ -35,6 +35,8 @@ define("ace/mode/ocaml",["require","exports","module","ace/lib/oop","ace/mode/te
 ;
 define("ace/mode/perl",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/perl_highlight_rules","ace/mode/matching_brace_outdent","ace/range"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./perl_highlight_rules").PerlHighlightRules,h=a("./matching_brace_outdent").MatchingBraceOutdent,i=a("../range").Range,j=function(){this.$tokenizer=new f((new g).getRules()),this.$outdent=new h};d.inherits(j,e),function(){this.toggleCommentLines=function(a,b,c,d){var e=!0,f=[],g=/^(\s*)#/;for(var h=c;h<=d;h++)if(!g.test(b.getLine(h))){e=!1;break}if(e){var j=new i(0,0,0,0);for(var h=c;h<=d;h++){var k=b.getLine(h),l=k.match(g);j.start.row=h,j.end.row=h,j.end.column=l[0].length,b.replace(j,l[1])}}else b.indentRows(c,d,"#")},this.getNextLineIndent=function(a,b,c){var d=this.$getIndent(b),e=this.$tokenizer.getLineTokens(b,a),f=e.tokens,g=e.state;if(f.length&&f[f.length-1].type=="comment")return d;if(a=="start"){var h=b.match(/^.*[\{\(\[\:]\s*$/);h&&(d+=c)}return d},this.checkOutdent=function(a,b,c){return this.$outdent.checkOutdent(b,c)},this.autoOutdent=function(a,b,c){this.$outdent.autoOutdent(b,c)}}.call(j.prototype),b.Mode=j}),define("ace/mode/perl_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("./text_highlight_rules").TextHighlightRules,g=function(){var a=e.arrayToMap("base|constant|continue|else|elsif|for|foreach|format|goto|if|last|local|my|next|no|package|parent|redo|require|scalar|sub|unless|until|while|use|vars".split("|")),b=e.arrayToMap("ARGV|ENV|INC|SIG".split("|")),c=e.arrayToMap("getprotobynumber|getprotobyname|getservbyname|gethostbyaddr|gethostbyname|getservbyport|getnetbyaddr|getnetbyname|getsockname|getpeername|setpriority|getprotoent|setprotoent|getpriority|endprotoent|getservent|setservent|endservent|sethostent|socketpair|getsockopt|gethostent|endhostent|setsockopt|setnetent|quotemeta|localtime|prototype|getnetent|endnetent|rewinddir|wantarray|getpwuid|closedir|getlogin|readlink|endgrent|getgrgid|getgrnam|shmwrite|shutdown|readline|endpwent|setgrent|readpipe|formline|truncate|dbmclose|syswrite|setpwent|getpwnam|getgrent|getpwent|ucfirst|sysread|setpgrp|shmread|sysseek|sysopen|telldir|defined|opendir|connect|lcfirst|getppid|binmode|syscall|sprintf|getpgrp|readdir|seekdir|waitpid|reverse|unshift|symlink|dbmopen|semget|msgrcv|rename|listen|chroot|msgsnd|shmctl|accept|unpack|exists|fileno|shmget|system|unlink|printf|gmtime|msgctl|semctl|values|rindex|substr|splice|length|msgget|select|socket|return|caller|delete|alarm|ioctl|index|undef|lstat|times|srand|chown|fcntl|close|write|umask|rmdir|study|sleep|chomp|untie|print|utime|mkdir|atan2|split|crypt|flock|chmod|BEGIN|bless|chdir|semop|shift|reset|link|stat|chop|grep|fork|dump|join|open|tell|pipe|exit|glob|warn|each|bind|sort|pack|eval|push|keys|getc|kill|seek|sqrt|send|wait|rand|tied|read|time|exec|recv|eof|chr|int|ord|exp|pos|pop|sin|log|abs|oct|hex|tie|cos|vec|END|ref|map|die|uc|lc|do".split("|"));this.$rules={start:[{token:"comment",regex:"#.*$"},{token:"string.regexp",regex:"[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",merge:!0,regex:'["].*\\\\$',next:"qqstring"},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:"string",merge:!0,regex:"['].*\\\\$",next:"qstring"},{token:"constant.numeric",regex:"0x[0-9a-fA-F]+\\b"},{token:"constant.numeric",regex:"[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},{token:function(d){return a.hasOwnProperty(d)?"keyword":b.hasOwnProperty(d)?"constant.language":c.hasOwnProperty(d)?"support.function":"identifier"},regex:"[a-zA-Z_$][a-zA-Z0-9_$]*\\b"},{token:"keyword.operator",regex:"\\.\\.\\.|\\|\\|=|>>=|<<=|<=>|&&=|=>|!~|\\^=|&=|\\|=|\\.=|x=|%=|\\/=|\\*=|\\-=|\\+=|=~|\\*\\*|\\-\\-|\\.\\.|\\|\\||&&|\\+\\+|\\->|!=|==|>=|<=|>>|<<|,|=|\\?\\:|\\^|\\||x|%|\\/|\\*|<|&|\\\\|~|!|>|\\.|\\-|\\+|\\-C|\\-b|\\-S|\\-u|\\-t|\\-p|\\-l|\\-d|\\-f|\\-g|\\-s|\\-z|\\-k|\\-e|\\-O|\\-T|\\-B|\\-M|\\-A|\\-X|\\-W|\\-c|\\-R|\\-o|\\-x|\\-w|\\-r|\\b(?:and|cmp|eq|ge|gt|le|lt|ne|not|or|xor)"},{token:"lparen",regex:"[[({]"},{token:"rparen",regex:"[\\])}]"},{token:"text",regex:"\\s+"}],qqstring:[{token:"string",regex:'(?:(?:\\\\.)|(?:[^"\\\\]))*?"',next:"start"},{token:"string",merge:!0,regex:".+"}],qstring:[{token:"string",regex:"(?:(?:\\\\.)|(?:[^'\\\\]))*?'",next:"start"},{token:"string",merge:!0,regex:".+"}]}};d.inherits(g,f),b.PerlHighlightRules=g}),define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(a,b,c){var d=a("../range").Range,e=function(){};((function(){this.checkOutdent=function(a,b){return/^\s+$/.test(a)?/^\s*\}/.test(b):!1},this.autoOutdent=function(a,b){var c=a.getLine(b),e=c.match(/^(\s*\})/);if(!e)return 0;var f=e[1].length,g=a.findMatchingBracket({row:b,column:f});if(!g||g.row==b)return 0;var h=this.$getIndent(a.getLine(g.row));a.replace(new d(b,0,b,f-1),h)},this.$getIndent=function(a){var b=a.match(/^(\s+)/);return b?b[1]:""}})).call(e.prototype),b.MatchingBraceOutdent=e});
 ;
+define("ace/mode/php",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/php_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/mode/behaviour/cstyle"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./php_highlight_rules").PhpHighlightRules,h=a("./matching_brace_outdent").MatchingBraceOutdent,i=a("../range").Range,j=a("./behaviour/cstyle").CstyleBehaviour,k=function(){this.$tokenizer=new f((new g).getRules()),this.$outdent=new h,this.$behaviour=new j};d.inherits(k,e),function(){this.toggleCommentLines=function(a,b,c,d){var e=!0,f=[],g=/^(\s*)#/;for(var h=c;h<=d;h++)if(!g.test(b.getLine(h))){e=!1;break}if(e){var j=new i(0,0,0,0);for(var h=c;h<=d;h++){var k=b.getLine(h),l=k.match(g);j.start.row=h,j.end.row=h,j.end.column=l[0].length,b.replace(j,l[1])}}else b.indentRows(c,d,"#")},this.getNextLineIndent=function(a,b,c){var d=this.$getIndent(b),e=this.$tokenizer.getLineTokens(b,a),f=e.tokens,g=e.state;if(f.length&&f[f.length-1].type=="comment")return d;if(a=="start"){var h=b.match(/^.*[\{\(\[\:]\s*$/);h&&(d+=c)}return d},this.checkOutdent=function(a,b,c){return this.$outdent.checkOutdent(b,c)},this.autoOutdent=function(a,b,c){this.$outdent.autoOutdent(b,c)}}.call(k.prototype),b.Mode=k}),define("ace/mode/php_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("./doc_comment_highlight_rules").DocCommentHighlightRules,g=a("./text_highlight_rules").TextHighlightRules,h=function(){var a=e.arrayToMap("abs|acos|acosh|addcslashes|addslashes|aggregate|aggregate_info|aggregate_methods|aggregate_methods_by_list|aggregate_methods_by_regexp|aggregate_properties|aggregate_properties_by_list|aggregate_properties_by_regexp|aggregation_info|amqpconnection|amqpexchange|amqpqueue|apache_child_terminate|apache_get_modules|apache_get_version|apache_getenv|apache_lookup_uri|apache_note|apache_request_headers|apache_reset_timeout|apache_response_headers|apache_setenv|apc_add|apc_bin_dump|apc_bin_dumpfile|apc_bin_load|apc_bin_loadfile|apc_cache_info|apc_cas|apc_clear_cache|apc_compile_file|apc_dec|apc_define_constants|apc_delete|apc_delete_file|apc_exists|apc_fetch|apc_inc|apc_load_constants|apc_sma_info|apc_store|apciterator|apd_breakpoint|apd_callstack|apd_clunk|apd_continue|apd_croak|apd_dump_function_table|apd_dump_persistent_resources|apd_dump_regular_resources|apd_echo|apd_get_active_symbols|apd_set_pprof_trace|apd_set_session|apd_set_session_trace|apd_set_session_trace_socket|appenditerator|array|array_change_key_case|array_chunk|array_combine|array_count_values|array_diff|array_diff_assoc|array_diff_key|array_diff_uassoc|array_diff_ukey|array_fill|array_fill_keys|array_filter|array_flip|array_intersect|array_intersect_assoc|array_intersect_key|array_intersect_uassoc|array_intersect_ukey|array_key_exists|array_keys|array_map|array_merge|array_merge_recursive|array_multisort|array_pad|array_pop|array_product|array_push|array_rand|array_reduce|array_replace|array_replace_recursive|array_reverse|array_search|array_shift|array_slice|array_splice|array_sum|array_udiff|array_udiff_assoc|array_udiff_uassoc|array_uintersect|array_uintersect_assoc|array_uintersect_uassoc|array_unique|array_unshift|array_values|array_walk|array_walk_recursive|arrayaccess|arrayiterator|arrayobject|arsort|asin|asinh|asort|assert|assert_options|atan|atan2|atanh|audioproperties|badfunctioncallexception|badmethodcallexception|base64_decode|base64_encode|base_convert|basename|bbcode_add_element|bbcode_add_smiley|bbcode_create|bbcode_destroy|bbcode_parse|bbcode_set_arg_parser|bbcode_set_flags|bcadd|bccomp|bcdiv|bcmod|bcmul|bcompiler_load|bcompiler_load_exe|bcompiler_parse_class|bcompiler_read|bcompiler_write_class|bcompiler_write_constant|bcompiler_write_exe_footer|bcompiler_write_file|bcompiler_write_footer|bcompiler_write_function|bcompiler_write_functions_from_file|bcompiler_write_header|bcompiler_write_included_filename|bcpow|bcpowmod|bcscale|bcsqrt|bcsub|bin2hex|bind_textdomain_codeset|bindec|bindtextdomain|bson_decode|bson_encode|bumpValue|bzclose|bzcompress|bzdecompress|bzerrno|bzerror|bzerrstr|bzflush|bzopen|bzread|bzwrite|cachingiterator|cairo|cairo_create|cairo_font_face_get_type|cairo_font_face_status|cairo_font_options_create|cairo_font_options_equal|cairo_font_options_get_antialias|cairo_font_options_get_hint_metrics|cairo_font_options_get_hint_style|cairo_font_options_get_subpixel_order|cairo_font_options_hash|cairo_font_options_merge|cairo_font_options_set_antialias|cairo_font_options_set_hint_metrics|cairo_font_options_set_hint_style|cairo_font_options_set_subpixel_order|cairo_font_options_status|cairo_format_stride_for_width|cairo_image_surface_create|cairo_image_surface_create_for_data|cairo_image_surface_create_from_png|cairo_image_surface_get_data|cairo_image_surface_get_format|cairo_image_surface_get_height|cairo_image_surface_get_stride|cairo_image_surface_get_width|cairo_matrix_create_scale|cairo_matrix_create_translate|cairo_matrix_invert|cairo_matrix_multiply|cairo_matrix_rotate|cairo_matrix_transform_distance|cairo_matrix_transform_point|cairo_matrix_translate|cairo_pattern_add_color_stop_rgb|cairo_pattern_add_color_stop_rgba|cairo_pattern_create_for_surface|cairo_pattern_create_linear|cairo_pattern_create_radial|cairo_pattern_create_rgb|cairo_pattern_create_rgba|cairo_pattern_get_color_stop_count|cairo_pattern_get_color_stop_rgba|cairo_pattern_get_extend|cairo_pattern_get_filter|cairo_pattern_get_linear_points|cairo_pattern_get_matrix|cairo_pattern_get_radial_circles|cairo_pattern_get_rgba|cairo_pattern_get_surface|cairo_pattern_get_type|cairo_pattern_set_extend|cairo_pattern_set_filter|cairo_pattern_set_matrix|cairo_pattern_status|cairo_pdf_surface_create|cairo_pdf_surface_set_size|cairo_ps_get_levels|cairo_ps_level_to_string|cairo_ps_surface_create|cairo_ps_surface_dsc_begin_page_setup|cairo_ps_surface_dsc_begin_setup|cairo_ps_surface_dsc_comment|cairo_ps_surface_get_eps|cairo_ps_surface_restrict_to_level|cairo_ps_surface_set_eps|cairo_ps_surface_set_size|cairo_scaled_font_create|cairo_scaled_font_extents|cairo_scaled_font_get_ctm|cairo_scaled_font_get_font_face|cairo_scaled_font_get_font_matrix|cairo_scaled_font_get_font_options|cairo_scaled_font_get_scale_matrix|cairo_scaled_font_get_type|cairo_scaled_font_glyph_extents|cairo_scaled_font_status|cairo_scaled_font_text_extents|cairo_surface_copy_page|cairo_surface_create_similar|cairo_surface_finish|cairo_surface_flush|cairo_surface_get_content|cairo_surface_get_device_offset|cairo_surface_get_font_options|cairo_surface_get_type|cairo_surface_mark_dirty|cairo_surface_mark_dirty_rectangle|cairo_surface_set_device_offset|cairo_surface_set_fallback_resolution|cairo_surface_show_page|cairo_surface_status|cairo_surface_write_to_png|cairo_svg_surface_create|cairo_svg_surface_restrict_to_version|cairo_svg_version_to_string|cairoantialias|cairocontent|cairocontext|cairoexception|cairoextend|cairofillrule|cairofilter|cairofontface|cairofontoptions|cairofontslant|cairofonttype|cairofontweight|cairoformat|cairogradientpattern|cairohintmetrics|cairohintstyle|cairoimagesurface|cairolineargradient|cairolinecap|cairolinejoin|cairomatrix|cairooperator|cairopath|cairopattern|cairopatterntype|cairopdfsurface|cairopslevel|cairopssurface|cairoradialgradient|cairoscaledfont|cairosolidpattern|cairostatus|cairosubpixelorder|cairosurface|cairosurfacepattern|cairosurfacetype|cairosvgsurface|cairosvgversion|cairotoyfontface|cal_days_in_month|cal_from_jd|cal_info|cal_to_jd|calcul_hmac|calculhmac|call_user_func|call_user_func_array|call_user_method|call_user_method_array|callbackfilteriterator|ceil|chdb|chdb_create|chdir|checkdate|checkdnsrr|chgrp|chmod|chop|chown|chr|chroot|chunk_split|class_alias|class_exists|class_implements|class_parents|classkit_import|classkit_method_add|classkit_method_copy|classkit_method_redefine|classkit_method_remove|classkit_method_rename|clearstatcache|clone|closedir|closelog|collator|com|com_addref|com_create_guid|com_event_sink|com_get|com_get_active_object|com_invoke|com_isenum|com_load|com_load_typelib|com_message_pump|com_print_typeinfo|com_propget|com_propput|com_propset|com_release|com_set|compact|connection_aborted|connection_status|connection_timeout|constant|construct|construct|construct|convert_cyr_string|convert_uudecode|convert_uuencode|copy|cos|cosh|count|count_chars|countable|counter_bump|counter_bump_value|counter_create|counter_get|counter_get_meta|counter_get_named|counter_get_value|counter_reset|counter_reset_value|crack_check|crack_closedict|crack_getlastmessage|crack_opendict|crc32|create_function|crypt|ctype_alnum|ctype_alpha|ctype_cntrl|ctype_digit|ctype_graph|ctype_lower|ctype_print|ctype_punct|ctype_space|ctype_upper|ctype_xdigit|cubrid_affected_rows|cubrid_bind|cubrid_client_encoding|cubrid_close|cubrid_close_prepare|cubrid_close_request|cubrid_col_get|cubrid_col_size|cubrid_column_names|cubrid_column_types|cubrid_commit|cubrid_connect|cubrid_connect_with_url|cubrid_current_oid|cubrid_data_seek|cubrid_db_name|cubrid_disconnect|cubrid_drop|cubrid_errno|cubrid_error|cubrid_error_code|cubrid_error_code_facility|cubrid_error_msg|cubrid_execute|cubrid_fetch|cubrid_fetch_array|cubrid_fetch_assoc|cubrid_fetch_field|cubrid_fetch_lengths|cubrid_fetch_object|cubrid_fetch_row|cubrid_field_flags|cubrid_field_len|cubrid_field_name|cubrid_field_seek|cubrid_field_table|cubrid_field_type|cubrid_free_result|cubrid_get|cubrid_get_autocommit|cubrid_get_charset|cubrid_get_class_name|cubrid_get_client_info|cubrid_get_db_parameter|cubrid_get_server_info|cubrid_insert_id|cubrid_is_instance|cubrid_list_dbs|cubrid_load_from_glo|cubrid_lob_close|cubrid_lob_export|cubrid_lob_get|cubrid_lob_send|cubrid_lob_size|cubrid_lock_read|cubrid_lock_write|cubrid_move_cursor|cubrid_new_glo|cubrid_next_result|cubrid_num_cols|cubrid_num_fields|cubrid_num_rows|cubrid_ping|cubrid_prepare|cubrid_put|cubrid_query|cubrid_real_escape_string|cubrid_result|cubrid_rollback|cubrid_save_to_glo|cubrid_schema|cubrid_send_glo|cubrid_seq_drop|cubrid_seq_insert|cubrid_seq_put|cubrid_set_add|cubrid_set_autocommit|cubrid_set_db_parameter|cubrid_set_drop|cubrid_unbuffered_query|cubrid_version|curl_close|curl_copy_handle|curl_errno|curl_error|curl_exec|curl_getinfo|curl_init|curl_multi_add_handle|curl_multi_close|curl_multi_exec|curl_multi_getcontent|curl_multi_info_read|curl_multi_init|curl_multi_remove_handle|curl_multi_select|curl_setopt|curl_setopt_array|curl_version|current|cyrus_authenticate|cyrus_bind|cyrus_close|cyrus_connect|cyrus_query|cyrus_unbind|date|date_add|date_create|date_create_from_format|date_date_set|date_default_timezone_get|date_default_timezone_set|date_diff|date_format|date_get_last_errors|date_interval_create_from_date_string|date_interval_format|date_isodate_set|date_modify|date_offset_get|date_parse|date_parse_from_format|date_sub|date_sun_info|date_sunrise|date_sunset|date_time_set|date_timestamp_get|date_timestamp_set|date_timezone_get|date_timezone_set|dateinterval|dateperiod|datetime|datetimezone|db2_autocommit|db2_bind_param|db2_client_info|db2_close|db2_column_privileges|db2_columns|db2_commit|db2_conn_error|db2_conn_errormsg|db2_connect|db2_cursor_type|db2_escape_string|db2_exec|db2_execute|db2_fetch_array|db2_fetch_assoc|db2_fetch_both|db2_fetch_object|db2_fetch_row|db2_field_display_size|db2_field_name|db2_field_num|db2_field_precision|db2_field_scale|db2_field_type|db2_field_width|db2_foreign_keys|db2_free_result|db2_free_stmt|db2_get_option|db2_last_insert_id|db2_lob_read|db2_next_result|db2_num_fields|db2_num_rows|db2_pclose|db2_pconnect|db2_prepare|db2_primary_keys|db2_procedure_columns|db2_procedures|db2_result|db2_rollback|db2_server_info|db2_set_option|db2_special_columns|db2_statistics|db2_stmt_error|db2_stmt_errormsg|db2_table_privileges|db2_tables|dba_close|dba_delete|dba_exists|dba_fetch|dba_firstkey|dba_handlers|dba_insert|dba_key_split|dba_list|dba_nextkey|dba_open|dba_optimize|dba_popen|dba_replace|dba_sync|dbase_add_record|dbase_close|dbase_create|dbase_delete_record|dbase_get_header_info|dbase_get_record|dbase_get_record_with_names|dbase_numfields|dbase_numrecords|dbase_open|dbase_pack|dbase_replace_record|dbplus_add|dbplus_aql|dbplus_chdir|dbplus_close|dbplus_curr|dbplus_errcode|dbplus_errno|dbplus_find|dbplus_first|dbplus_flush|dbplus_freealllocks|dbplus_freelock|dbplus_freerlocks|dbplus_getlock|dbplus_getunique|dbplus_info|dbplus_last|dbplus_lockrel|dbplus_next|dbplus_open|dbplus_prev|dbplus_rchperm|dbplus_rcreate|dbplus_rcrtexact|dbplus_rcrtlike|dbplus_resolve|dbplus_restorepos|dbplus_rkeys|dbplus_ropen|dbplus_rquery|dbplus_rrename|dbplus_rsecindex|dbplus_runlink|dbplus_rzap|dbplus_savepos|dbplus_setindex|dbplus_setindexbynumber|dbplus_sql|dbplus_tcl|dbplus_tremove|dbplus_undo|dbplus_undoprepare|dbplus_unlockrel|dbplus_unselect|dbplus_update|dbplus_xlockrel|dbplus_xunlockrel|dbx_close|dbx_compare|dbx_connect|dbx_error|dbx_escape_string|dbx_fetch_row|dbx_query|dbx_sort|dcgettext|dcngettext|deaggregate|debug_backtrace|debug_print_backtrace|debug_zval_dump|decbin|dechex|decoct|define|define_syslog_variables|defined|deg2rad|delete|dgettext|die|dio_close|dio_fcntl|dio_open|dio_read|dio_seek|dio_stat|dio_tcsetattr|dio_truncate|dio_write|dir|directoryiterator|dirname|disk_free_space|disk_total_space|diskfreespace|dl|dngettext|dns_check_record|dns_get_mx|dns_get_record|dom_import_simplexml|domainexception|domattr|domattribute_name|domattribute_set_value|domattribute_specified|domattribute_value|domcharacterdata|domcomment|domdocument|domdocument_add_root|domdocument_create_attribute|domdocument_create_cdata_section|domdocument_create_comment|domdocument_create_element|domdocument_create_element_ns|domdocument_create_entity_reference|domdocument_create_processing_instruction|domdocument_create_text_node|domdocument_doctype|domdocument_document_element|domdocument_dump_file|domdocument_dump_mem|domdocument_get_element_by_id|domdocument_get_elements_by_tagname|domdocument_html_dump_mem|domdocument_xinclude|domdocumentfragment|domdocumenttype|domdocumenttype_entities|domdocumenttype_internal_subset|domdocumenttype_name|domdocumenttype_notations|domdocumenttype_public_id|domdocumenttype_system_id|domelement|domelement_get_attribute|domelement_get_attribute_node|domelement_get_elements_by_tagname|domelement_has_attribute|domelement_remove_attribute|domelement_set_attribute|domelement_set_attribute_node|domelement_tagname|domentity|domentityreference|domexception|domimplementation|domnamednodemap|domnode|domnode_add_namespace|domnode_append_child|domnode_append_sibling|domnode_attributes|domnode_child_nodes|domnode_clone_node|domnode_dump_node|domnode_first_child|domnode_get_content|domnode_has_attributes|domnode_has_child_nodes|domnode_insert_before|domnode_is_blank_node|domnode_last_child|domnode_next_sibling|domnode_node_name|domnode_node_type|domnode_node_value|domnode_owner_document|domnode_parent_node|domnode_prefix|domnode_previous_sibling|domnode_remove_child|domnode_replace_child|domnode_replace_node|domnode_set_content|domnode_set_name|domnode_set_namespace|domnode_unlink_node|domnodelist|domnotation|domprocessinginstruction|domprocessinginstruction_data|domprocessinginstruction_target|domtext|domxml_new_doc|domxml_open_file|domxml_open_mem|domxml_version|domxml_xmltree|domxml_xslt_stylesheet|domxml_xslt_stylesheet_doc|domxml_xslt_stylesheet_file|domxml_xslt_version|domxpath|domxsltstylesheet_process|domxsltstylesheet_result_dump_file|domxsltstylesheet_result_dump_mem|dotnet|dotnet_load|doubleval|each|easter_date|easter_days|echo|empty|emptyiterator|enchant_broker_describe|enchant_broker_dict_exists|enchant_broker_free|enchant_broker_free_dict|enchant_broker_get_error|enchant_broker_init|enchant_broker_list_dicts|enchant_broker_request_dict|enchant_broker_request_pwl_dict|enchant_broker_set_ordering|enchant_dict_add_to_personal|enchant_dict_add_to_session|enchant_dict_check|enchant_dict_describe|enchant_dict_get_error|enchant_dict_is_in_session|enchant_dict_quick_check|enchant_dict_store_replacement|enchant_dict_suggest|end|ereg|ereg_replace|eregi|eregi_replace|error_get_last|error_log|error_reporting|errorexception|escapeshellarg|escapeshellcmd|eval|event_add|event_base_free|event_base_loop|event_base_loopbreak|event_base_loopexit|event_base_new|event_base_priority_init|event_base_set|event_buffer_base_set|event_buffer_disable|event_buffer_enable|event_buffer_fd_set|event_buffer_free|event_buffer_new|event_buffer_priority_set|event_buffer_read|event_buffer_set_callback|event_buffer_timeout_set|event_buffer_watermark_set|event_buffer_write|event_del|event_free|event_new|event_set|exception|exec|exif_imagetype|exif_read_data|exif_tagname|exif_thumbnail|exit|exp|expect_expectl|expect_popen|explode|expm1|export|export|extension_loaded|extract|ezmlm_hash|fam_cancel_monitor|fam_close|fam_monitor_collection|fam_monitor_directory|fam_monitor_file|fam_next_event|fam_open|fam_pending|fam_resume_monitor|fam_suspend_monitor|fbsql_affected_rows|fbsql_autocommit|fbsql_blob_size|fbsql_change_user|fbsql_clob_size|fbsql_close|fbsql_commit|fbsql_connect|fbsql_create_blob|fbsql_create_clob|fbsql_create_db|fbsql_data_seek|fbsql_database|fbsql_database_password|fbsql_db_query|fbsql_db_status|fbsql_drop_db|fbsql_errno|fbsql_error|fbsql_fetch_array|fbsql_fetch_assoc|fbsql_fetch_field|fbsql_fetch_lengths|fbsql_fetch_object|fbsql_fetch_row|fbsql_field_flags|fbsql_field_len|fbsql_field_name|fbsql_field_seek|fbsql_field_table|fbsql_field_type|fbsql_free_result|fbsql_get_autostart_info|fbsql_hostname|fbsql_insert_id|fbsql_list_dbs|fbsql_list_fields|fbsql_list_tables|fbsql_next_result|fbsql_num_fields|fbsql_num_rows|fbsql_password|fbsql_pconnect|fbsql_query|fbsql_read_blob|fbsql_read_clob|fbsql_result|fbsql_rollback|fbsql_rows_fetched|fbsql_select_db|fbsql_set_characterset|fbsql_set_lob_mode|fbsql_set_password|fbsql_set_transaction|fbsql_start_db|fbsql_stop_db|fbsql_table_name|fbsql_tablename|fbsql_username|fbsql_warnings|fclose|fdf_add_doc_javascript|fdf_add_template|fdf_close|fdf_create|fdf_enum_values|fdf_errno|fdf_error|fdf_get_ap|fdf_get_attachment|fdf_get_encoding|fdf_get_file|fdf_get_flags|fdf_get_opt|fdf_get_status|fdf_get_value|fdf_get_version|fdf_header|fdf_next_field_name|fdf_open|fdf_open_string|fdf_remove_item|fdf_save|fdf_save_string|fdf_set_ap|fdf_set_encoding|fdf_set_file|fdf_set_flags|fdf_set_javascript_action|fdf_set_on_import_javascript|fdf_set_opt|fdf_set_status|fdf_set_submit_form_action|fdf_set_target_frame|fdf_set_value|fdf_set_version|feof|fflush|fgetc|fgetcsv|fgets|fgetss|file|file_exists|file_get_contents|file_put_contents|fileatime|filectime|filegroup|fileinode|filemtime|fileowner|fileperms|filepro|filepro_fieldcount|filepro_fieldname|filepro_fieldtype|filepro_fieldwidth|filepro_retrieve|filepro_rowcount|filesize|filesystemiterator|filetype|filter_has_var|filter_id|filter_input|filter_input_array|filter_list|filter_var|filter_var_array|filteriterator|finfo_buffer|finfo_close|finfo_file|finfo_open|finfo_set_flags|floatval|flock|floor|flush|fmod|fnmatch|fopen|forward_static_call|forward_static_call_array|fpassthru|fprintf|fputcsv|fputs|fread|frenchtojd|fribidi_log2vis|fscanf|fseek|fsockopen|fstat|ftell|ftok|ftp_alloc|ftp_cdup|ftp_chdir|ftp_chmod|ftp_close|ftp_connect|ftp_delete|ftp_exec|ftp_fget|ftp_fput|ftp_get|ftp_get_option|ftp_login|ftp_mdtm|ftp_mkdir|ftp_nb_continue|ftp_nb_fget|ftp_nb_fput|ftp_nb_get|ftp_nb_put|ftp_nlist|ftp_pasv|ftp_put|ftp_pwd|ftp_quit|ftp_raw|ftp_rawlist|ftp_rename|ftp_rmdir|ftp_set_option|ftp_site|ftp_size|ftp_ssl_connect|ftp_systype|ftruncate|func_get_arg|func_get_args|func_num_args|function_exists|fwrite|gc_collect_cycles|gc_disable|gc_enable|gc_enabled|gd_info|gearmanclient|gearmanjob|gearmantask|gearmanworker|geoip_continent_code_by_name|geoip_country_code3_by_name|geoip_country_code_by_name|geoip_country_name_by_name|geoip_database_info|geoip_db_avail|geoip_db_filename|geoip_db_get_all_info|geoip_id_by_name|geoip_isp_by_name|geoip_org_by_name|geoip_record_by_name|geoip_region_by_name|geoip_region_name_by_code|geoip_time_zone_by_country_and_region|getMeta|getNamed|getValue|get_browser|get_called_class|get_cfg_var|get_class|get_class_methods|get_class_vars|get_current_user|get_declared_classes|get_declared_interfaces|get_defined_constants|get_defined_functions|get_defined_vars|get_extension_funcs|get_headers|get_html_translation_table|get_include_path|get_included_files|get_loaded_extensions|get_magic_quotes_gpc|get_magic_quotes_runtime|get_meta_tags|get_object_vars|get_parent_class|get_required_files|get_resource_type|getallheaders|getconstant|getconstants|getconstructor|getcwd|getdate|getdefaultproperties|getdoccomment|getendline|getenv|getextension|getextensionname|getfilename|gethostbyaddr|gethostbyname|gethostbynamel|gethostname|getimagesize|getinterfacenames|getinterfaces|getlastmod|getmethod|getmethods|getmodifiers|getmxrr|getmygid|getmyinode|getmypid|getmyuid|getname|getnamespacename|getopt|getparentclass|getproperties|getproperty|getprotobyname|getprotobynumber|getrandmax|getrusage|getservbyname|getservbyport|getshortname|getstartline|getstaticproperties|getstaticpropertyvalue|gettext|gettimeofday|gettype|glob|globiterator|gmagick|gmagickdraw|gmagickpixel|gmdate|gmmktime|gmp_abs|gmp_add|gmp_and|gmp_clrbit|gmp_cmp|gmp_com|gmp_div|gmp_div_q|gmp_div_qr|gmp_div_r|gmp_divexact|gmp_fact|gmp_gcd|gmp_gcdext|gmp_hamdist|gmp_init|gmp_intval|gmp_invert|gmp_jacobi|gmp_legendre|gmp_mod|gmp_mul|gmp_neg|gmp_nextprime|gmp_or|gmp_perfect_square|gmp_popcount|gmp_pow|gmp_powm|gmp_prob_prime|gmp_random|gmp_scan0|gmp_scan1|gmp_setbit|gmp_sign|gmp_sqrt|gmp_sqrtrem|gmp_strval|gmp_sub|gmp_testbit|gmp_xor|gmstrftime|gnupg_adddecryptkey|gnupg_addencryptkey|gnupg_addsignkey|gnupg_cleardecryptkeys|gnupg_clearencryptkeys|gnupg_clearsignkeys|gnupg_decrypt|gnupg_decryptverify|gnupg_encrypt|gnupg_encryptsign|gnupg_export|gnupg_geterror|gnupg_getprotocol|gnupg_import|gnupg_init|gnupg_keyinfo|gnupg_setarmor|gnupg_seterrormode|gnupg_setsignmode|gnupg_sign|gnupg_verify|gopher_parsedir|grapheme_extract|grapheme_stripos|grapheme_stristr|grapheme_strlen|grapheme_strpos|grapheme_strripos|grapheme_strrpos|grapheme_strstr|grapheme_substr|gregoriantojd|gupnp_context_get_host_ip|gupnp_context_get_port|gupnp_context_get_subscription_timeout|gupnp_context_host_path|gupnp_context_new|gupnp_context_set_subscription_timeout|gupnp_context_timeout_add|gupnp_context_unhost_path|gupnp_control_point_browse_start|gupnp_control_point_browse_stop|gupnp_control_point_callback_set|gupnp_control_point_new|gupnp_device_action_callback_set|gupnp_device_info_get|gupnp_device_info_get_service|gupnp_root_device_get_available|gupnp_root_device_get_relative_location|gupnp_root_device_new|gupnp_root_device_set_available|gupnp_root_device_start|gupnp_root_device_stop|gupnp_service_action_get|gupnp_service_action_return|gupnp_service_action_return_error|gupnp_service_action_set|gupnp_service_freeze_notify|gupnp_service_info_get|gupnp_service_info_get_introspection|gupnp_service_introspection_get_state_variable|gupnp_service_notify|gupnp_service_proxy_action_get|gupnp_service_proxy_action_set|gupnp_service_proxy_add_notify|gupnp_service_proxy_callback_set|gupnp_service_proxy_get_subscribed|gupnp_service_proxy_remove_notify|gupnp_service_proxy_set_subscribed|gupnp_service_thaw_notify|gzclose|gzcompress|gzdecode|gzdeflate|gzencode|gzeof|gzfile|gzgetc|gzgets|gzgetss|gzinflate|gzopen|gzpassthru|gzputs|gzread|gzrewind|gzseek|gztell|gzuncompress|gzwrite|halt_compiler|haruannotation|haruannotation_setborderstyle|haruannotation_sethighlightmode|haruannotation_seticon|haruannotation_setopened|harudestination|harudestination_setfit|harudestination_setfitb|harudestination_setfitbh|harudestination_setfitbv|harudestination_setfith|harudestination_setfitr|harudestination_setfitv|harudestination_setxyz|harudoc|harudoc_addpage|harudoc_addpagelabel|harudoc_construct|harudoc_createoutline|harudoc_getcurrentencoder|harudoc_getcurrentpage|harudoc_getencoder|harudoc_getfont|harudoc_getinfoattr|harudoc_getpagelayout|harudoc_getpagemode|harudoc_getstreamsize|harudoc_insertpage|harudoc_loadjpeg|harudoc_loadpng|harudoc_loadraw|harudoc_loadttc|harudoc_loadttf|harudoc_loadtype1|harudoc_output|harudoc_readfromstream|harudoc_reseterror|harudoc_resetstream|harudoc_save|harudoc_savetostream|harudoc_setcompressionmode|harudoc_setcurrentencoder|harudoc_setencryptionmode|harudoc_setinfoattr|harudoc_setinfodateattr|harudoc_setopenaction|harudoc_setpagelayout|harudoc_setpagemode|harudoc_setpagesconfiguration|harudoc_setpassword|harudoc_setpermission|harudoc_usecnsencodings|harudoc_usecnsfonts|harudoc_usecntencodings|harudoc_usecntfonts|harudoc_usejpencodings|harudoc_usejpfonts|harudoc_usekrencodings|harudoc_usekrfonts|haruencoder|haruencoder_getbytetype|haruencoder_gettype|haruencoder_getunicode|haruencoder_getwritingmode|haruexception|harufont|harufont_getascent|harufont_getcapheight|harufont_getdescent|harufont_getencodingname|harufont_getfontname|harufont_gettextwidth|harufont_getunicodewidth|harufont_getxheight|harufont_measuretext|haruimage|haruimage_getbitspercomponent|haruimage_getcolorspace|haruimage_getheight|haruimage_getsize|haruimage_getwidth|haruimage_setcolormask|haruimage_setmaskimage|haruoutline|haruoutline_setdestination|haruoutline_setopened|harupage|harupage_arc|harupage_begintext|harupage_circle|harupage_closepath|harupage_concat|harupage_createdestination|harupage_createlinkannotation|harupage_createtextannotation|harupage_createurlannotation|harupage_curveto|harupage_curveto2|harupage_curveto3|harupage_drawimage|harupage_ellipse|harupage_endpath|harupage_endtext|harupage_eofill|harupage_eofillstroke|harupage_fill|harupage_fillstroke|harupage_getcharspace|harupage_getcmykfill|harupage_getcmykstroke|harupage_getcurrentfont|harupage_getcurrentfontsize|harupage_getcurrentpos|harupage_getcurrenttextpos|harupage_getdash|harupage_getfillingcolorspace|harupage_getflatness|harupage_getgmode|harupage_getgrayfill|harupage_getgraystroke|harupage_getheight|harupage_gethorizontalscaling|harupage_getlinecap|harupage_getlinejoin|harupage_getlinewidth|harupage_getmiterlimit|harupage_getrgbfill|harupage_getrgbstroke|harupage_getstrokingcolorspace|harupage_gettextleading|harupage_gettextmatrix|harupage_gettextrenderingmode|harupage_gettextrise|harupage_gettextwidth|harupage_gettransmatrix|harupage_getwidth|harupage_getwordspace|harupage_lineto|harupage_measuretext|harupage_movetextpos|harupage_moveto|harupage_movetonextline|harupage_rectangle|harupage_setcharspace|harupage_setcmykfill|harupage_setcmykstroke|harupage_setdash|harupage_setflatness|harupage_setfontandsize|harupage_setgrayfill|harupage_setgraystroke|harupage_setheight|harupage_sethorizontalscaling|harupage_setlinecap|harupage_setlinejoin|harupage_setlinewidth|harupage_setmiterlimit|harupage_setrgbfill|harupage_setrgbstroke|harupage_setrotate|harupage_setsize|harupage_setslideshow|harupage_settextleading|harupage_settextmatrix|harupage_settextrenderingmode|harupage_settextrise|harupage_setwidth|harupage_setwordspace|harupage_showtext|harupage_showtextnextline|harupage_stroke|harupage_textout|harupage_textrect|hasconstant|hash|hash_algos|hash_copy|hash_file|hash_final|hash_hmac|hash_hmac_file|hash_init|hash_update|hash_update_file|hash_update_stream|hasmethod|hasproperty|header|header_register_callback|header_remove|headers_list|headers_sent|hebrev|hebrevc|hex2bin|hexdec|highlight_file|highlight_string|html_entity_decode|htmlentities|htmlspecialchars|htmlspecialchars_decode|http_build_cookie|http_build_query|http_build_str|http_build_url|http_cache_etag|http_cache_last_modified|http_chunked_decode|http_date|http_deflate|http_get|http_get_request_body|http_get_request_body_stream|http_get_request_headers|http_head|http_inflate|http_match_etag|http_match_modified|http_match_request_header|http_negotiate_charset|http_negotiate_content_type|http_negotiate_language|http_parse_cookie|http_parse_headers|http_parse_message|http_parse_params|http_persistent_handles_clean|http_persistent_handles_count|http_persistent_handles_ident|http_post_data|http_post_fields|http_put_data|http_put_file|http_put_stream|http_redirect|http_request|http_request_body_encode|http_request_method_exists|http_request_method_name|http_request_method_register|http_request_method_unregister|http_response_code|http_send_content_disposition|http_send_content_type|http_send_data|http_send_file|http_send_last_modified|http_send_status|http_send_stream|http_support|http_throttle|httpdeflatestream|httpdeflatestream_construct|httpdeflatestream_factory|httpdeflatestream_finish|httpdeflatestream_flush|httpdeflatestream_update|httpinflatestream|httpinflatestream_construct|httpinflatestream_factory|httpinflatestream_finish|httpinflatestream_flush|httpinflatestream_update|httpmessage|httpmessage_addheaders|httpmessage_construct|httpmessage_detach|httpmessage_factory|httpmessage_fromenv|httpmessage_fromstring|httpmessage_getbody|httpmessage_getheader|httpmessage_getheaders|httpmessage_gethttpversion|httpmessage_getparentmessage|httpmessage_getrequestmethod|httpmessage_getrequesturl|httpmessage_getresponsecode|httpmessage_getresponsestatus|httpmessage_gettype|httpmessage_guesscontenttype|httpmessage_prepend|httpmessage_reverse|httpmessage_send|httpmessage_setbody|httpmessage_setheaders|httpmessage_sethttpversion|httpmessage_setrequestmethod|httpmessage_setrequesturl|httpmessage_setresponsecode|httpmessage_setresponsestatus|httpmessage_settype|httpmessage_tomessagetypeobject|httpmessage_tostring|httpquerystring|httpquerystring_construct|httpquerystring_get|httpquerystring_mod|httpquerystring_set|httpquerystring_singleton|httpquerystring_toarray|httpquerystring_tostring|httpquerystring_xlate|httprequest|httprequest_addcookies|httprequest_addheaders|httprequest_addpostfields|httprequest_addpostfile|httprequest_addputdata|httprequest_addquerydata|httprequest_addrawpostdata|httprequest_addssloptions|httprequest_clearhistory|httprequest_construct|httprequest_enablecookies|httprequest_getcontenttype|httprequest_getcookies|httprequest_getheaders|httprequest_gethistory|httprequest_getmethod|httprequest_getoptions|httprequest_getpostfields|httprequest_getpostfiles|httprequest_getputdata|httprequest_getputfile|httprequest_getquerydata|httprequest_getrawpostdata|httprequest_getrawrequestmessage|httprequest_getrawresponsemessage|httprequest_getrequestmessage|httprequest_getresponsebody|httprequest_getresponsecode|httprequest_getresponsecookies|httprequest_getresponsedata|httprequest_getresponseheader|httprequest_getresponseinfo|httprequest_getresponsemessage|httprequest_getresponsestatus|httprequest_getssloptions|httprequest_geturl|httprequest_resetcookies|httprequest_send|httprequest_setcontenttype|httprequest_setcookies|httprequest_setheaders|httprequest_setmethod|httprequest_setoptions|httprequest_setpostfields|httprequest_setpostfiles|httprequest_setputdata|httprequest_setputfile|httprequest_setquerydata|httprequest_setrawpostdata|httprequest_setssloptions|httprequest_seturl|httprequestpool|httprequestpool_attach|httprequestpool_construct|httprequestpool_destruct|httprequestpool_detach|httprequestpool_getattachedrequests|httprequestpool_getfinishedrequests|httprequestpool_reset|httprequestpool_send|httprequestpool_socketperform|httprequestpool_socketselect|httpresponse|httpresponse_capture|httpresponse_getbuffersize|httpresponse_getcache|httpresponse_getcachecontrol|httpresponse_getcontentdisposition|httpresponse_getcontenttype|httpresponse_getdata|httpresponse_getetag|httpresponse_getfile|httpresponse_getgzip|httpresponse_getheader|httpresponse_getlastmodified|httpresponse_getrequestbody|httpresponse_getrequestbodystream|httpresponse_getrequestheaders|httpresponse_getstream|httpresponse_getthrottledelay|httpresponse_guesscontenttype|httpresponse_redirect|httpresponse_send|httpresponse_setbuffersize|httpresponse_setcache|httpresponse_setcachecontrol|httpresponse_setcontentdisposition|httpresponse_setcontenttype|httpresponse_setdata|httpresponse_setetag|httpresponse_setfile|httpresponse_setgzip|httpresponse_setheader|httpresponse_setlastmodified|httpresponse_setstream|httpresponse_setthrottledelay|httpresponse_status|hw_array2objrec|hw_changeobject|hw_children|hw_childrenobj|hw_close|hw_connect|hw_connection_info|hw_cp|hw_deleteobject|hw_docbyanchor|hw_docbyanchorobj|hw_document_attributes|hw_document_bodytag|hw_document_content|hw_document_setcontent|hw_document_size|hw_dummy|hw_edittext|hw_error|hw_errormsg|hw_free_document|hw_getanchors|hw_getanchorsobj|hw_getandlock|hw_getchildcoll|hw_getchildcollobj|hw_getchilddoccoll|hw_getchilddoccollobj|hw_getobject|hw_getobjectbyquery|hw_getobjectbyquerycoll|hw_getobjectbyquerycollobj|hw_getobjectbyqueryobj|hw_getparents|hw_getparentsobj|hw_getrellink|hw_getremote|hw_getremotechildren|hw_getsrcbydestobj|hw_gettext|hw_getusername|hw_identify|hw_incollections|hw_info|hw_inscoll|hw_insdoc|hw_insertanchors|hw_insertdocument|hw_insertobject|hw_mapid|hw_modifyobject|hw_mv|hw_new_document|hw_objrec2array|hw_output_document|hw_pconnect|hw_pipedocument|hw_root|hw_setlinkroot|hw_stat|hw_unlock|hw_who|hwapi_attribute|hwapi_attribute_key|hwapi_attribute_langdepvalue|hwapi_attribute_value|hwapi_attribute_values|hwapi_checkin|hwapi_checkout|hwapi_children|hwapi_content|hwapi_content_mimetype|hwapi_content_read|hwapi_copy|hwapi_dbstat|hwapi_dcstat|hwapi_dstanchors|hwapi_dstofsrcanchor|hwapi_error_count|hwapi_error_reason|hwapi_find|hwapi_ftstat|hwapi_hgcsp|hwapi_hwstat|hwapi_identify|hwapi_info|hwapi_insert|hwapi_insertanchor|hwapi_insertcollection|hwapi_insertdocument|hwapi_link|hwapi_lock|hwapi_move|hwapi_new_content|hwapi_object|hwapi_object_assign|hwapi_object_attreditable|hwapi_object_count|hwapi_object_insert|hwapi_object_new|hwapi_object_remove|hwapi_object_title|hwapi_object_value|hwapi_objectbyanchor|hwapi_parents|hwapi_reason_description|hwapi_reason_type|hwapi_remove|hwapi_replace|hwapi_setcommittedversion|hwapi_srcanchors|hwapi_srcsofdst|hwapi_unlock|hwapi_user|hwapi_userlist|hypot|ibase_add_user|ibase_affected_rows|ibase_backup|ibase_blob_add|ibase_blob_cancel|ibase_blob_close|ibase_blob_create|ibase_blob_echo|ibase_blob_get|ibase_blob_import|ibase_blob_info|ibase_blob_open|ibase_close|ibase_commit|ibase_commit_ret|ibase_connect|ibase_db_info|ibase_delete_user|ibase_drop_db|ibase_errcode|ibase_errmsg|ibase_execute|ibase_fetch_assoc|ibase_fetch_object|ibase_fetch_row|ibase_field_info|ibase_free_event_handler|ibase_free_query|ibase_free_result|ibase_gen_id|ibase_maintain_db|ibase_modify_user|ibase_name_result|ibase_num_fields|ibase_num_params|ibase_param_info|ibase_pconnect|ibase_prepare|ibase_query|ibase_restore|ibase_rollback|ibase_rollback_ret|ibase_server_info|ibase_service_attach|ibase_service_detach|ibase_set_event_handler|ibase_timefmt|ibase_trans|ibase_wait_event|iconv|iconv_get_encoding|iconv_mime_decode|iconv_mime_decode_headers|iconv_mime_encode|iconv_set_encoding|iconv_strlen|iconv_strpos|iconv_strrpos|iconv_substr|id3_get_frame_long_name|id3_get_frame_short_name|id3_get_genre_id|id3_get_genre_list|id3_get_genre_name|id3_get_tag|id3_get_version|id3_remove_tag|id3_set_tag|id3v2attachedpictureframe|id3v2frame|id3v2tag|idate|idn_to_ascii|idn_to_unicode|idn_to_utf8|ifx_affected_rows|ifx_blobinfile_mode|ifx_byteasvarchar|ifx_close|ifx_connect|ifx_copy_blob|ifx_create_blob|ifx_create_char|ifx_do|ifx_error|ifx_errormsg|ifx_fetch_row|ifx_fieldproperties|ifx_fieldtypes|ifx_free_blob|ifx_free_char|ifx_free_result|ifx_get_blob|ifx_get_char|ifx_getsqlca|ifx_htmltbl_result|ifx_nullformat|ifx_num_fields|ifx_num_rows|ifx_pconnect|ifx_prepare|ifx_query|ifx_textasvarchar|ifx_update_blob|ifx_update_char|ifxus_close_slob|ifxus_create_slob|ifxus_free_slob|ifxus_open_slob|ifxus_read_slob|ifxus_seek_slob|ifxus_tell_slob|ifxus_write_slob|ignore_user_abort|iis_add_server|iis_get_dir_security|iis_get_script_map|iis_get_server_by_comment|iis_get_server_by_path|iis_get_server_rights|iis_get_service_state|iis_remove_server|iis_set_app_settings|iis_set_dir_security|iis_set_script_map|iis_set_server_rights|iis_start_server|iis_start_service|iis_stop_server|iis_stop_service|image2wbmp|image_type_to_extension|image_type_to_mime_type|imagealphablending|imageantialias|imagearc|imagechar|imagecharup|imagecolorallocate|imagecolorallocatealpha|imagecolorat|imagecolorclosest|imagecolorclosestalpha|imagecolorclosesthwb|imagecolordeallocate|imagecolorexact|imagecolorexactalpha|imagecolormatch|imagecolorresolve|imagecolorresolvealpha|imagecolorset|imagecolorsforindex|imagecolorstotal|imagecolortransparent|imageconvolution|imagecopy|imagecopymerge|imagecopymergegray|imagecopyresampled|imagecopyresized|imagecreate|imagecreatefromgd|imagecreatefromgd2|imagecreatefromgd2part|imagecreatefromgif|imagecreatefromjpeg|imagecreatefrompng|imagecreatefromstring|imagecreatefromwbmp|imagecreatefromxbm|imagecreatefromxpm|imagecreatetruecolor|imagedashedline|imagedestroy|imageellipse|imagefill|imagefilledarc|imagefilledellipse|imagefilledpolygon|imagefilledrectangle|imagefilltoborder|imagefilter|imagefontheight|imagefontwidth|imageftbbox|imagefttext|imagegammacorrect|imagegd|imagegd2|imagegif|imagegrabscreen|imagegrabwindow|imageinterlace|imageistruecolor|imagejpeg|imagelayereffect|imageline|imageloadfont|imagepalettecopy|imagepng|imagepolygon|imagepsbbox|imagepsencodefont|imagepsextendfont|imagepsfreefont|imagepsloadfont|imagepsslantfont|imagepstext|imagerectangle|imagerotate|imagesavealpha|imagesetbrush|imagesetpixel|imagesetstyle|imagesetthickness|imagesettile|imagestring|imagestringup|imagesx|imagesy|imagetruecolortopalette|imagettfbbox|imagettftext|imagetypes|imagewbmp|imagexbm|imagick|imagick_adaptiveblurimage|imagick_adaptiveresizeimage|imagick_adaptivesharpenimage|imagick_adaptivethresholdimage|imagick_addimage|imagick_addnoiseimage|imagick_affinetransformimage|imagick_animateimages|imagick_annotateimage|imagick_appendimages|imagick_averageimages|imagick_blackthresholdimage|imagick_blurimage|imagick_borderimage|imagick_charcoalimage|imagick_chopimage|imagick_clear|imagick_clipimage|imagick_clippathimage|imagick_clone|imagick_clutimage|imagick_coalesceimages|imagick_colorfloodfillimage|imagick_colorizeimage|imagick_combineimages|imagick_commentimage|imagick_compareimagechannels|imagick_compareimagelayers|imagick_compareimages|imagick_compositeimage|imagick_construct|imagick_contrastimage|imagick_contraststretchimage|imagick_convolveimage|imagick_cropimage|imagick_cropthumbnailimage|imagick_current|imagick_cyclecolormapimage|imagick_decipherimage|imagick_deconstructimages|imagick_deleteimageartifact|imagick_despeckleimage|imagick_destroy|imagick_displayimage|imagick_displayimages|imagick_distortimage|imagick_drawimage|imagick_edgeimage|imagick_embossimage|imagick_encipherimage|imagick_enhanceimage|imagick_equalizeimage|imagick_evaluateimage|imagick_extentimage|imagick_flattenimages|imagick_flipimage|imagick_floodfillpaintimage|imagick_flopimage|imagick_frameimage|imagick_fximage|imagick_gammaimage|imagick_gaussianblurimage|imagick_getcolorspace|imagick_getcompression|imagick_getcompressionquality|imagick_getcopyright|imagick_getfilename|imagick_getfont|imagick_getformat|imagick_getgravity|imagick_gethomeurl|imagick_getimage|imagick_getimagealphachannel|imagick_getimageartifact|imagick_getimagebackgroundcolor|imagick_getimageblob|imagick_getimageblueprimary|imagick_getimagebordercolor|imagick_getimagechanneldepth|imagick_getimagechanneldistortion|imagick_getimagechanneldistortions|imagick_getimagechannelextrema|imagick_getimagechannelmean|imagick_getimagechannelrange|imagick_getimagechannelstatistics|imagick_getimageclipmask|imagick_getimagecolormapcolor|imagick_getimagecolors|imagick_getimagecolorspace|imagick_getimagecompose|imagick_getimagecompression|imagick_getimagecompressionquality|imagick_getimagedelay|imagick_getimagedepth|imagick_getimagedispose|imagick_getimagedistortion|imagick_getimageextrema|imagick_getimagefilename|imagick_getimageformat|imagick_getimagegamma|imagick_getimagegeometry|imagick_getimagegravity|imagick_getimagegreenprimary|imagick_getimageheight|imagick_getimagehistogram|imagick_getimageindex|imagick_getimageinterlacescheme|imagick_getimageinterpolatemethod|imagick_getimageiterations|imagick_getimagelength|imagick_getimagemagicklicense|imagick_getimagematte|imagick_getimagemattecolor|imagick_getimageorientation|imagick_getimagepage|imagick_getimagepixelcolor|imagick_getimageprofile|imagick_getimageprofiles|imagick_getimageproperties|imagick_getimageproperty|imagick_getimageredprimary|imagick_getimageregion|imagick_getimagerenderingintent|imagick_getimageresolution|imagick_getimagesblob|imagick_getimagescene|imagick_getimagesignature|imagick_getimagesize|imagick_getimagetickspersecond|imagick_getimagetotalinkdensity|imagick_getimagetype|imagick_getimageunits|imagick_getimagevirtualpixelmethod|imagick_getimagewhitepoint|imagick_getimagewidth|imagick_getinterlacescheme|imagick_getiteratorindex|imagick_getnumberimages|imagick_getoption|imagick_getpackagename|imagick_getpage|imagick_getpixeliterator|imagick_getpixelregioniterator|imagick_getpointsize|imagick_getquantumdepth|imagick_getquantumrange|imagick_getreleasedate|imagick_getresource|imagick_getresourcelimit|imagick_getsamplingfactors|imagick_getsize|imagick_getsizeoffset|imagick_getversion|imagick_hasnextimage|imagick_haspreviousimage|imagick_identifyimage|imagick_implodeimage|imagick_labelimage|imagick_levelimage|imagick_linearstretchimage|imagick_liquidrescaleimage|imagick_magnifyimage|imagick_mapimage|imagick_mattefloodfillimage|imagick_medianfilterimage|imagick_mergeimagelayers|imagick_minifyimage|imagick_modulateimage|imagick_montageimage|imagick_morphimages|imagick_mosaicimages|imagick_motionblurimage|imagick_negateimage|imagick_newimage|imagick_newpseudoimage|imagick_nextimage|imagick_normalizeimage|imagick_oilpaintimage|imagick_opaquepaintimage|imagick_optimizeimagelayers|imagick_orderedposterizeimage|imagick_paintfloodfillimage|imagick_paintopaqueimage|imagick_painttransparentimage|imagick_pingimage|imagick_pingimageblob|imagick_pingimagefile|imagick_polaroidimage|imagick_posterizeimage|imagick_previewimages|imagick_previousimage|imagick_profileimage|imagick_quantizeimage|imagick_quantizeimages|imagick_queryfontmetrics|imagick_queryfonts|imagick_queryformats|imagick_radialblurimage|imagick_raiseimage|imagick_randomthresholdimage|imagick_readimage|imagick_readimageblob|imagick_readimagefile|imagick_recolorimage|imagick_reducenoiseimage|imagick_removeimage|imagick_removeimageprofile|imagick_render|imagick_resampleimage|imagick_resetimagepage|imagick_resizeimage|imagick_rollimage|imagick_rotateimage|imagick_roundcorners|imagick_sampleimage|imagick_scaleimage|imagick_separateimagechannel|imagick_sepiatoneimage|imagick_setbackgroundcolor|imagick_setcolorspace|imagick_setcompression|imagick_setcompressionquality|imagick_setfilename|imagick_setfirstiterator|imagick_setfont|imagick_setformat|imagick_setgravity|imagick_setimage|imagick_setimagealphachannel|imagick_setimageartifact|imagick_setimagebackgroundcolor|imagick_setimagebias|imagick_setimageblueprimary|imagick_setimagebordercolor|imagick_setimagechanneldepth|imagick_setimageclipmask|imagick_setimagecolormapcolor|imagick_setimagecolorspace|imagick_setimagecompose|imagick_setimagecompression|imagick_setimagecompressionquality|imagick_setimagedelay|imagick_setimagedepth|imagick_setimagedispose|imagick_setimageextent|imagick_setimagefilename|imagick_setimageformat|imagick_setimagegamma|imagick_setimagegravity|imagick_setimagegreenprimary|imagick_setimageindex|imagick_setimageinterlacescheme|imagick_setimageinterpolatemethod|imagick_setimageiterations|imagick_setimagematte|imagick_setimagemattecolor|imagick_setimageopacity|imagick_setimageorientation|imagick_setimagepage|imagick_setimageprofile|imagick_setimageproperty|imagick_setimageredprimary|imagick_setimagerenderingintent|imagick_setimageresolution|imagick_setimagescene|imagick_setimagetickspersecond|imagick_setimagetype|imagick_setimageunits|imagick_setimagevirtualpixelmethod|imagick_setimagewhitepoint|imagick_setinterlacescheme|imagick_setiteratorindex|imagick_setlastiterator|imagick_setoption|imagick_setpage|imagick_setpointsize|imagick_setresolution|imagick_setresourcelimit|imagick_setsamplingfactors|imagick_setsize|imagick_setsizeoffset|imagick_settype|imagick_shadeimage|imagick_shadowimage|imagick_sharpenimage|imagick_shaveimage|imagick_shearimage|imagick_sigmoidalcontrastimage|imagick_sketchimage|imagick_solarizeimage|imagick_spliceimage|imagick_spreadimage|imagick_steganoimage|imagick_stereoimage|imagick_stripimage|imagick_swirlimage|imagick_textureimage|imagick_thresholdimage|imagick_thumbnailimage|imagick_tintimage|imagick_transformimage|imagick_transparentpaintimage|imagick_transposeimage|imagick_transverseimage|imagick_trimimage|imagick_uniqueimagecolors|imagick_unsharpmaskimage|imagick_valid|imagick_vignetteimage|imagick_waveimage|imagick_whitethresholdimage|imagick_writeimage|imagick_writeimagefile|imagick_writeimages|imagick_writeimagesfile|imagickdraw|imagickdraw_affine|imagickdraw_annotation|imagickdraw_arc|imagickdraw_bezier|imagickdraw_circle|imagickdraw_clear|imagickdraw_clone|imagickdraw_color|imagickdraw_comment|imagickdraw_composite|imagickdraw_construct|imagickdraw_destroy|imagickdraw_ellipse|imagickdraw_getclippath|imagickdraw_getcliprule|imagickdraw_getclipunits|imagickdraw_getfillcolor|imagickdraw_getfillopacity|imagickdraw_getfillrule|imagickdraw_getfont|imagickdraw_getfontfamily|imagickdraw_getfontsize|imagickdraw_getfontstyle|imagickdraw_getfontweight|imagickdraw_getgravity|imagickdraw_getstrokeantialias|imagickdraw_getstrokecolor|imagickdraw_getstrokedasharray|imagickdraw_getstrokedashoffset|imagickdraw_getstrokelinecap|imagickdraw_getstrokelinejoin|imagickdraw_getstrokemiterlimit|imagickdraw_getstrokeopacity|imagickdraw_getstrokewidth|imagickdraw_gettextalignment|imagickdraw_gettextantialias|imagickdraw_gettextdecoration|imagickdraw_gettextencoding|imagickdraw_gettextundercolor|imagickdraw_getvectorgraphics|imagickdraw_line|imagickdraw_matte|imagickdraw_pathclose|imagickdraw_pathcurvetoabsolute|imagickdraw_pathcurvetoquadraticbezierabsolute|imagickdraw_pathcurvetoquadraticbezierrelative|imagickdraw_pathcurvetoquadraticbeziersmoothabsolute|imagickdraw_pathcurvetoquadraticbeziersmoothrelative|imagickdraw_pathcurvetorelative|imagickdraw_pathcurvetosmoothabsolute|imagickdraw_pathcurvetosmoothrelative|imagickdraw_pathellipticarcabsolute|imagickdraw_pathellipticarcrelative|imagickdraw_pathfinish|imagickdraw_pathlinetoabsolute|imagickdraw_pathlinetohorizontalabsolute|imagickdraw_pathlinetohorizontalrelative|imagickdraw_pathlinetorelative|imagickdraw_pathlinetoverticalabsolute|imagickdraw_pathlinetoverticalrelative|imagickdraw_pathmovetoabsolute|imagickdraw_pathmovetorelative|imagickdraw_pathstart|imagickdraw_point|imagickdraw_polygon|imagickdraw_polyline|imagickdraw_pop|imagickdraw_popclippath|imagickdraw_popdefs|imagickdraw_poppattern|imagickdraw_push|imagickdraw_pushclippath|imagickdraw_pushdefs|imagickdraw_pushpattern|imagickdraw_rectangle|imagickdraw_render|imagickdraw_rotate|imagickdraw_roundrectangle|imagickdraw_scale|imagickdraw_setclippath|imagickdraw_setcliprule|imagickdraw_setclipunits|imagickdraw_setfillalpha|imagickdraw_setfillcolor|imagickdraw_setfillopacity|imagickdraw_setfillpatternurl|imagickdraw_setfillrule|imagickdraw_setfont|imagickdraw_setfontfamily|imagickdraw_setfontsize|imagickdraw_setfontstretch|imagickdraw_setfontstyle|imagickdraw_setfontweight|imagickdraw_setgravity|imagickdraw_setstrokealpha|imagickdraw_setstrokeantialias|imagickdraw_setstrokecolor|imagickdraw_setstrokedasharray|imagickdraw_setstrokedashoffset|imagickdraw_setstrokelinecap|imagickdraw_setstrokelinejoin|imagickdraw_setstrokemiterlimit|imagickdraw_setstrokeopacity|imagickdraw_setstrokepatternurl|imagickdraw_setstrokewidth|imagickdraw_settextalignment|imagickdraw_settextantialias|imagickdraw_settextdecoration|imagickdraw_settextencoding|imagickdraw_settextundercolor|imagickdraw_setvectorgraphics|imagickdraw_setviewbox|imagickdraw_skewx|imagickdraw_skewy|imagickdraw_translate|imagickpixel|imagickpixel_clear|imagickpixel_construct|imagickpixel_destroy|imagickpixel_getcolor|imagickpixel_getcolorasstring|imagickpixel_getcolorcount|imagickpixel_getcolorvalue|imagickpixel_gethsl|imagickpixel_issimilar|imagickpixel_setcolor|imagickpixel_setcolorvalue|imagickpixel_sethsl|imagickpixeliterator|imagickpixeliterator_clear|imagickpixeliterator_construct|imagickpixeliterator_destroy|imagickpixeliterator_getcurrentiteratorrow|imagickpixeliterator_getiteratorrow|imagickpixeliterator_getnextiteratorrow|imagickpixeliterator_getpreviousiteratorrow|imagickpixeliterator_newpixeliterator|imagickpixeliterator_newpixelregioniterator|imagickpixeliterator_resetiterator|imagickpixeliterator_setiteratorfirstrow|imagickpixeliterator_setiteratorlastrow|imagickpixeliterator_setiteratorrow|imagickpixeliterator_synciterator|imap_8bit|imap_alerts|imap_append|imap_base64|imap_binary|imap_body|imap_bodystruct|imap_check|imap_clearflag_full|imap_close|imap_create|imap_createmailbox|imap_delete|imap_deletemailbox|imap_errors|imap_expunge|imap_fetch_overview|imap_fetchbody|imap_fetchheader|imap_fetchmime|imap_fetchstructure|imap_fetchtext|imap_gc|imap_get_quota|imap_get_quotaroot|imap_getacl|imap_getmailboxes|imap_getsubscribed|imap_header|imap_headerinfo|imap_headers|imap_last_error|imap_list|imap_listmailbox|imap_listscan|imap_listsubscribed|imap_lsub|imap_mail|imap_mail_compose|imap_mail_copy|imap_mail_move|imap_mailboxmsginfo|imap_mime_header_decode|imap_msgno|imap_num_msg|imap_num_recent|imap_open|imap_ping|imap_qprint|imap_rename|imap_renamemailbox|imap_reopen|imap_rfc822_parse_adrlist|imap_rfc822_parse_headers|imap_rfc822_write_address|imap_savebody|imap_scan|imap_scanmailbox|imap_search|imap_set_quota|imap_setacl|imap_setflag_full|imap_sort|imap_status|imap_subscribe|imap_thread|imap_timeout|imap_uid|imap_undelete|imap_unsubscribe|imap_utf7_decode|imap_utf7_encode|imap_utf8|implementsinterface|implode|import_request_variables|in_array|include|include_once|inclued_get_data|inet_ntop|inet_pton|infiniteiterator|ingres_autocommit|ingres_autocommit_state|ingres_charset|ingres_close|ingres_commit|ingres_connect|ingres_cursor|ingres_errno|ingres_error|ingres_errsqlstate|ingres_escape_string|ingres_execute|ingres_fetch_array|ingres_fetch_assoc|ingres_fetch_object|ingres_fetch_proc_return|ingres_fetch_row|ingres_field_length|ingres_field_name|ingres_field_nullable|ingres_field_precision|ingres_field_scale|ingres_field_type|ingres_free_result|ingres_next_error|ingres_num_fields|ingres_num_rows|ingres_pconnect|ingres_prepare|ingres_query|ingres_result_seek|ingres_rollback|ingres_set_environment|ingres_unbuffered_query|ini_alter|ini_get|ini_get_all|ini_restore|ini_set|innamespace|inotify_add_watch|inotify_init|inotify_queue_len|inotify_read|inotify_rm_watch|interface_exists|intl_error_name|intl_get_error_code|intl_get_error_message|intl_is_failure|intldateformatter|intval|invalidargumentexception|invoke|invokeargs|ip2long|iptcembed|iptcparse|is_a|is_array|is_bool|is_callable|is_dir|is_double|is_executable|is_file|is_finite|is_float|is_infinite|is_int|is_integer|is_link|is_long|is_nan|is_null|is_numeric|is_object|is_readable|is_real|is_resource|is_scalar|is_soap_fault|is_string|is_subclass_of|is_uploaded_file|is_writable|is_writeable|isabstract|iscloneable|isdisabled|isfinal|isinstance|isinstantiable|isinterface|isinternal|isiterateable|isset|issubclassof|isuserdefined|iterator|iterator_apply|iterator_count|iterator_to_array|iteratoraggregate|iteratoriterator|java_last_exception_clear|java_last_exception_get|jddayofweek|jdmonthname|jdtofrench|jdtogregorian|jdtojewish|jdtojulian|jdtounix|jewishtojd|join|jpeg2wbmp|json_decode|json_encode|json_last_error|jsonserializable|judy|judy_type|judy_version|juliantojd|kadm5_chpass_principal|kadm5_create_principal|kadm5_delete_principal|kadm5_destroy|kadm5_flush|kadm5_get_policies|kadm5_get_principal|kadm5_get_principals|kadm5_init_with_password|kadm5_modify_principal|key|krsort|ksort|lcfirst|lcg_value|lchgrp|lchown|ldap_8859_to_t61|ldap_add|ldap_bind|ldap_close|ldap_compare|ldap_connect|ldap_count_entries|ldap_delete|ldap_dn2ufn|ldap_err2str|ldap_errno|ldap_error|ldap_explode_dn|ldap_first_attribute|ldap_first_entry|ldap_first_reference|ldap_free_result|ldap_get_attributes|ldap_get_dn|ldap_get_entries|ldap_get_option|ldap_get_values|ldap_get_values_len|ldap_list|ldap_mod_add|ldap_mod_del|ldap_mod_replace|ldap_modify|ldap_next_attribute|ldap_next_entry|ldap_next_reference|ldap_parse_reference|ldap_parse_result|ldap_read|ldap_rename|ldap_sasl_bind|ldap_search|ldap_set_option|ldap_set_rebind_proc|ldap_sort|ldap_start_tls|ldap_t61_to_8859|ldap_unbind|lengthexception|levenshtein|libxml_clear_errors|libxml_disable_entity_loader|libxml_get_errors|libxml_get_last_error|libxml_set_streams_context|libxml_use_internal_errors|libxmlerror|limititerator|link|linkinfo|list|locale|localeconv|localtime|log|log10|log1p|logicexception|long2ip|lstat|ltrim|lzf_compress|lzf_decompress|lzf_optimized_for|m_checkstatus|m_completeauthorizations|m_connect|m_connectionerror|m_deletetrans|m_destroyconn|m_destroyengine|m_getcell|m_getcellbynum|m_getcommadelimited|m_getheader|m_initconn|m_initengine|m_iscommadelimited|m_maxconntimeout|m_monitor|m_numcolumns|m_numrows|m_parsecommadelimited|m_responsekeys|m_responseparam|m_returnstatus|m_setblocking|m_setdropfile|m_setip|m_setssl|m_setssl_cafile|m_setssl_files|m_settimeout|m_sslcert_gen_hash|m_transactionssent|m_transinqueue|m_transkeyval|m_transnew|m_transsend|m_uwait|m_validateidentifier|m_verifyconnection|m_verifysslcert|magic_quotes_runtime|mail|mailparse_determine_best_xfer_encoding|mailparse_msg_create|mailparse_msg_extract_part|mailparse_msg_extract_part_file|mailparse_msg_extract_whole_part_file|mailparse_msg_free|mailparse_msg_get_part|mailparse_msg_get_part_data|mailparse_msg_get_structure|mailparse_msg_parse|mailparse_msg_parse_file|mailparse_rfc822_parse_addresses|mailparse_stream_encode|mailparse_uudecode_all|main|max|maxdb_affected_rows|maxdb_autocommit|maxdb_bind_param|maxdb_bind_result|maxdb_change_user|maxdb_character_set_name|maxdb_client_encoding|maxdb_close|maxdb_close_long_data|maxdb_commit|maxdb_connect|maxdb_connect_errno|maxdb_connect_error|maxdb_data_seek|maxdb_debug|maxdb_disable_reads_from_master|maxdb_disable_rpl_parse|maxdb_dump_debug_info|maxdb_embedded_connect|maxdb_enable_reads_from_master|maxdb_enable_rpl_parse|maxdb_errno|maxdb_error|maxdb_escape_string|maxdb_execute|maxdb_fetch|maxdb_fetch_array|maxdb_fetch_assoc|maxdb_fetch_field|maxdb_fetch_field_direct|maxdb_fetch_fields|maxdb_fetch_lengths|maxdb_fetch_object|maxdb_fetch_row|maxdb_field_count|maxdb_field_seek|maxdb_field_tell|maxdb_free_result|maxdb_get_client_info|maxdb_get_client_version|maxdb_get_host_info|maxdb_get_metadata|maxdb_get_proto_info|maxdb_get_server_info|maxdb_get_server_version|maxdb_info|maxdb_init|maxdb_insert_id|maxdb_kill|maxdb_master_query|maxdb_more_results|maxdb_multi_query|maxdb_next_result|maxdb_num_fields|maxdb_num_rows|maxdb_options|maxdb_param_count|maxdb_ping|maxdb_prepare|maxdb_query|maxdb_real_connect|maxdb_real_escape_string|maxdb_real_query|maxdb_report|maxdb_rollback|maxdb_rpl_parse_enabled|maxdb_rpl_probe|maxdb_rpl_query_type|maxdb_select_db|maxdb_send_long_data|maxdb_send_query|maxdb_server_end|maxdb_server_init|maxdb_set_opt|maxdb_sqlstate|maxdb_ssl_set|maxdb_stat|maxdb_stmt_affected_rows|maxdb_stmt_bind_param|maxdb_stmt_bind_result|maxdb_stmt_close|maxdb_stmt_close_long_data|maxdb_stmt_data_seek|maxdb_stmt_errno|maxdb_stmt_error|maxdb_stmt_execute|maxdb_stmt_fetch|maxdb_stmt_free_result|maxdb_stmt_init|maxdb_stmt_num_rows|maxdb_stmt_param_count|maxdb_stmt_prepare|maxdb_stmt_reset|maxdb_stmt_result_metadata|maxdb_stmt_send_long_data|maxdb_stmt_sqlstate|maxdb_stmt_store_result|maxdb_store_result|maxdb_thread_id|maxdb_thread_safe|maxdb_use_result|maxdb_warning_count|mb_check_encoding|mb_convert_case|mb_convert_encoding|mb_convert_kana|mb_convert_variables|mb_decode_mimeheader|mb_decode_numericentity|mb_detect_encoding|mb_detect_order|mb_encode_mimeheader|mb_encode_numericentity|mb_encoding_aliases|mb_ereg|mb_ereg_match|mb_ereg_replace|mb_ereg_search|mb_ereg_search_getpos|mb_ereg_search_getregs|mb_ereg_search_init|mb_ereg_search_pos|mb_ereg_search_regs|mb_ereg_search_setpos|mb_eregi|mb_eregi_replace|mb_get_info|mb_http_input|mb_http_output|mb_internal_encoding|mb_language|mb_list_encodings|mb_output_handler|mb_parse_str|mb_preferred_mime_name|mb_regex_encoding|mb_regex_set_options|mb_send_mail|mb_split|mb_strcut|mb_strimwidth|mb_stripos|mb_stristr|mb_strlen|mb_strpos|mb_strrchr|mb_strrichr|mb_strripos|mb_strrpos|mb_strstr|mb_strtolower|mb_strtoupper|mb_strwidth|mb_substitute_character|mb_substr|mb_substr_count|mcrypt_cbc|mcrypt_cfb|mcrypt_create_iv|mcrypt_decrypt|mcrypt_ecb|mcrypt_enc_get_algorithms_name|mcrypt_enc_get_block_size|mcrypt_enc_get_iv_size|mcrypt_enc_get_key_size|mcrypt_enc_get_modes_name|mcrypt_enc_get_supported_key_sizes|mcrypt_enc_is_block_algorithm|mcrypt_enc_is_block_algorithm_mode|mcrypt_enc_is_block_mode|mcrypt_enc_self_test|mcrypt_encrypt|mcrypt_generic|mcrypt_generic_deinit|mcrypt_generic_end|mcrypt_generic_init|mcrypt_get_block_size|mcrypt_get_cipher_name|mcrypt_get_iv_size|mcrypt_get_key_size|mcrypt_list_algorithms|mcrypt_list_modes|mcrypt_module_close|mcrypt_module_get_algo_block_size|mcrypt_module_get_algo_key_size|mcrypt_module_get_supported_key_sizes|mcrypt_module_is_block_algorithm|mcrypt_module_is_block_algorithm_mode|mcrypt_module_is_block_mode|mcrypt_module_open|mcrypt_module_self_test|mcrypt_ofb|md5|md5_file|mdecrypt_generic|memcache|memcache_debug|memcached|memory_get_peak_usage|memory_get_usage|messageformatter|metaphone|method_exists|mhash|mhash_count|mhash_get_block_size|mhash_get_hash_name|mhash_keygen_s2k|microtime|mime_content_type|min|ming_keypress|ming_setcubicthreshold|ming_setscale|ming_setswfcompression|ming_useconstants|ming_useswfversion|mkdir|mktime|money_format|mongo|mongobindata|mongocode|mongocollection|mongoconnectionexception|mongocursor|mongocursorexception|mongocursortimeoutexception|mongodate|mongodb|mongodbref|mongoexception|mongogridfs|mongogridfscursor|mongogridfsexception|mongogridfsfile|mongoid|mongoint32|mongoint64|mongomaxkey|mongominkey|mongoregex|mongotimestamp|move_uploaded_file|mpegfile|mqseries_back|mqseries_begin|mqseries_close|mqseries_cmit|mqseries_conn|mqseries_connx|mqseries_disc|mqseries_get|mqseries_inq|mqseries_open|mqseries_put|mqseries_put1|mqseries_set|mqseries_strerror|msession_connect|msession_count|msession_create|msession_destroy|msession_disconnect|msession_find|msession_get|msession_get_array|msession_get_data|msession_inc|msession_list|msession_listvar|msession_lock|msession_plugin|msession_randstr|msession_set|msession_set_array|msession_set_data|msession_timeout|msession_uniq|msession_unlock|msg_get_queue|msg_queue_exists|msg_receive|msg_remove_queue|msg_send|msg_set_queue|msg_stat_queue|msql|msql_affected_rows|msql_close|msql_connect|msql_create_db|msql_createdb|msql_data_seek|msql_db_query|msql_dbname|msql_drop_db|msql_error|msql_fetch_array|msql_fetch_field|msql_fetch_object|msql_fetch_row|msql_field_flags|msql_field_len|msql_field_name|msql_field_seek|msql_field_table|msql_field_type|msql_fieldflags|msql_fieldlen|msql_fieldname|msql_fieldtable|msql_fieldtype|msql_free_result|msql_list_dbs|msql_list_fields|msql_list_tables|msql_num_fields|msql_num_rows|msql_numfields|msql_numrows|msql_pconnect|msql_query|msql_regcase|msql_result|msql_select_db|msql_tablename|mssql_bind|mssql_close|mssql_connect|mssql_data_seek|mssql_execute|mssql_fetch_array|mssql_fetch_assoc|mssql_fetch_batch|mssql_fetch_field|mssql_fetch_object|mssql_fetch_row|mssql_field_length|mssql_field_name|mssql_field_seek|mssql_field_type|mssql_free_result|mssql_free_statement|mssql_get_last_message|mssql_guid_string|mssql_init|mssql_min_error_severity|mssql_min_message_severity|mssql_next_result|mssql_num_fields|mssql_num_rows|mssql_pconnect|mssql_query|mssql_result|mssql_rows_affected|mssql_select_db|mt_getrandmax|mt_rand|mt_srand|multipleiterator|mysql_affected_rows|mysql_client_encoding|mysql_close|mysql_connect|mysql_create_db|mysql_data_seek|mysql_db_name|mysql_db_query|mysql_drop_db|mysql_errno|mysql_error|mysql_escape_string|mysql_fetch_array|mysql_fetch_assoc|mysql_fetch_field|mysql_fetch_lengths|mysql_fetch_object|mysql_fetch_row|mysql_field_flags|mysql_field_len|mysql_field_name|mysql_field_seek|mysql_field_table|mysql_field_type|mysql_free_result|mysql_get_client_info|mysql_get_host_info|mysql_get_proto_info|mysql_get_server_info|mysql_info|mysql_insert_id|mysql_list_dbs|mysql_list_fields|mysql_list_processes|mysql_list_tables|mysql_num_fields|mysql_num_rows|mysql_pconnect|mysql_ping|mysql_query|mysql_real_escape_string|mysql_result|mysql_select_db|mysql_set_charset|mysql_stat|mysql_tablename|mysql_thread_id|mysql_unbuffered_query|mysqli|mysqli_bind_param|mysqli_bind_result|mysqli_client_encoding|mysqli_connect|mysqli_disable_reads_from_master|mysqli_disable_rpl_parse|mysqli_driver|mysqli_enable_reads_from_master|mysqli_enable_rpl_parse|mysqli_escape_string|mysqli_execute|mysqli_fetch|mysqli_get_metadata|mysqli_master_query|mysqli_param_count|mysqli_report|mysqli_result|mysqli_rpl_parse_enabled|mysqli_rpl_probe|mysqli_rpl_query_type|mysqli_send_long_data|mysqli_send_query|mysqli_set_opt|mysqli_slave_query|mysqli_stmt|mysqli_warning|mysqlnd_ms_get_stats|mysqlnd_ms_query_is_select|mysqlnd_ms_set_user_pick_server|mysqlnd_qc_change_handler|mysqlnd_qc_clear_cache|mysqlnd_qc_get_cache_info|mysqlnd_qc_get_core_stats|mysqlnd_qc_get_handler|mysqlnd_qc_get_query_trace_log|mysqlnd_qc_set_user_handlers|natcasesort|natsort|ncurses_addch|ncurses_addchnstr|ncurses_addchstr|ncurses_addnstr|ncurses_addstr|ncurses_assume_default_colors|ncurses_attroff|ncurses_attron|ncurses_attrset|ncurses_baudrate|ncurses_beep|ncurses_bkgd|ncurses_bkgdset|ncurses_border|ncurses_bottom_panel|ncurses_can_change_color|ncurses_cbreak|ncurses_clear|ncurses_clrtobot|ncurses_clrtoeol|ncurses_color_content|ncurses_color_set|ncurses_curs_set|ncurses_def_prog_mode|ncurses_def_shell_mode|ncurses_define_key|ncurses_del_panel|ncurses_delay_output|ncurses_delch|ncurses_deleteln|ncurses_delwin|ncurses_doupdate|ncurses_echo|ncurses_echochar|ncurses_end|ncurses_erase|ncurses_erasechar|ncurses_filter|ncurses_flash|ncurses_flushinp|ncurses_getch|ncurses_getmaxyx|ncurses_getmouse|ncurses_getyx|ncurses_halfdelay|ncurses_has_colors|ncurses_has_ic|ncurses_has_il|ncurses_has_key|ncurses_hide_panel|ncurses_hline|ncurses_inch|ncurses_init|ncurses_init_color|ncurses_init_pair|ncurses_insch|ncurses_insdelln|ncurses_insertln|ncurses_insstr|ncurses_instr|ncurses_isendwin|ncurses_keyok|ncurses_keypad|ncurses_killchar|ncurses_longname|ncurses_meta|ncurses_mouse_trafo|ncurses_mouseinterval|ncurses_mousemask|ncurses_move|ncurses_move_panel|ncurses_mvaddch|ncurses_mvaddchnstr|ncurses_mvaddchstr|ncurses_mvaddnstr|ncurses_mvaddstr|ncurses_mvcur|ncurses_mvdelch|ncurses_mvgetch|ncurses_mvhline|ncurses_mvinch|ncurses_mvvline|ncurses_mvwaddstr|ncurses_napms|ncurses_new_panel|ncurses_newpad|ncurses_newwin|ncurses_nl|ncurses_nocbreak|ncurses_noecho|ncurses_nonl|ncurses_noqiflush|ncurses_noraw|ncurses_pair_content|ncurses_panel_above|ncurses_panel_below|ncurses_panel_window|ncurses_pnoutrefresh|ncurses_prefresh|ncurses_putp|ncurses_qiflush|ncurses_raw|ncurses_refresh|ncurses_replace_panel|ncurses_reset_prog_mode|ncurses_reset_shell_mode|ncurses_resetty|ncurses_savetty|ncurses_scr_dump|ncurses_scr_init|ncurses_scr_restore|ncurses_scr_set|ncurses_scrl|ncurses_show_panel|ncurses_slk_attr|ncurses_slk_attroff|ncurses_slk_attron|ncurses_slk_attrset|ncurses_slk_clear|ncurses_slk_color|ncurses_slk_init|ncurses_slk_noutrefresh|ncurses_slk_refresh|ncurses_slk_restore|ncurses_slk_set|ncurses_slk_touch|ncurses_standend|ncurses_standout|ncurses_start_color|ncurses_termattrs|ncurses_termname|ncurses_timeout|ncurses_top_panel|ncurses_typeahead|ncurses_ungetch|ncurses_ungetmouse|ncurses_update_panels|ncurses_use_default_colors|ncurses_use_env|ncurses_use_extended_names|ncurses_vidattr|ncurses_vline|ncurses_waddch|ncurses_waddstr|ncurses_wattroff|ncurses_wattron|ncurses_wattrset|ncurses_wborder|ncurses_wclear|ncurses_wcolor_set|ncurses_werase|ncurses_wgetch|ncurses_whline|ncurses_wmouse_trafo|ncurses_wmove|ncurses_wnoutrefresh|ncurses_wrefresh|ncurses_wstandend|ncurses_wstandout|ncurses_wvline|newinstance|newinstanceargs|newt_bell|newt_button|newt_button_bar|newt_centered_window|newt_checkbox|newt_checkbox_get_value|newt_checkbox_set_flags|newt_checkbox_set_value|newt_checkbox_tree|newt_checkbox_tree_add_item|newt_checkbox_tree_find_item|newt_checkbox_tree_get_current|newt_checkbox_tree_get_entry_value|newt_checkbox_tree_get_multi_selection|newt_checkbox_tree_get_selection|newt_checkbox_tree_multi|newt_checkbox_tree_set_current|newt_checkbox_tree_set_entry|newt_checkbox_tree_set_entry_value|newt_checkbox_tree_set_width|newt_clear_key_buffer|newt_cls|newt_compact_button|newt_component_add_callback|newt_component_takes_focus|newt_create_grid|newt_cursor_off|newt_cursor_on|newt_delay|newt_draw_form|newt_draw_root_text|newt_entry|newt_entry_get_value|newt_entry_set|newt_entry_set_filter|newt_entry_set_flags|newt_finished|newt_form|newt_form_add_component|newt_form_add_components|newt_form_add_hot_key|newt_form_destroy|newt_form_get_current|newt_form_run|newt_form_set_background|newt_form_set_height|newt_form_set_size|newt_form_set_timer|newt_form_set_width|newt_form_watch_fd|newt_get_screen_size|newt_grid_add_components_to_form|newt_grid_basic_window|newt_grid_free|newt_grid_get_size|newt_grid_h_close_stacked|newt_grid_h_stacked|newt_grid_place|newt_grid_set_field|newt_grid_simple_window|newt_grid_v_close_stacked|newt_grid_v_stacked|newt_grid_wrapped_window|newt_grid_wrapped_window_at|newt_init|newt_label|newt_label_set_text|newt_listbox|newt_listbox_append_entry|newt_listbox_clear|newt_listbox_clear_selection|newt_listbox_delete_entry|newt_listbox_get_current|newt_listbox_get_selection|newt_listbox_insert_entry|newt_listbox_item_count|newt_listbox_select_item|newt_listbox_set_current|newt_listbox_set_current_by_key|newt_listbox_set_data|newt_listbox_set_entry|newt_listbox_set_width|newt_listitem|newt_listitem_get_data|newt_listitem_set|newt_open_window|newt_pop_help_line|newt_pop_window|newt_push_help_line|newt_radio_get_current|newt_radiobutton|newt_redraw_help_line|newt_reflow_text|newt_refresh|newt_resize_screen|newt_resume|newt_run_form|newt_scale|newt_scale_set|newt_scrollbar_set|newt_set_help_callback|newt_set_suspend_callback|newt_suspend|newt_textbox|newt_textbox_get_num_lines|newt_textbox_reflowed|newt_textbox_set_height|newt_textbox_set_text|newt_vertical_scrollbar|newt_wait_for_key|newt_win_choice|newt_win_entries|newt_win_menu|newt_win_message|newt_win_messagev|newt_win_ternary|next|ngettext|nl2br|nl_langinfo|norewinditerator|normalizer|notes_body|notes_copy_db|notes_create_db|notes_create_note|notes_drop_db|notes_find_note|notes_header_info|notes_list_msgs|notes_mark_read|notes_mark_unread|notes_nav_create|notes_search|notes_unread|notes_version|nsapi_request_headers|nsapi_response_headers|nsapi_virtual|nthmac|number_format|numberformatter|oauth|oauth_get_sbs|oauth_urlencode|oauthexception|oauthprovider|ob_clean|ob_deflatehandler|ob_end_clean|ob_end_flush|ob_etaghandler|ob_flush|ob_get_clean|ob_get_contents|ob_get_flush|ob_get_length|ob_get_level|ob_get_status|ob_gzhandler|ob_iconv_handler|ob_implicit_flush|ob_inflatehandler|ob_list_handlers|ob_start|ob_tidyhandler|oci_bind_array_by_name|oci_bind_by_name|oci_cancel|oci_client_version|oci_close|oci_collection_append|oci_collection_assign|oci_collection_element_assign|oci_collection_element_get|oci_collection_free|oci_collection_max|oci_collection_size|oci_collection_trim|oci_commit|oci_connect|oci_define_by_name|oci_error|oci_execute|oci_fetch|oci_fetch_all|oci_fetch_array|oci_fetch_assoc|oci_fetch_object|oci_fetch_row|oci_field_is_null|oci_field_name|oci_field_precision|oci_field_scale|oci_field_size|oci_field_type|oci_field_type_raw|oci_free_statement|oci_internal_debug|oci_lob_append|oci_lob_close|oci_lob_copy|oci_lob_eof|oci_lob_erase|oci_lob_export|oci_lob_flush|oci_lob_free|oci_lob_getbuffering|oci_lob_import|oci_lob_is_equal|oci_lob_load|oci_lob_read|oci_lob_rewind|oci_lob_save|oci_lob_savefile|oci_lob_seek|oci_lob_setbuffering|oci_lob_size|oci_lob_tell|oci_lob_truncate|oci_lob_write|oci_lob_writetemporary|oci_lob_writetofile|oci_new_collection|oci_new_connect|oci_new_cursor|oci_new_descriptor|oci_num_fields|oci_num_rows|oci_parse|oci_password_change|oci_pconnect|oci_result|oci_rollback|oci_server_version|oci_set_action|oci_set_client_identifier|oci_set_client_info|oci_set_edition|oci_set_module_name|oci_set_prefetch|oci_statement_type|ocibindbyname|ocicancel|ocicloselob|ocicollappend|ocicollassign|ocicollassignelem|ocicollgetelem|ocicollmax|ocicollsize|ocicolltrim|ocicolumnisnull|ocicolumnname|ocicolumnprecision|ocicolumnscale|ocicolumnsize|ocicolumntype|ocicolumntyperaw|ocicommit|ocidefinebyname|ocierror|ociexecute|ocifetch|ocifetchinto|ocifetchstatement|ocifreecollection|ocifreecursor|ocifreedesc|ocifreestatement|ociinternaldebug|ociloadlob|ocilogoff|ocilogon|ocinewcollection|ocinewcursor|ocinewdescriptor|ocinlogon|ocinumcols|ociparse|ociplogon|ociresult|ocirollback|ocirowcount|ocisavelob|ocisavelobfile|ociserverversion|ocisetprefetch|ocistatementtype|ociwritelobtofile|ociwritetemporarylob|octdec|odbc_autocommit|odbc_binmode|odbc_close|odbc_close_all|odbc_columnprivileges|odbc_columns|odbc_commit|odbc_connect|odbc_cursor|odbc_data_source|odbc_do|odbc_error|odbc_errormsg|odbc_exec|odbc_execute|odbc_fetch_array|odbc_fetch_into|odbc_fetch_object|odbc_fetch_row|odbc_field_len|odbc_field_name|odbc_field_num|odbc_field_precision|odbc_field_scale|odbc_field_type|odbc_foreignkeys|odbc_free_result|odbc_gettypeinfo|odbc_longreadlen|odbc_next_result|odbc_num_fields|odbc_num_rows|odbc_pconnect|odbc_prepare|odbc_primarykeys|odbc_procedurecolumns|odbc_procedures|odbc_result|odbc_result_all|odbc_rollback|odbc_setoption|odbc_specialcolumns|odbc_statistics|odbc_tableprivileges|odbc_tables|openal_buffer_create|openal_buffer_data|openal_buffer_destroy|openal_buffer_get|openal_buffer_loadwav|openal_context_create|openal_context_current|openal_context_destroy|openal_context_process|openal_context_suspend|openal_device_close|openal_device_open|openal_listener_get|openal_listener_set|openal_source_create|openal_source_destroy|openal_source_get|openal_source_pause|openal_source_play|openal_source_rewind|openal_source_set|openal_source_stop|openal_stream|opendir|openlog|openssl_cipher_iv_length|openssl_csr_export|openssl_csr_export_to_file|openssl_csr_get_public_key|openssl_csr_get_subject|openssl_csr_new|openssl_csr_sign|openssl_decrypt|openssl_dh_compute_key|openssl_digest|openssl_encrypt|openssl_error_string|openssl_free_key|openssl_get_cipher_methods|openssl_get_md_methods|openssl_get_privatekey|openssl_get_publickey|openssl_open|openssl_pkcs12_export|openssl_pkcs12_export_to_file|openssl_pkcs12_read|openssl_pkcs7_decrypt|openssl_pkcs7_encrypt|openssl_pkcs7_sign|openssl_pkcs7_verify|openssl_pkey_export|openssl_pkey_export_to_file|openssl_pkey_free|openssl_pkey_get_details|openssl_pkey_get_private|openssl_pkey_get_public|openssl_pkey_new|openssl_private_decrypt|openssl_private_encrypt|openssl_public_decrypt|openssl_public_encrypt|openssl_random_pseudo_bytes|openssl_seal|openssl_sign|openssl_verify|openssl_x509_check_private_key|openssl_x509_checkpurpose|openssl_x509_export|openssl_x509_export_to_file|openssl_x509_free|openssl_x509_parse|openssl_x509_read|ord|outeriterator|outofboundsexception|outofrangeexception|output_add_rewrite_var|output_reset_rewrite_vars|overflowexception|overload|override_function|ovrimos_close|ovrimos_commit|ovrimos_connect|ovrimos_cursor|ovrimos_exec|ovrimos_execute|ovrimos_fetch_into|ovrimos_fetch_row|ovrimos_field_len|ovrimos_field_name|ovrimos_field_num|ovrimos_field_type|ovrimos_free_result|ovrimos_longreadlen|ovrimos_num_fields|ovrimos_num_rows|ovrimos_prepare|ovrimos_result|ovrimos_result_all|ovrimos_rollback|pack|parentiterator|parse_ini_file|parse_ini_string|parse_str|parse_url|parsekit_compile_file|parsekit_compile_string|parsekit_func_arginfo|passthru|pathinfo|pclose|pcntl_alarm|pcntl_exec|pcntl_fork|pcntl_getpriority|pcntl_setpriority|pcntl_signal|pcntl_signal_dispatch|pcntl_sigprocmask|pcntl_sigtimedwait|pcntl_sigwaitinfo|pcntl_wait|pcntl_waitpid|pcntl_wexitstatus|pcntl_wifexited|pcntl_wifsignaled|pcntl_wifstopped|pcntl_wstopsig|pcntl_wtermsig|pdf_activate_item|pdf_add_annotation|pdf_add_bookmark|pdf_add_launchlink|pdf_add_locallink|pdf_add_nameddest|pdf_add_note|pdf_add_outline|pdf_add_pdflink|pdf_add_table_cell|pdf_add_textflow|pdf_add_thumbnail|pdf_add_weblink|pdf_arc|pdf_arcn|pdf_attach_file|pdf_begin_document|pdf_begin_font|pdf_begin_glyph|pdf_begin_item|pdf_begin_layer|pdf_begin_page|pdf_begin_page_ext|pdf_begin_pattern|pdf_begin_template|pdf_begin_template_ext|pdf_circle|pdf_clip|pdf_close|pdf_close_image|pdf_close_pdi|pdf_close_pdi_page|pdf_closepath|pdf_closepath_fill_stroke|pdf_closepath_stroke|pdf_concat|pdf_continue_text|pdf_create_3dview|pdf_create_action|pdf_create_annotation|pdf_create_bookmark|pdf_create_field|pdf_create_fieldgroup|pdf_create_gstate|pdf_create_pvf|pdf_create_textflow|pdf_curveto|pdf_define_layer|pdf_delete|pdf_delete_pvf|pdf_delete_table|pdf_delete_textflow|pdf_encoding_set_char|pdf_end_document|pdf_end_font|pdf_end_glyph|pdf_end_item|pdf_end_layer|pdf_end_page|pdf_end_page_ext|pdf_end_pattern|pdf_end_template|pdf_endpath|pdf_fill|pdf_fill_imageblock|pdf_fill_pdfblock|pdf_fill_stroke|pdf_fill_textblock|pdf_findfont|pdf_fit_image|pdf_fit_pdi_page|pdf_fit_table|pdf_fit_textflow|pdf_fit_textline|pdf_get_apiname|pdf_get_buffer|pdf_get_errmsg|pdf_get_errnum|pdf_get_font|pdf_get_fontname|pdf_get_fontsize|pdf_get_image_height|pdf_get_image_width|pdf_get_majorversion|pdf_get_minorversion|pdf_get_parameter|pdf_get_pdi_parameter|pdf_get_pdi_value|pdf_get_value|pdf_info_font|pdf_info_matchbox|pdf_info_table|pdf_info_textflow|pdf_info_textline|pdf_initgraphics|pdf_lineto|pdf_load_3ddata|pdf_load_font|pdf_load_iccprofile|pdf_load_image|pdf_makespotcolor|pdf_moveto|pdf_new|pdf_open_ccitt|pdf_open_file|pdf_open_gif|pdf_open_image|pdf_open_image_file|pdf_open_jpeg|pdf_open_memory_image|pdf_open_pdi|pdf_open_pdi_document|pdf_open_pdi_page|pdf_open_tiff|pdf_pcos_get_number|pdf_pcos_get_stream|pdf_pcos_get_string|pdf_place_image|pdf_place_pdi_page|pdf_process_pdi|pdf_rect|pdf_restore|pdf_resume_page|pdf_rotate|pdf_save|pdf_scale|pdf_set_border_color|pdf_set_border_dash|pdf_set_border_style|pdf_set_char_spacing|pdf_set_duration|pdf_set_gstate|pdf_set_horiz_scaling|pdf_set_info|pdf_set_info_author|pdf_set_info_creator|pdf_set_info_keywords|pdf_set_info_subject|pdf_set_info_title|pdf_set_layer_dependency|pdf_set_leading|pdf_set_parameter|pdf_set_text_matrix|pdf_set_text_pos|pdf_set_text_rendering|pdf_set_text_rise|pdf_set_value|pdf_set_word_spacing|pdf_setcolor|pdf_setdash|pdf_setdashpattern|pdf_setflat|pdf_setfont|pdf_setgray|pdf_setgray_fill|pdf_setgray_stroke|pdf_setlinecap|pdf_setlinejoin|pdf_setlinewidth|pdf_setmatrix|pdf_setmiterlimit|pdf_setpolydash|pdf_setrgbcolor|pdf_setrgbcolor_fill|pdf_setrgbcolor_stroke|pdf_shading|pdf_shading_pattern|pdf_shfill|pdf_show|pdf_show_boxed|pdf_show_xy|pdf_skew|pdf_stringwidth|pdf_stroke|pdf_suspend_page|pdf_translate|pdf_utf16_to_utf8|pdf_utf32_to_utf16|pdf_utf8_to_utf16|pdo|pdo_cubrid_schema|pdo_pgsqllobcreate|pdo_pgsqllobopen|pdo_pgsqllobunlink|pdo_sqlitecreateaggregate|pdo_sqlitecreatefunction|pdoexception|pdostatement|pfsockopen|pg_affected_rows|pg_cancel_query|pg_client_encoding|pg_close|pg_connect|pg_connection_busy|pg_connection_reset|pg_connection_status|pg_convert|pg_copy_from|pg_copy_to|pg_dbname|pg_delete|pg_end_copy|pg_escape_bytea|pg_escape_string|pg_execute|pg_fetch_all|pg_fetch_all_columns|pg_fetch_array|pg_fetch_assoc|pg_fetch_object|pg_fetch_result|pg_fetch_row|pg_field_is_null|pg_field_name|pg_field_num|pg_field_prtlen|pg_field_size|pg_field_table|pg_field_type|pg_field_type_oid|pg_free_result|pg_get_notify|pg_get_pid|pg_get_result|pg_host|pg_insert|pg_last_error|pg_last_notice|pg_last_oid|pg_lo_close|pg_lo_create|pg_lo_export|pg_lo_import|pg_lo_open|pg_lo_read|pg_lo_read_all|pg_lo_seek|pg_lo_tell|pg_lo_unlink|pg_lo_write|pg_meta_data|pg_num_fields|pg_num_rows|pg_options|pg_parameter_status|pg_pconnect|pg_ping|pg_port|pg_prepare|pg_put_line|pg_query|pg_query_params|pg_result_error|pg_result_error_field|pg_result_seek|pg_result_status|pg_select|pg_send_execute|pg_send_prepare|pg_send_query|pg_send_query_params|pg_set_client_encoding|pg_set_error_verbosity|pg_trace|pg_transaction_status|pg_tty|pg_unescape_bytea|pg_untrace|pg_update|pg_version|php_check_syntax|php_ini_loaded_file|php_ini_scanned_files|php_logo_guid|php_sapi_name|php_strip_whitespace|php_uname|phpcredits|phpinfo|phpversion|pi|png2wbmp|popen|pos|posix_access|posix_ctermid|posix_errno|posix_get_last_error|posix_getcwd|posix_getegid|posix_geteuid|posix_getgid|posix_getgrgid|posix_getgrnam|posix_getgroups|posix_getlogin|posix_getpgid|posix_getpgrp|posix_getpid|posix_getppid|posix_getpwnam|posix_getpwuid|posix_getrlimit|posix_getsid|posix_getuid|posix_initgroups|posix_isatty|posix_kill|posix_mkfifo|posix_mknod|posix_setegid|posix_seteuid|posix_setgid|posix_setpgid|posix_setsid|posix_setuid|posix_strerror|posix_times|posix_ttyname|posix_uname|pow|preg_filter|preg_grep|preg_last_error|preg_match|preg_match_all|preg_quote|preg_replace|preg_replace_callback|preg_split|prev|print|print_r|printer_abort|printer_close|printer_create_brush|printer_create_dc|printer_create_font|printer_create_pen|printer_delete_brush|printer_delete_dc|printer_delete_font|printer_delete_pen|printer_draw_bmp|printer_draw_chord|printer_draw_elipse|printer_draw_line|printer_draw_pie|printer_draw_rectangle|printer_draw_roundrect|printer_draw_text|printer_end_doc|printer_end_page|printer_get_option|printer_list|printer_logical_fontheight|printer_open|printer_select_brush|printer_select_font|printer_select_pen|printer_set_option|printer_start_doc|printer_start_page|printer_write|printf|proc_close|proc_get_status|proc_nice|proc_open|proc_terminate|property_exists|ps_add_bookmark|ps_add_launchlink|ps_add_locallink|ps_add_note|ps_add_pdflink|ps_add_weblink|ps_arc|ps_arcn|ps_begin_page|ps_begin_pattern|ps_begin_template|ps_circle|ps_clip|ps_close|ps_close_image|ps_closepath|ps_closepath_stroke|ps_continue_text|ps_curveto|ps_delete|ps_end_page|ps_end_pattern|ps_end_template|ps_fill|ps_fill_stroke|ps_findfont|ps_get_buffer|ps_get_parameter|ps_get_value|ps_hyphenate|ps_include_file|ps_lineto|ps_makespotcolor|ps_moveto|ps_new|ps_open_file|ps_open_image|ps_open_image_file|ps_open_memory_image|ps_place_image|ps_rect|ps_restore|ps_rotate|ps_save|ps_scale|ps_set_border_color|ps_set_border_dash|ps_set_border_style|ps_set_info|ps_set_parameter|ps_set_text_pos|ps_set_value|ps_setcolor|ps_setdash|ps_setflat|ps_setfont|ps_setgray|ps_setlinecap|ps_setlinejoin|ps_setlinewidth|ps_setmiterlimit|ps_setoverprintmode|ps_setpolydash|ps_shading|ps_shading_pattern|ps_shfill|ps_show|ps_show2|ps_show_boxed|ps_show_xy|ps_show_xy2|ps_string_geometry|ps_stringwidth|ps_stroke|ps_symbol|ps_symbol_name|ps_symbol_width|ps_translate|pspell_add_to_personal|pspell_add_to_session|pspell_check|pspell_clear_session|pspell_config_create|pspell_config_data_dir|pspell_config_dict_dir|pspell_config_ignore|pspell_config_mode|pspell_config_personal|pspell_config_repl|pspell_config_runtogether|pspell_config_save_repl|pspell_new|pspell_new_config|pspell_new_personal|pspell_save_wordlist|pspell_store_replacement|pspell_suggest|putenv|px_close|px_create_fp|px_date2string|px_delete|px_delete_record|px_get_field|px_get_info|px_get_parameter|px_get_record|px_get_schema|px_get_value|px_insert_record|px_new|px_numfields|px_numrecords|px_open_fp|px_put_record|px_retrieve_record|px_set_blob_file|px_set_parameter|px_set_tablename|px_set_targetencoding|px_set_value|px_timestamp2string|px_update_record|qdom_error|qdom_tree|quoted_printable_decode|quoted_printable_encode|quotemeta|rad2deg|radius_acct_open|radius_add_server|radius_auth_open|radius_close|radius_config|radius_create_request|radius_cvt_addr|radius_cvt_int|radius_cvt_string|radius_demangle|radius_demangle_mppe_key|radius_get_attr|radius_get_vendor_attr|radius_put_addr|radius_put_attr|radius_put_int|radius_put_string|radius_put_vendor_addr|radius_put_vendor_attr|radius_put_vendor_int|radius_put_vendor_string|radius_request_authenticator|radius_send_request|radius_server_secret|radius_strerror|rand|range|rangeexception|rar_wrapper_cache_stats|rararchive|rarentry|rarexception|rawurldecode|rawurlencode|read_exif_data|readdir|readfile|readgzfile|readline|readline_add_history|readline_callback_handler_install|readline_callback_handler_remove|readline_callback_read_char|readline_clear_history|readline_completion_function|readline_info|readline_list_history|readline_on_new_line|readline_read_history|readline_redisplay|readline_write_history|readlink|realpath|realpath_cache_get|realpath_cache_size|recode|recode_file|recode_string|recursivearrayiterator|recursivecachingiterator|recursivecallbackfilteriterator|recursivedirectoryiterator|recursivefilteriterator|recursiveiterator|recursiveiteratoriterator|recursiveregexiterator|recursivetreeiterator|reflection|reflectionclass|reflectionexception|reflectionextension|reflectionfunction|reflectionfunctionabstract|reflectionmethod|reflectionobject|reflectionparameter|reflectionproperty|reflector|regexiterator|register_shutdown_function|register_tick_function|rename|rename_function|require|require_once|reset|resetValue|resourcebundle|restore_error_handler|restore_exception_handler|restore_include_path|return|rewind|rewinddir|rmdir|round|rpm_close|rpm_get_tag|rpm_is_valid|rpm_open|rpm_version|rrd_create|rrd_error|rrd_fetch|rrd_first|rrd_graph|rrd_info|rrd_last|rrd_lastupdate|rrd_restore|rrd_tune|rrd_update|rrd_xport|rrdcreator|rrdgraph|rrdupdater|rsort|rtrim|runkit_class_adopt|runkit_class_emancipate|runkit_constant_add|runkit_constant_redefine|runkit_constant_remove|runkit_function_add|runkit_function_copy|runkit_function_redefine|runkit_function_remove|runkit_function_rename|runkit_import|runkit_lint|runkit_lint_file|runkit_method_add|runkit_method_copy|runkit_method_redefine|runkit_method_remove|runkit_method_rename|runkit_return_value_used|runkit_sandbox_output_handler|runkit_superglobals|runtimeexception|samconnection_commit|samconnection_connect|samconnection_constructor|samconnection_disconnect|samconnection_errno|samconnection_error|samconnection_isconnected|samconnection_peek|samconnection_peekall|samconnection_receive|samconnection_remove|samconnection_rollback|samconnection_send|samconnection_setDebug|samconnection_subscribe|samconnection_unsubscribe|sammessage_body|sammessage_constructor|sammessage_header|sca_createdataobject|sca_getservice|sca_localproxy_createdataobject|sca_soapproxy_createdataobject|scandir|sdo_das_changesummary_beginlogging|sdo_das_changesummary_endlogging|sdo_das_changesummary_getchangeddataobjects|sdo_das_changesummary_getchangetype|sdo_das_changesummary_getoldcontainer|sdo_das_changesummary_getoldvalues|sdo_das_changesummary_islogging|sdo_das_datafactory_addpropertytotype|sdo_das_datafactory_addtype|sdo_das_datafactory_getdatafactory|sdo_das_dataobject_getchangesummary|sdo_das_relational_applychanges|sdo_das_relational_construct|sdo_das_relational_createrootdataobject|sdo_das_relational_executepreparedquery|sdo_das_relational_executequery|sdo_das_setting_getlistindex|sdo_das_setting_getpropertyindex|sdo_das_setting_getpropertyname|sdo_das_setting_getvalue|sdo_das_setting_isset|sdo_das_xml_addtypes|sdo_das_xml_create|sdo_das_xml_createdataobject|sdo_das_xml_createdocument|sdo_das_xml_document_getrootdataobject|sdo_das_xml_document_getrootelementname|sdo_das_xml_document_getrootelementuri|sdo_das_xml_document_setencoding|sdo_das_xml_document_setxmldeclaration|sdo_das_xml_document_setxmlversion|sdo_das_xml_loadfile|sdo_das_xml_loadstring|sdo_das_xml_savefile|sdo_das_xml_savestring|sdo_datafactory_create|sdo_dataobject_clear|sdo_dataobject_createdataobject|sdo_dataobject_getcontainer|sdo_dataobject_getsequence|sdo_dataobject_gettypename|sdo_dataobject_gettypenamespaceuri|sdo_exception_getcause|sdo_list_insert|sdo_model_property_getcontainingtype|sdo_model_property_getdefault|sdo_model_property_getname|sdo_model_property_gettype|sdo_model_property_iscontainment|sdo_model_property_ismany|sdo_model_reflectiondataobject_construct|sdo_model_reflectiondataobject_export|sdo_model_reflectiondataobject_getcontainmentproperty|sdo_model_reflectiondataobject_getinstanceproperties|sdo_model_reflectiondataobject_gettype|sdo_model_type_getbasetype|sdo_model_type_getname|sdo_model_type_getnamespaceuri|sdo_model_type_getproperties|sdo_model_type_getproperty|sdo_model_type_isabstracttype|sdo_model_type_isdatatype|sdo_model_type_isinstance|sdo_model_type_isopentype|sdo_model_type_issequencedtype|sdo_sequence_getproperty|sdo_sequence_insert|sdo_sequence_move|seekableiterator|sem_acquire|sem_get|sem_release|sem_remove|serializable|serialize|session_cache_expire|session_cache_limiter|session_commit|session_decode|session_destroy|session_encode|session_get_cookie_params|session_id|session_is_registered|session_module_name|session_name|session_pgsql_add_error|session_pgsql_get_error|session_pgsql_get_field|session_pgsql_reset|session_pgsql_set_field|session_pgsql_status|session_regenerate_id|session_register|session_save_path|session_set_cookie_params|session_set_save_handler|session_start|session_unregister|session_unset|session_write_close|setCounterClass|set_error_handler|set_exception_handler|set_file_buffer|set_include_path|set_magic_quotes_runtime|set_socket_blocking|set_time_limit|setcookie|setlocale|setproctitle|setrawcookie|setstaticpropertyvalue|setthreadtitle|settype|sha1|sha1_file|shell_exec|shm_attach|shm_detach|shm_get_var|shm_has_var|shm_put_var|shm_remove|shm_remove_var|shmop_close|shmop_delete|shmop_open|shmop_read|shmop_size|shmop_write|show_source|shuffle|signeurlpaiement|similar_text|simplexml_import_dom|simplexml_load_file|simplexml_load_string|simplexmlelement|simplexmliterator|sin|sinh|sizeof|sleep|snmp|snmp2_get|snmp2_getnext|snmp2_real_walk|snmp2_set|snmp2_walk|snmp3_get|snmp3_getnext|snmp3_real_walk|snmp3_set|snmp3_walk|snmp_get_quick_print|snmp_get_valueretrieval|snmp_read_mib|snmp_set_enum_print|snmp_set_oid_numeric_print|snmp_set_oid_output_format|snmp_set_quick_print|snmp_set_valueretrieval|snmpget|snmpgetnext|snmprealwalk|snmpset|snmpwalk|snmpwalkoid|soapclient|soapfault|soapheader|soapparam|soapserver|soapvar|socket_accept|socket_bind|socket_clear_error|socket_close|socket_connect|socket_create|socket_create_listen|socket_create_pair|socket_get_option|socket_get_status|socket_getpeername|socket_getsockname|socket_last_error|socket_listen|socket_read|socket_recv|socket_recvfrom|socket_select|socket_send|socket_sendto|socket_set_block|socket_set_blocking|socket_set_nonblock|socket_set_option|socket_set_timeout|socket_shutdown|socket_strerror|socket_write|solr_get_version|solrclient|solrclientexception|solrdocument|solrdocumentfield|solrexception|solrgenericresponse|solrillegalargumentexception|solrillegaloperationexception|solrinputdocument|solrmodifiableparams|solrobject|solrparams|solrpingresponse|solrquery|solrqueryresponse|solrresponse|solrupdateresponse|solrutils|sort|soundex|sphinxclient|spl_autoload|spl_autoload_call|spl_autoload_extensions|spl_autoload_functions|spl_autoload_register|spl_autoload_unregister|spl_classes|spl_object_hash|splbool|spldoublylinkedlist|splenum|splfileinfo|splfileobject|splfixedarray|splfloat|splheap|splint|split|spliti|splmaxheap|splminheap|splobjectstorage|splobserver|splpriorityqueue|splqueue|splstack|splstring|splsubject|spltempfileobject|spoofchecker|sprintf|sql_regcase|sqlite3|sqlite3result|sqlite3stmt|sqlite_array_query|sqlite_busy_timeout|sqlite_changes|sqlite_close|sqlite_column|sqlite_create_aggregate|sqlite_create_function|sqlite_current|sqlite_error_string|sqlite_escape_string|sqlite_exec|sqlite_factory|sqlite_fetch_all|sqlite_fetch_array|sqlite_fetch_column_types|sqlite_fetch_object|sqlite_fetch_single|sqlite_fetch_string|sqlite_field_name|sqlite_has_more|sqlite_has_prev|sqlite_key|sqlite_last_error|sqlite_last_insert_rowid|sqlite_libencoding|sqlite_libversion|sqlite_next|sqlite_num_fields|sqlite_num_rows|sqlite_open|sqlite_popen|sqlite_prev|sqlite_query|sqlite_rewind|sqlite_seek|sqlite_single_query|sqlite_udf_decode_binary|sqlite_udf_encode_binary|sqlite_unbuffered_query|sqlite_valid|sqrt|srand|sscanf|ssdeep_fuzzy_compare|ssdeep_fuzzy_hash|ssdeep_fuzzy_hash_filename|ssh2_auth_hostbased_file|ssh2_auth_none|ssh2_auth_password|ssh2_auth_pubkey_file|ssh2_connect|ssh2_exec|ssh2_fetch_stream|ssh2_fingerprint|ssh2_methods_negotiated|ssh2_publickey_add|ssh2_publickey_init|ssh2_publickey_list|ssh2_publickey_remove|ssh2_scp_recv|ssh2_scp_send|ssh2_sftp|ssh2_sftp_lstat|ssh2_sftp_mkdir|ssh2_sftp_readlink|ssh2_sftp_realpath|ssh2_sftp_rename|ssh2_sftp_rmdir|ssh2_sftp_stat|ssh2_sftp_symlink|ssh2_sftp_unlink|ssh2_shell|ssh2_tunnel|stat|stats_absolute_deviation|stats_cdf_beta|stats_cdf_binomial|stats_cdf_cauchy|stats_cdf_chisquare|stats_cdf_exponential|stats_cdf_f|stats_cdf_gamma|stats_cdf_laplace|stats_cdf_logistic|stats_cdf_negative_binomial|stats_cdf_noncentral_chisquare|stats_cdf_noncentral_f|stats_cdf_poisson|stats_cdf_t|stats_cdf_uniform|stats_cdf_weibull|stats_covariance|stats_den_uniform|stats_dens_beta|stats_dens_cauchy|stats_dens_chisquare|stats_dens_exponential|stats_dens_f|stats_dens_gamma|stats_dens_laplace|stats_dens_logistic|stats_dens_negative_binomial|stats_dens_normal|stats_dens_pmf_binomial|stats_dens_pmf_hypergeometric|stats_dens_pmf_poisson|stats_dens_t|stats_dens_weibull|stats_harmonic_mean|stats_kurtosis|stats_rand_gen_beta|stats_rand_gen_chisquare|stats_rand_gen_exponential|stats_rand_gen_f|stats_rand_gen_funiform|stats_rand_gen_gamma|stats_rand_gen_ibinomial|stats_rand_gen_ibinomial_negative|stats_rand_gen_int|stats_rand_gen_ipoisson|stats_rand_gen_iuniform|stats_rand_gen_noncenral_chisquare|stats_rand_gen_noncentral_f|stats_rand_gen_noncentral_t|stats_rand_gen_normal|stats_rand_gen_t|stats_rand_get_seeds|stats_rand_phrase_to_seeds|stats_rand_ranf|stats_rand_setall|stats_skew|stats_standard_deviation|stats_stat_binomial_coef|stats_stat_correlation|stats_stat_gennch|stats_stat_independent_t|stats_stat_innerproduct|stats_stat_noncentral_t|stats_stat_paired_t|stats_stat_percentile|stats_stat_powersum|stats_variance|stomp|stomp_connect_error|stomp_version|stompexception|stompframe|str_getcsv|str_ireplace|str_pad|str_repeat|str_replace|str_rot13|str_shuffle|str_split|str_word_count|strcasecmp|strchr|strcmp|strcoll|strcspn|stream_bucket_append|stream_bucket_make_writeable|stream_bucket_new|stream_bucket_prepend|stream_context_create|stream_context_get_default|stream_context_get_options|stream_context_get_params|stream_context_set_default|stream_context_set_option|stream_context_set_params|stream_copy_to_stream|stream_encoding|stream_filter_append|stream_filter_prepend|stream_filter_register|stream_filter_remove|stream_get_contents|stream_get_filters|stream_get_line|stream_get_meta_data|stream_get_transports|stream_get_wrappers|stream_is_local|stream_notification_callback|stream_register_wrapper|stream_resolve_include_path|stream_select|stream_set_blocking|stream_set_read_buffer|stream_set_timeout|stream_set_write_buffer|stream_socket_accept|stream_socket_client|stream_socket_enable_crypto|stream_socket_get_name|stream_socket_pair|stream_socket_recvfrom|stream_socket_sendto|stream_socket_server|stream_socket_shutdown|stream_supports_lock|stream_wrapper_register|stream_wrapper_restore|stream_wrapper_unregister|streamwrapper|strftime|strip_tags|stripcslashes|stripos|stripslashes|stristr|strlen|strnatcasecmp|strnatcmp|strncasecmp|strncmp|strpbrk|strpos|strptime|strrchr|strrev|strripos|strrpos|strspn|strstr|strtok|strtolower|strtotime|strtoupper|strtr|strval|substr|substr_compare|substr_count|substr_replace|svm|svmmodel|svn_add|svn_auth_get_parameter|svn_auth_set_parameter|svn_blame|svn_cat|svn_checkout|svn_cleanup|svn_client_version|svn_commit|svn_delete|svn_diff|svn_export|svn_fs_abort_txn|svn_fs_apply_text|svn_fs_begin_txn2|svn_fs_change_node_prop|svn_fs_check_path|svn_fs_contents_changed|svn_fs_copy|svn_fs_delete|svn_fs_dir_entries|svn_fs_file_contents|svn_fs_file_length|svn_fs_is_dir|svn_fs_is_file|svn_fs_make_dir|svn_fs_make_file|svn_fs_node_created_rev|svn_fs_node_prop|svn_fs_props_changed|svn_fs_revision_prop|svn_fs_revision_root|svn_fs_txn_root|svn_fs_youngest_rev|svn_import|svn_log|svn_ls|svn_mkdir|svn_repos_create|svn_repos_fs|svn_repos_fs_begin_txn_for_commit|svn_repos_fs_commit_txn|svn_repos_hotcopy|svn_repos_open|svn_repos_recover|svn_revert|svn_status|svn_update|swf_actiongeturl|swf_actiongotoframe|swf_actiongotolabel|swf_actionnextframe|swf_actionplay|swf_actionprevframe|swf_actionsettarget|swf_actionstop|swf_actiontogglequality|swf_actionwaitforframe|swf_addbuttonrecord|swf_addcolor|swf_closefile|swf_definebitmap|swf_definefont|swf_defineline|swf_definepoly|swf_definerect|swf_definetext|swf_endbutton|swf_enddoaction|swf_endshape|swf_endsymbol|swf_fontsize|swf_fontslant|swf_fonttracking|swf_getbitmapinfo|swf_getfontinfo|swf_getframe|swf_labelframe|swf_lookat|swf_modifyobject|swf_mulcolor|swf_nextid|swf_oncondition|swf_openfile|swf_ortho|swf_ortho2|swf_perspective|swf_placeobject|swf_polarview|swf_popmatrix|swf_posround|swf_pushmatrix|swf_removeobject|swf_rotate|swf_scale|swf_setfont|swf_setframe|swf_shapearc|swf_shapecurveto|swf_shapecurveto3|swf_shapefillbitmapclip|swf_shapefillbitmaptile|swf_shapefilloff|swf_shapefillsolid|swf_shapelinesolid|swf_shapelineto|swf_shapemoveto|swf_showframe|swf_startbutton|swf_startdoaction|swf_startshape|swf_startsymbol|swf_textwidth|swf_translate|swf_viewport|swfaction|swfbitmap|swfbutton|swfdisplayitem|swffill|swffont|swffontchar|swfgradient|swfmorph|swfmovie|swfprebuiltclip|swfshape|swfsound|swfsoundinstance|swfsprite|swftext|swftextfield|swfvideostream|swish_construct|swish_getmetalist|swish_getpropertylist|swish_prepare|swish_query|swishresult_getmetalist|swishresult_stem|swishresults_getparsedwords|swishresults_getremovedstopwords|swishresults_nextresult|swishresults_seekresult|swishsearch_execute|swishsearch_resetlimit|swishsearch_setlimit|swishsearch_setphrasedelimiter|swishsearch_setsort|swishsearch_setstructure|sybase_affected_rows|sybase_close|sybase_connect|sybase_data_seek|sybase_deadlock_retry_count|sybase_fetch_array|sybase_fetch_assoc|sybase_fetch_field|sybase_fetch_object|sybase_fetch_row|sybase_field_seek|sybase_free_result|sybase_get_last_message|sybase_min_client_severity|sybase_min_error_severity|sybase_min_message_severity|sybase_min_server_severity|sybase_num_fields|sybase_num_rows|sybase_pconnect|sybase_query|sybase_result|sybase_select_db|sybase_set_message_handler|sybase_unbuffered_query|symlink|sys_get_temp_dir|sys_getloadavg|syslog|system|tag|tan|tanh|tcpwrap_check|tempnam|textdomain|tidy|tidy_access_count|tidy_config_count|tidy_diagnose|tidy_error_count|tidy_get_error_buffer|tidy_get_output|tidy_load_config|tidy_reset_config|tidy_save_config|tidy_set_encoding|tidy_setopt|tidy_warning_count|tidynode|time|time_nanosleep|time_sleep_until|timezone_abbreviations_list|timezone_identifiers_list|timezone_location_get|timezone_name_from_abbr|timezone_name_get|timezone_offset_get|timezone_open|timezone_transitions_get|timezone_version_get|tmpfile|token_get_all|token_name|tokyotyrant|tokyotyrantquery|tokyotyranttable|tostring|tostring|touch|transliterator|traversable|trigger_error|trim|uasort|ucfirst|ucwords|udm_add_search_limit|udm_alloc_agent|udm_alloc_agent_array|udm_api_version|udm_cat_list|udm_cat_path|udm_check_charset|udm_check_stored|udm_clear_search_limits|udm_close_stored|udm_crc32|udm_errno|udm_error|udm_find|udm_free_agent|udm_free_ispell_data|udm_free_res|udm_get_doc_count|udm_get_res_field|udm_get_res_param|udm_hash32|udm_load_ispell_data|udm_open_stored|udm_set_agent_param|uksort|umask|underflowexception|unexpectedvalueexception|uniqid|unixtojd|unlink|unpack|unregister_tick_function|unserialize|unset|urldecode|urlencode|use_soap_error_handler|user_error|usleep|usort|utf8_decode|utf8_encode|v8js|v8jsexception|var_dump|var_export|variant|variant_abs|variant_add|variant_and|variant_cast|variant_cat|variant_cmp|variant_date_from_timestamp|variant_date_to_timestamp|variant_div|variant_eqv|variant_fix|variant_get_type|variant_idiv|variant_imp|variant_int|variant_mod|variant_mul|variant_neg|variant_not|variant_or|variant_pow|variant_round|variant_set|variant_set_type|variant_sub|variant_xor|version_compare|vfprintf|virtual|vpopmail_add_alias_domain|vpopmail_add_alias_domain_ex|vpopmail_add_domain|vpopmail_add_domain_ex|vpopmail_add_user|vpopmail_alias_add|vpopmail_alias_del|vpopmail_alias_del_domain|vpopmail_alias_get|vpopmail_alias_get_all|vpopmail_auth_user|vpopmail_del_domain|vpopmail_del_domain_ex|vpopmail_del_user|vpopmail_error|vpopmail_passwd|vpopmail_set_user_quota|vprintf|vsprintf|w32api_deftype|w32api_init_dtype|w32api_invoke_function|w32api_register_function|w32api_set_call_method|wddx_add_vars|wddx_deserialize|wddx_packet_end|wddx_packet_start|wddx_serialize_value|wddx_serialize_vars|win32_continue_service|win32_create_service|win32_delete_service|win32_get_last_control_message|win32_pause_service|win32_ps_list_procs|win32_ps_stat_mem|win32_ps_stat_proc|win32_query_service_status|win32_set_service_status|win32_start_service|win32_start_service_ctrl_dispatcher|win32_stop_service|wincache_fcache_fileinfo|wincache_fcache_meminfo|wincache_lock|wincache_ocache_fileinfo|wincache_ocache_meminfo|wincache_refresh_if_changed|wincache_rplist_fileinfo|wincache_rplist_meminfo|wincache_scache_info|wincache_scache_meminfo|wincache_ucache_add|wincache_ucache_cas|wincache_ucache_clear|wincache_ucache_dec|wincache_ucache_delete|wincache_ucache_exists|wincache_ucache_get|wincache_ucache_inc|wincache_ucache_info|wincache_ucache_meminfo|wincache_ucache_set|wincache_unlock|wordwrap|xattr_get|xattr_list|xattr_remove|xattr_set|xattr_supported|xdiff_file_bdiff|xdiff_file_bdiff_size|xdiff_file_bpatch|xdiff_file_diff|xdiff_file_diff_binary|xdiff_file_merge3|xdiff_file_patch|xdiff_file_patch_binary|xdiff_file_rabdiff|xdiff_string_bdiff|xdiff_string_bdiff_size|xdiff_string_bpatch|xdiff_string_diff|xdiff_string_diff_binary|xdiff_string_merge3|xdiff_string_patch|xdiff_string_patch_binary|xdiff_string_rabdiff|xhprof_disable|xhprof_enable|xhprof_sample_disable|xhprof_sample_enable|xml_error_string|xml_get_current_byte_index|xml_get_current_column_number|xml_get_current_line_number|xml_get_error_code|xml_parse|xml_parse_into_struct|xml_parser_create|xml_parser_create_ns|xml_parser_free|xml_parser_get_option|xml_parser_set_option|xml_set_character_data_handler|xml_set_default_handler|xml_set_element_handler|xml_set_end_namespace_decl_handler|xml_set_external_entity_ref_handler|xml_set_notation_decl_handler|xml_set_object|xml_set_processing_instruction_handler|xml_set_start_namespace_decl_handler|xml_set_unparsed_entity_decl_handler|xmlreader|xmlrpc_decode|xmlrpc_decode_request|xmlrpc_encode|xmlrpc_encode_request|xmlrpc_get_type|xmlrpc_is_fault|xmlrpc_parse_method_descriptions|xmlrpc_server_add_introspection_data|xmlrpc_server_call_method|xmlrpc_server_create|xmlrpc_server_destroy|xmlrpc_server_register_introspection_callback|xmlrpc_server_register_method|xmlrpc_set_type|xmlwriter_end_attribute|xmlwriter_end_cdata|xmlwriter_end_comment|xmlwriter_end_document|xmlwriter_end_dtd|xmlwriter_end_dtd_attlist|xmlwriter_end_dtd_element|xmlwriter_end_dtd_entity|xmlwriter_end_element|xmlwriter_end_pi|xmlwriter_flush|xmlwriter_full_end_element|xmlwriter_open_memory|xmlwriter_open_uri|xmlwriter_output_memory|xmlwriter_set_indent|xmlwriter_set_indent_string|xmlwriter_start_attribute|xmlwriter_start_attribute_ns|xmlwriter_start_cdata|xmlwriter_start_comment|xmlwriter_start_document|xmlwriter_start_dtd|xmlwriter_start_dtd_attlist|xmlwriter_start_dtd_element|xmlwriter_start_dtd_entity|xmlwriter_start_element|xmlwriter_start_element_ns|xmlwriter_start_pi|xmlwriter_text|xmlwriter_write_attribute|xmlwriter_write_attribute_ns|xmlwriter_write_cdata|xmlwriter_write_comment|xmlwriter_write_dtd|xmlwriter_write_dtd_attlist|xmlwriter_write_dtd_element|xmlwriter_write_dtd_entity|xmlwriter_write_element|xmlwriter_write_element_ns|xmlwriter_write_pi|xmlwriter_write_raw|xpath_eval|xpath_eval_expression|xpath_new_context|xpath_register_ns|xpath_register_ns_auto|xptr_eval|xptr_new_context|xslt_backend_info|xslt_backend_name|xslt_backend_version|xslt_create|xslt_errno|xslt_error|xslt_free|xslt_getopt|xslt_process|xslt_set_base|xslt_set_encoding|xslt_set_error_handler|xslt_set_log|xslt_set_object|xslt_set_sax_handler|xslt_set_sax_handlers|xslt_set_scheme_handler|xslt_set_scheme_handlers|xslt_setopt|xsltprocessor|yaml_emit|yaml_emit_file|yaml_parse|yaml_parse_file|yaml_parse_url|yaz_addinfo|yaz_ccl_conf|yaz_ccl_parse|yaz_close|yaz_connect|yaz_database|yaz_element|yaz_errno|yaz_error|yaz_es|yaz_es_result|yaz_get_option|yaz_hits|yaz_itemorder|yaz_present|yaz_range|yaz_record|yaz_scan|yaz_scan_result|yaz_schema|yaz_search|yaz_set_option|yaz_sort|yaz_syntax|yaz_wait|yp_all|yp_cat|yp_err_string|yp_errno|yp_first|yp_get_default_domain|yp_master|yp_match|yp_next|yp_order|zend_logo_guid|zend_thread_id|zend_version|zip_close|zip_entry_close|zip_entry_compressedsize|zip_entry_compressionmethod|zip_entry_filesize|zip_entry_name|zip_entry_open|zip_entry_read|zip_open|zip_read|ziparchive|ziparchive_addemptydir|ziparchive_addfile|ziparchive_addfromstring|ziparchive_close|ziparchive_deleteindex|ziparchive_deletename|ziparchive_extractto|ziparchive_getarchivecomment|ziparchive_getcommentindex|ziparchive_getcommentname|ziparchive_getfromindex|ziparchive_getfromname|ziparchive_getnameindex|ziparchive_getstatusstring|ziparchive_getstream|ziparchive_locatename|ziparchive_open|ziparchive_renameindex|ziparchive_renamename|ziparchive_setCommentName|ziparchive_setarchivecomment|ziparchive_setcommentindex|ziparchive_statindex|ziparchive_statname|ziparchive_unchangeall|ziparchive_unchangearchive|ziparchive_unchangeindex|ziparchive_unchangename|zlib_get_coding_type".split("|")),b=e.arrayToMap("abstract|and|array|as|break|case|catch|class|clone|const|continue|declare|default|do|else|elseif|enddeclare|endfor|endforeach|endif|endswitch|endwhile|extends|final|for|foreach|function|global|goto|if|implements|interface|instanceof|namespace|new|or|private|protected|public|static|switch|throw|try|use|var|while|xor".split("|")),c=e.arrayToMap("die|echo|empty|exit|eval|include|include_once|isset|list|require|require_once|return|print|unset".split("|")),d=e.arrayToMap("true|false|null|__CLASS__|__DIR__|__FILE__|__LINE__|__METHOD__|__FUNCTION__|__NAMESPACE__".split("|")),g=e.arrayToMap("$GLOBALS|$_SERVER|$_GET|$_POST|$_FILES|$_REQUEST|$_SESSION|$_ENV|$_COOKIE|$php_errormsg|$HTTP_RAW_POST_DATA|$http_response_header|$argc|$argv".split("|")),h=e.arrayToMap("key_exists|cairo_matrix_create_scale|cairo_matrix_create_translate|call_user_method|call_user_method_array|com_addref|com_get|com_invoke|com_isenum|com_load|com_release|com_set|connection_timeout|cubrid_load_from_glo|cubrid_new_glo|cubrid_save_to_glo|cubrid_send_glo|define_syslog_variables|dl|ereg|ereg_replace|eregi|eregi_replace|hw_documentattributes|hw_documentbodytag|hw_documentsize|hw_outputdocument|imagedashedline|maxdb_bind_param|maxdb_bind_result|maxdb_client_encoding|maxdb_close_long_data|maxdb_execute|maxdb_fetch|maxdb_get_metadata|maxdb_param_count|maxdb_send_long_data|mcrypt_ecb|mcrypt_generic_end|mime_content_type|mysql_createdb|mysql_dbname|mysql_db_query|mysql_drop_db|mysql_dropdb|mysql_escape_string|mysql_fieldflags|mysql_fieldflags|mysql_fieldname|mysql_fieldtable|mysql_fieldtype|mysql_freeresult|mysql_listdbs|mysql_list_fields|mysql_listfields|mysql_list_tables|mysql_listtables|mysql_numfields|mysql_numrows|mysql_selectdb|mysql_tablename|mysqli_bind_param|mysqli_bind_result|mysqli_disable_reads_from_master|mysqli_disable_rpl_parse|mysqli_enable_reads_from_master|mysqli_enable_rpl_parse|mysqli_execute|mysqli_fetch|mysqli_get_metadata|mysqli_master_query|mysqli_param_count|mysqli_rpl_parse_enabled|mysqli_rpl_probe|mysqli_rpl_query_type|mysqli_send_long_data|mysqli_send_query|mysqli_slave_query|ocibindbyname|ocicancel|ocicloselob|ocicollappend|ocicollassign|ocicollassignelem|ocicollgetelem|ocicollmax|ocicollsize|ocicolltrim|ocicolumnisnull|ocicolumnname|ocicolumnprecision|ocicolumnscale|ocicolumnsize|ocicolumntype|ocicolumntyperaw|ocicommit|ocidefinebyname|ocierror|ociexecute|ocifetch|ocifetchinto|ocifetchstatement|ocifreecollection|ocifreecursor|ocifreedesc|ocifreestatement|ociinternaldebug|ociloadlob|ocilogoff|ocilogon|ocinewcollection|ocinewcursor|ocinewdescriptor|ocinlogon|ocinumcols|ociparse|ociplogon|ociresult|ocirollback|ocirowcount|ocisavelob|ocisavelobfile|ociserverversion|ocisetprefetch|ocistatementtype|ociwritelobtofile|ociwritetemporarylob|PDF_add_annotation|PDF_add_bookmark|PDF_add_launchlink|PDF_add_locallink|PDF_add_note|PDF_add_outline|PDF_add_pdflink|PDF_add_weblink|PDF_attach_file|PDF_begin_page|PDF_begin_template|PDF_close_pdi|PDF_close|PDF_findfont|PDF_get_font|PDF_get_fontname|PDF_get_fontsize|PDF_get_image_height|PDF_get_image_width|PDF_get_majorversion|PDF_get_minorversion|PDF_get_pdi_parameter|PDF_get_pdi_value|PDF_open_ccitt|PDF_open_file|PDF_open_gif|PDF_open_image_file|PDF_open_image|PDF_open_jpeg|PDF_open_pdi|PDF_open_tiff|PDF_place_image|PDF_place_pdi_page|PDF_set_border_color|PDF_set_border_dash|PDF_set_border_style|PDF_set_char_spacing|PDF_set_duration|PDF_set_horiz_scaling|PDF_set_info_author|PDF_set_info_creator|PDF_set_info_keywords|PDF_set_info_subject|PDF_set_info_title|PDF_set_leading|PDF_set_text_matrix|PDF_set_text_rendering|PDF_set_text_rise|PDF_set_word_spacing|PDF_setgray_fill|PDF_setgray_stroke|PDF_setgray|PDF_setpolydash|PDF_setrgbcolor_fill|PDF_setrgbcolor_stroke|PDF_setrgbcolor|PDF_show_boxed|php_check_syntax|px_set_tablename|px_set_targetencoding|runkit_sandbox_output_handler|session_is_registered|session_register|session_unregisterset_magic_quotes_runtime|magic_quotes_runtime|set_socket_blocking|socket_set_blocking|set_socket_timeout|socket_set_timeout|split|spliti|sql_regcase".split("|")),i=e.arrayToMap("cfunction|old_function".split("|")),j=e.arrayToMap([]);this.$rules={start:[{token:"support",regex:"<\\?(?:php|\\=)"},{token:"support",regex:"\\?>"},{token:"comment",regex:"\\/\\/.*$"},{token:"comment",regex:"#.*$"},(new f).getStartRule("doc-start"),{token:"comment",merge:!0,regex:"\\/\\*",next:"comment"},{token:"string.regexp",regex:"[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/][gimy]*\\s*(?=[).,;]|$)"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",merge:!0,regex:'["].*\\\\$',next:"qqstring"},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:"string",merge:!0,regex:"['].*\\\\$",next:"qstring"},{token:"constant.numeric",regex:"0[xX][0-9a-fA-F]+\\b"},{token:"constant.numeric",regex:"[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},{token:"constant.language",regex:"\\b(?:DEFAULT_INCLUDE_PATH|E_(?:ALL|CO(?:MPILE_(?:ERROR|WARNING)|RE_(?:ERROR|WARNING))|ERROR|NOTICE|PARSE|STRICT|USER_(?:ERROR|NOTICE|WARNING)|WARNING)|P(?:EAR_(?:EXTENSION_DIR|INSTALL_DIR)|HP_(?:BINDIR|CONFIG_FILE_(?:PATH|SCAN_DIR)|DATADIR|E(?:OL|XTENSION_DIR)|INT_(?:MAX|SIZE)|L(?:IBDIR|OCALSTATEDIR)|O(?:S|UTPUT_HANDLER_(?:CONT|END|START))|PREFIX|S(?:API|HLIB_SUFFIX|YSCONFDIR)|VERSION))|__COMPILER_HALT_OFFSET__)\\b"},{token:"constant.language",regex:"\\b(?:A(?:B(?:DAY_(?:1|2|3|4|5|6|7)|MON_(?:1(?:0|1|2|)|2|3|4|5|6|7|8|9))|LT_DIGITS|M_STR|SSERT_(?:ACTIVE|BAIL|CALLBACK|QUIET_EVAL|WARNING))|C(?:ASE_(?:LOWER|UPPER)|HAR_MAX|O(?:DESET|NNECTION_(?:ABORTED|NORMAL|TIMEOUT)|UNT_(?:NORMAL|RECURSIVE))|R(?:EDITS_(?:ALL|DOCS|FULLPAGE|G(?:ENERAL|ROUP)|MODULES|QA|SAPI)|NCYSTR|YPT_(?:BLOWFISH|EXT_DES|MD5|S(?:ALT_LENGTH|TD_DES)))|URRENCY_SYMBOL)|D(?:AY_(?:1|2|3|4|5|6|7)|ECIMAL_POINT|IRECTORY_SEPARATOR|_(?:FMT|T_FMT))|E(?:NT_(?:COMPAT|NOQUOTES|QUOTES)|RA(?:_(?:D_(?:FMT|T_FMT)|T_FMT|YEAR)|)|XTR_(?:IF_EXISTS|OVERWRITE|PREFIX_(?:ALL|I(?:F_EXISTS|NVALID)|SAME)|SKIP))|FRAC_DIGITS|GROUPING|HTML_(?:ENTITIES|SPECIALCHARS)|IN(?:FO_(?:ALL|C(?:ONFIGURATION|REDITS)|ENVIRONMENT|GENERAL|LICENSE|MODULES|VARIABLES)|I_(?:ALL|PERDIR|SYSTEM|USER)|T_(?:CURR_SYMBOL|FRAC_DIGITS))|L(?:C_(?:ALL|C(?:OLLATE|TYPE)|M(?:ESSAGES|ONETARY)|NUMERIC|TIME)|O(?:CK_(?:EX|NB|SH|UN)|G_(?:A(?:LERT|UTH(?:PRIV|))|C(?:ONS|R(?:IT|ON))|D(?:AEMON|EBUG)|E(?:MERG|RR)|INFO|KERN|L(?:OCAL(?:0|1|2|3|4|5|6|7)|PR)|MAIL|N(?:DELAY|EWS|O(?:TICE|WAIT))|ODELAY|P(?:ERROR|ID)|SYSLOG|U(?:SER|UCP)|WARNING)))|M(?:ON_(?:1(?:0|1|2|)|2|3|4|5|6|7|8|9|DECIMAL_POINT|GROUPING|THOUSANDS_SEP)|_(?:1_PI|2_(?:PI|SQRTPI)|E|L(?:N(?:10|2)|OG(?:10E|2E))|PI(?:_(?:2|4)|)|SQRT(?:1_2|2)))|N(?:EGATIVE_SIGN|O(?:EXPR|STR)|_(?:CS_PRECEDES|S(?:EP_BY_SPACE|IGN_POSN)))|P(?:ATH(?:INFO_(?:BASENAME|DIRNAME|EXTENSION)|_SEPARATOR)|M_STR|OSITIVE_SIGN|_(?:CS_PRECEDES|S(?:EP_BY_SPACE|IGN_POSN)))|RADIXCHAR|S(?:EEK_(?:CUR|END|SET)|ORT_(?:ASC|DESC|NUMERIC|REGULAR|STRING)|TR_PAD_(?:BOTH|LEFT|RIGHT))|T(?:HOUS(?:ANDS_SEP|EP)|_FMT(?:_AMPM|))|YES(?:EXPR|STR)|STD(?:IN|OUT|ERR))\\b"},{token:function(e){return i.hasOwnProperty(e)?"invalid.deprecated":b.hasOwnProperty(e)?"keyword":c.hasOwnProperty(e)?"keyword":d.hasOwnProperty(e)?"constant.language":g.hasOwnProperty(e)?"variable.language":j.hasOwnProperty(e)?"invalid.illegal":h.hasOwnProperty(e)?"invalid.deprecated":a.hasOwnProperty(e)?"support.function":e.match(/^(\$[a-zA-Z_][a-zA-Z0-9_]*|self|parent)$/)?"variable":"identifier"},regex:"[a-zA-Z_$][a-zA-Z0-9_$]*\\b"},{token:"keyword.operator",regex:"!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|\\b(?:in|instanceof|new|delete|typeof|void)"},{token:"paren.lparen",regex:"[[({]"},{token:"paren.rparen",regex:"[\\])}]"},{token:"text",regex:"\\s+"}],comment:[{token:"comment",regex:".*?\\*\\/",next:"start"},{token:"comment",merge:!0,regex:".+"}],qqstring:[{token:"string",regex:'(?:(?:\\\\.)|(?:[^"\\\\]))*?"',next:"start"},{token:"string",merge:!0,regex:".+"}],qstring:[{token:"string",regex:"(?:(?:\\\\.)|(?:[^'\\\\]))*?'",next:"start"},{token:"string",merge:!0,regex:".+"}]},this.embedRules(f,"doc-",[(new f).getEndRule("start")])};d.inherits(h,g),b.PhpHighlightRules=h}),define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("./text_highlight_rules").TextHighlightRules,f=function(){this.$rules={start:[{token:"comment.doc.tag",regex:"@[\\w\\d_]+"},{token:"comment.doc",merge:!0,regex:"\\s+"},{token:"comment.doc",merge:!0,regex:"TODO"},{token:"comment.doc",merge:!0,regex:"[^@\\*]+"},{token:"comment.doc",merge:!0,regex:"."}]}};d.inherits(f,e),function(){this.getStartRule=function(a){return{token:"comment.doc",merge:!0,regex:"\\/\\*(?=\\*)",next:a}},this.getEndRule=function(a){return{token:"comment.doc",merge:!0,regex:"\\*\\/",next:a}}}.call(f.prototype),b.DocCommentHighlightRules=f}),define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(a,b,c){var d=a("../range").Range,e=function(){};((function(){this.checkOutdent=function(a,b){return/^\s+$/.test(a)?/^\s*\}/.test(b):!1},this.autoOutdent=function(a,b){var c=a.getLine(b),e=c.match(/^(\s*\})/);if(!e)return 0;var f=e[1].length,g=a.findMatchingBracket({row:b,column:f});if(!g||g.row==b)return 0;var h=this.$getIndent(a.getLine(g.row));a.replace(new d(b,0,b,f-1),h)},this.$getIndent=function(a){var b=a.match(/^(\s+)/);return b?b[1]:""}})).call(e.prototype),b.MatchingBraceOutdent=e}),define("ace/mode/behaviour/cstyle",["require","exports","module","ace/lib/oop","ace/mode/behaviour"],function(a,b,c){var d=a("../../lib/oop"),e=a("../behaviour").Behaviour,f=function(){this.add("braces","insertion",function(a,b,c,d,e){if(e=="{"){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"{"+g+"}",selection:!1}:{text:"{}",selection:[1,1]}}if(e=="}"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="}"){var k=d.$findOpeningBracket("}",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}else if(e=="\n"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="}"){var l=d.findMatchingBracket({row:h.row,column:h.column+1});if(!l)return null;var m=this.getNextLineIndent(a,i.substring(0,i.length-1),d.getTabString()),n=this.$getIndent(d.doc.getLine(l.row));return{text:"\n"+m+"\n"+n,selection:[1,m.length,1,m.length]}}}}),this.add("braces","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="{"){var g=d.doc.getLine(e.start.row),h=g.substring(e.end.column,e.end.column+1);if(h=="}")return e.end.column++,e}}),this.add("parens","insertion",function(a,b,c,d,e){if(e=="("){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"("+g+")",selection:!1}:{text:"()",selection:[1,1]}}if(e==")"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j==")"){var k=d.$findOpeningBracket(")",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}}),this.add("parens","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="("){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h==")")return e.end.column++,e}}),this.add("string_dquotes","insertion",function(a,b,c,d,e){if(e=='"'){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);if(g!=="")return{text:'"'+g+'"',selection:!1};var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column-1,h.column);if(j=="\\")return null;var k=d.getTokens(f.start.row,f.start.row)[0].tokens,l=0,m,n=-1;for(var o=0;o<k.length;o++){m=k[o],m.type=="string"?n=-1:n<0&&(n=m.value.indexOf('"'));if(m.value.length+l>f.start.column)break;l+=k[o].value.length}if(!m||n<0&&m.type!=="comment"&&(m.type!=="string"||f.start.column!==m.value.length+l-1&&m.value.lastIndexOf('"')===m.value.length-1))return{text:'""',selection:[1,1]};if(m&&m.type==="string"){var p=i.substring(h.column,h.column+1);if(p=='"')return{text:"",selection:[1,1]}}}}),this.add("string_dquotes","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=='"'){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h=='"')return e.end.column++,e}})};d.inherits(f,e),b.CstyleBehaviour=f});
+;
 define("ace/mode/powershell",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/powershell_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/behaviour/cstyle"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./powershell_highlight_rules").PowershellHighlightRules,h=a("./matching_brace_outdent").MatchingBraceOutdent,i=a("./behaviour/cstyle").CstyleBehaviour,j=function(){this.$tokenizer=new f((new g).getRules()),this.$outdent=new h,this.$behaviour=new i};d.inherits(j,e),function(){this.getNextLineIndent=function(a,b,c){var d=this.$getIndent(b),e=this.$tokenizer.getLineTokens(b,a),f=e.tokens,g=e.state;if(f.length&&f[f.length-1].type=="comment")return d;if(a=="start"){var h=b.match(/^.*[\{\(\[]\s*$/);h&&(d+=c)}return d},this.checkOutdent=function(a,b,c){return this.$outdent.checkOutdent(b,c)},this.autoOutdent=function(a,b,c){this.$outdent.autoOutdent(b,c)},this.createWorker=function(a){return null}}.call(j.prototype),b.Mode=j}),define("ace/mode/powershell_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("./doc_comment_highlight_rules").DocCommentHighlightRules,g=a("./text_highlight_rules").TextHighlightRules,h=function(){var a=e.arrayToMap("function|if|else|elseif|switch|while|default|for|do|until|break|continue|foreach|return|filter|in|trap|throw|param|begin|process|end".split("|")),b=e.arrayToMap("Get-Alias|Import-Alias|New-Alias|Set-Alias|Get-AuthenticodeSignature|Set-AuthenticodeSignature|Set-Location|Get-ChildItem|Clear-Item|Get-Command|Measure-Command|Trace-Command|Add-Computer|Checkpoint-Computer|Remove-Computer|Restart-Computer|Restore-Computer|Stop-Computer|Reset-ComputerMachinePassword|Test-ComputerSecureChannel|Add-Content|Get-Content|Set-Content|Clear-Content|Get-Command|Invoke-Command|Enable-ComputerRestore|Disable-ComputerRestore|Get-ComputerRestorePoint|Test-Connection|ConvertFrom-CSV|ConvertTo-CSV|ConvertTo-Html|ConvertTo-Xml|ConvertFrom-SecureString|ConvertTo-SecureString|Copy-Item|Export-Counter|Get-Counter|Import-Counter|Get-Credential|Get-Culture|Get-ChildItem|Get-Date|Set-Date|Remove-Item|Compare-Object|Get-Event|Get-WinEvent|New-Event|Remove-Event|Unregister-Event|Wait-Event|Clear-EventLog|Get-Eventlog|Limit-EventLog|New-Eventlog|Remove-EventLog|Show-EventLog|Write-EventLog|Get-EventSubscriber|Register-EngineEvent|Register-ObjectEvent|Register-WmiEvent|Get-ExecutionPolicy|Set-ExecutionPolicy|Export-Alias|Export-Clixml|Export-Console|Export-Csv|ForEach-Object|Format-Custom|Format-List|Format-Table|Format-Wide|Export-FormatData|Get-FormatData|Get-Item|Get-ChildItem|Get-Help|Add-History|Clear-History|Get-History|Invoke-History|Get-Host|Read-Host|Write-Host|Get-HotFix|Import-Clixml|Import-Csv|Invoke-Command|Invoke-Expression|Get-Item|Invoke-Item|New-Item|Remove-Item|Set-Item|Clear-ItemProperty|Copy-ItemProperty|Get-ItemProperty|Move-ItemProperty|New-ItemProperty|Remove-ItemProperty|Rename-ItemProperty|Set-ItemProperty|Get-Job|Receive-Job|Remove-Job|Start-Job|Stop-Job|Wait-Job|Stop-Process|Update-List|Get-Location|Pop-Location|Push-Location|Set-Location|Send-MailMessage|Add-Member|Get-Member|Move-Item|Compare-Object|Group-Object|Measure-Object|New-Object|Select-Object|Sort-Object|Where-Object|Out-Default|Out-File|Out-GridView|Out-Host|Out-Null|Out-Printer|Out-String|Convert-Path|Join-Path|Resolve-Path|Split-Path|Test-Path|Get-Pfxcertificate|Pop-Location|Push-Location|Get-Process|Start-Process|Stop-Process|Wait-Process|Enable-PSBreakpoint|Disable-PSBreakpoint|Get-PSBreakpoint|Set-PSBreakpoint|Remove-PSBreakpoint|Get-PSDrive|New-PSDrive|Remove-PSDrive|Get-PSProvider|Set-PSdebug|Enter-PSSession|Exit-PSSession|Export-PSSession|Get-PSSession|Import-PSSession|New-PSSession|Remove-PSSession|Disable-PSSessionConfiguration|Enable-PSSessionConfiguration|Get-PSSessionConfiguration|Register-PSSessionConfiguration|Set-PSSessionConfiguration|Unregister-PSSessionConfiguration|New-PSSessionOption|Add-PsSnapIn|Get-PsSnapin|Remove-PSSnapin|Get-Random|Read-Host|Remove-Item|Rename-Item|Rename-ItemProperty|Select-Object|Select-XML|Send-MailMessage|Get-Service|New-Service|Restart-Service|Resume-Service|Set-Service|Start-Service|Stop-Service|Suspend-Service|Sort-Object|Start-Sleep|ConvertFrom-StringData|Select-String|Tee-Object|New-Timespan|Trace-Command|Get-Tracesource|Set-Tracesource|Start-Transaction|Complete-Transaction|Get-Transaction|Use-Transaction|Undo-Transaction|Start-Transcript|Stop-Transcript|Add-Type|Update-TypeData|Get-Uiculture|Get-Unique|Update-Formatdata|Update-Typedata|Clear-Variable|Get-Variable|New-Variable|Remove-Variable|Set-Variable|New-WebServiceProxy|Where-Object|Write-Debug|Write-Error|Write-Host|Write-Output|Write-Progress|Write-Verbose|Write-Warning|Set-WmiInstance|Invoke-WmiMethod|Get-WmiObject|Remove-WmiObject|Connect-WSMan|Disconnect-WSMan|Test-WSMan|Invoke-WSManAction|Disable-WSManCredSSP|Enable-WSManCredSSP|Get-WSManCredSSP|New-WSManInstance|Get-WSManInstance|Set-WSManInstance|Remove-WSManInstance|Set-WSManQuickConfig|New-WSManSessionOption".split("|")),c="eq|ne|ge|gt|lt|le|like|notlike|match|notmatch|replace|contains|notcontains|ieq|ine|ige|igt|ile|ilt|ilike|inotlike|imatch|inotmatch|ireplace|icontains|inotcontains|is|isnot|as|and|or|band|bor|not";this.$rules={start:[{token:"comment",regex:"#.*$"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:"constant.numeric",regex:"0[xX][0-9a-fA-F]+\\b"},{token:"constant.numeric",regex:"[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},{token:"constant.language.boolean",regex:"[$](?:[Tt]rue|[Ff]alse)\\b"},{token:"constant.language",regex:"[$][Nn]ull\\b"},{token:"variable.instance",regex:"[$][a-zA-Z][a-zA-Z0-9_]*\\b"},{token:function(c){return a.hasOwnProperty(c)?"keyword":b.hasOwnProperty(c)?"support.function":"identifier"},regex:"[a-zA-Z_$][a-zA-Z0-9_$\\-]*\\b"},{token:"keyword.operator",regex:"\\-(?:"+c+")"},{token:"keyword.operator",regex:"&|\\*|\\+|\\-|\\=|\\+=|\\-="},{token:"lparen",regex:"[[({]"},{token:"rparen",regex:"[\\])}]"},{token:"text",regex:"\\s+"}],comment:[{token:"comment",regex:".*?\\*\\/",next:"start"},{token:"comment",merge:!0,regex:".+"}]}};d.inherits(h,g),b.PowershellHighlightRules=h}),define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("./text_highlight_rules").TextHighlightRules,f=function(){this.$rules={start:[{token:"comment.doc.tag",regex:"@[\\w\\d_]+"},{token:"comment.doc",merge:!0,regex:"\\s+"},{token:"comment.doc",merge:!0,regex:"TODO"},{token:"comment.doc",merge:!0,regex:"[^@\\*]+"},{token:"comment.doc",merge:!0,regex:"."}]}};d.inherits(f,e),function(){this.getStartRule=function(a){return{token:"comment.doc",merge:!0,regex:"\\/\\*(?=\\*)",next:a}},this.getEndRule=function(a){return{token:"comment.doc",merge:!0,regex:"\\*\\/",next:a}}}.call(f.prototype),b.DocCommentHighlightRules=f}),define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(a,b,c){var d=a("../range").Range,e=function(){};((function(){this.checkOutdent=function(a,b){return/^\s+$/.test(a)?/^\s*\}/.test(b):!1},this.autoOutdent=function(a,b){var c=a.getLine(b),e=c.match(/^(\s*\})/);if(!e)return 0;var f=e[1].length,g=a.findMatchingBracket({row:b,column:f});if(!g||g.row==b)return 0;var h=this.$getIndent(a.getLine(g.row));a.replace(new d(b,0,b,f-1),h)},this.$getIndent=function(a){var b=a.match(/^(\s+)/);return b?b[1]:""}})).call(e.prototype),b.MatchingBraceOutdent=e}),define("ace/mode/behaviour/cstyle",["require","exports","module","ace/lib/oop","ace/mode/behaviour"],function(a,b,c){var d=a("../../lib/oop"),e=a("../behaviour").Behaviour,f=function(){this.add("braces","insertion",function(a,b,c,d,e){if(e=="{"){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"{"+g+"}",selection:!1}:{text:"{}",selection:[1,1]}}if(e=="}"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="}"){var k=d.$findOpeningBracket("}",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}else if(e=="\n"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="}"){var l=d.findMatchingBracket({row:h.row,column:h.column+1});if(!l)return null;var m=this.getNextLineIndent(a,i.substring(0,i.length-1),d.getTabString()),n=this.$getIndent(d.doc.getLine(l.row));return{text:"\n"+m+"\n"+n,selection:[1,m.length,1,m.length]}}}}),this.add("braces","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="{"){var g=d.doc.getLine(e.start.row),h=g.substring(e.end.column,e.end.column+1);if(h=="}")return e.end.column++,e}}),this.add("parens","insertion",function(a,b,c,d,e){if(e=="("){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"("+g+")",selection:!1}:{text:"()",selection:[1,1]}}if(e==")"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j==")"){var k=d.$findOpeningBracket(")",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}}),this.add("parens","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="("){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h==")")return e.end.column++,e}}),this.add("string_dquotes","insertion",function(a,b,c,d,e){if(e=='"'){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);if(g!=="")return{text:'"'+g+'"',selection:!1};var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column-1,h.column);if(j=="\\")return null;var k=d.getTokens(f.start.row,f.start.row)[0].tokens,l=0,m,n=-1;for(var o=0;o<k.length;o++){m=k[o],m.type=="string"?n=-1:n<0&&(n=m.value.indexOf('"'));if(m.value.length+l>f.start.column)break;l+=k[o].value.length}if(!m||n<0&&m.type!=="comment"&&(m.type!=="string"||f.start.column!==m.value.length+l-1&&m.value.lastIndexOf('"')===m.value.length-1))return{text:'""',selection:[1,1]};if(m&&m.type==="string"){var p=i.substring(h.column,h.column+1);if(p=='"')return{text:"",selection:[1,1]}}}}),this.add("string_dquotes","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=='"'){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h=='"')return e.end.column++,e}})};d.inherits(f,e),b.CstyleBehaviour=f});
 ;
 define("ace/mode/python",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/python_highlight_rules","ace/mode/matching_brace_outdent","ace/range"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./python_highlight_rules").PythonHighlightRules,h=a("./matching_brace_outdent").MatchingBraceOutdent,i=a("../range").Range,j=function(){this.$tokenizer=new f((new g).getRules())};d.inherits(j,e),function(){this.toggleCommentLines=function(a,b,c,d){var e=!0,f=[],g=/^(\s*)#/;for(var h=c;h<=d;h++)if(!g.test(b.getLine(h))){e=!1;break}if(e){var j=new i(0,0,0,0);for(var h=c;h<=d;h++){var k=b.getLine(h),l=k.match(g);j.start.row=h,j.end.row=h,j.end.column=l[0].length,b.replace(j,l[1])}}else b.indentRows(c,d,"#")},this.getNextLineIndent=function(a,b,c){var d=this.$getIndent(b),e=this.$tokenizer.getLineTokens(b,a),f=e.tokens,g=e.state;if(f.length&&f[f.length-1].type=="comment")return d;if(a=="start"){var h=b.match(/^.*[\{\(\[\:]\s*$/);h&&(d+=c)}return d};var a={pass:1,"return":1,raise:1,"break":1,"continue":1};this.checkOutdent=function(b,c,d){if(d!=="\r\n"&&d!=="\r"&&d!=="\n")return!1;var e=this.$tokenizer.getLineTokens(c.trim(),b).tokens;if(!e)return!1;do var f=e.pop();while(f&&(f.type=="comment"||f.type=="text"&&f.value.match(/^\s+$/)));return f?f.type=="keyword"&&a[f.value]:!1},this.autoOutdent=function(a,b,c){c+=1;var d=this.$getIndent(b.getLine(c)),e=b.getTabString();d.slice(-e.length)==e&&b.remove(new i(c,d.length-e.length,c,d.length))}}.call(j.prototype),b.Mode=j}),define("ace/mode/python_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("./text_highlight_rules").TextHighlightRules,g=function(){var a=e.arrayToMap("and|as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|raise|return|try|while|with|yield".split("|")),b=e.arrayToMap("True|False|None|NotImplemented|Ellipsis|__debug__".split("|")),c=e.arrayToMap("abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|eval|isinstance|pow|sum|basestring|execfile|issubclass|print|super|binfile|iter|property|tuple|bool|filter|len|range|type|bytearray|float|list|raw_input|unichr|callable|format|locals|reduce|unicode|chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|__import__|complex|hash|min|set|apply|delattr|help|next|setattr|buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern".split("|")),d=e.arrayToMap("".split("|")),f="(?:r|u|ur|R|U|UR|Ur|uR)?",g="(?:(?:[1-9]\\d*)|(?:0))",h="(?:0[oO]?[0-7]+)",i="(?:0[xX][\\dA-Fa-f]+)",j="(?:0[bB][01]+)",k="(?:"+g+"|"+h+"|"+i+"|"+j+")",l="(?:[eE][+-]?\\d+)",m="(?:\\.\\d+)",n="(?:\\d+)",o="(?:(?:"+n+"?"+m+")|(?:"+n+"\\.))",p="(?:(?:"+o+"|"+n+")"+l+")",q="(?:"+p+"|"+o+")";this.$rules={start:[{token:"comment",regex:"#.*$"},{token:"string",regex:f+'"{3}(?:[^\\\\]|\\\\.)*?"{3}'},{token:"string",merge:!0,regex:f+'"{3}.*$',next:"qqstring"},{token:"string",regex:f+'"(?:[^\\\\]|\\\\.)*?"'},{token:"string",regex:f+"'{3}(?:[^\\\\]|\\\\.)*?'{3}"},{token:"string",merge:!0,regex:f+"'{3}.*$",next:"qstring"},{token:"string",regex:f+"'(?:[^\\\\]|\\\\.)*?'"},{token:"constant.numeric",regex:"(?:"+q+"|\\d+)[jJ]\\b"},{token:"constant.numeric",regex:q},{token:"constant.numeric",regex:k+"[lL]\\b"},{token:"constant.numeric",regex:k+"\\b"},{token:function(e){return a.hasOwnProperty(e)?"keyword":b.hasOwnProperty(e)?"constant.language":d.hasOwnProperty(e)?"invalid.illegal":c.hasOwnProperty(e)?"support.function":e=="debugger"?"invalid.deprecated":"identifier"},regex:"[a-zA-Z_$][a-zA-Z0-9_$]*\\b"},{token:"keyword.operator",regex:"\\+|\\-|\\*|\\*\\*|\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|="},{token:"lparen.paren",regex:"[\\[\\(\\{]"},{token:"paren.rparen",regex:"[\\]\\)\\}]"},{token:"text",regex:"\\s+"}],qqstring:[{token:"string",regex:'(?:[^\\\\]|\\\\.)*?"{3}',next:"start"},{token:"string",merge:!0,regex:".+"}],qstring:[{token:"string",regex:"(?:[^\\\\]|\\\\.)*?'{3}",next:"start"},{token:"string",merge:!0,regex:".+"}]}};d.inherits(g,f),b.PythonHighlightRules=g}),define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(a,b,c){var d=a("../range").Range,e=function(){};((function(){this.checkOutdent=function(a,b){return/^\s+$/.test(a)?/^\s*\}/.test(b):!1},this.autoOutdent=function(a,b){var c=a.getLine(b),e=c.match(/^(\s*\})/);if(!e)return 0;var f=e[1].length,g=a.findMatchingBracket({row:b,column:f});if(!g||g.row==b)return 0;var h=this.$getIndent(a.getLine(g.row));a.replace(new d(b,0,b,f-1),h)},this.$getIndent=function(a){var b=a.match(/^(\s+)/);return b?b[1]:""}})).call(e.prototype),b.MatchingBraceOutdent=e});
@@ -100,4 +102,3667 @@ define("ace/theme/tomorrow_night_eighties",["require","exports","module"],functi
 define("ace/theme/twilight",["require","exports","module"],function(a,b,c){b.cssClass="ace-twilight",b.cssText=".ace-twilight .ace_editor {  border: 2px solid rgb(159, 159, 159);}.ace-twilight .ace_editor.ace_focus {  border: 2px solid #327fbd;}.ace-twilight .ace_gutter {  width: 50px;  background: #e8e8e8;  color: #333;  overflow : hidden;}.ace-twilight .ace_gutter-layer {  width: 100%;  text-align: right;}.ace-twilight .ace_gutter-layer .ace_gutter-cell {  padding-right: 6px;}.ace-twilight .ace_print_margin {  width: 1px;  background: #e8e8e8;}.ace-twilight .ace_scroller {  background-color: #141414;}.ace-twilight .ace_text-layer {  cursor: text;  color: #F8F8F8;}.ace-twilight .ace_cursor {  border-left: 2px solid #A7A7A7;}.ace-twilight .ace_cursor.ace_overwrite {  border-left: 0px;  border-bottom: 1px solid #A7A7A7;} .ace-twilight .ace_marker-layer .ace_selection {  background: rgba(221, 240, 255, 0.20);}.ace-twilight .ace_marker-layer .ace_step {  background: rgb(198, 219, 174);}.ace-twilight .ace_marker-layer .ace_bracket {  margin: -1px 0 0 -1px;  border: 1px solid rgba(255, 255, 255, 0.25);}.ace-twilight .ace_marker-layer .ace_active_line {  background: rgba(255, 255, 255, 0.031);}       .ace-twilight .ace_invisible {  color: rgba(255, 255, 255, 0.25);}.ace-twilight .ace_keyword {  color:#CDA869;}.ace-twilight .ace_keyword.ace_operator {  }.ace-twilight .ace_constant {  color:#CF6A4C;}.ace-twilight .ace_constant.ace_language {  }.ace-twilight .ace_constant.ace_library {  }.ace-twilight .ace_constant.ace_numeric {  }.ace-twilight .ace_invalid {  }.ace-twilight .ace_invalid.ace_illegal {  color:#F8F8F8;background-color:rgba(86, 45, 86, 0.75);}.ace-twilight .ace_invalid.ace_deprecated {  text-decoration:underline;font-style:italic;color:#D2A8A1;}.ace-twilight .ace_support {  color:#9B859D;}.ace-twilight .ace_support.ace_function {  color:#DAD085;}.ace-twilight .ace_function.ace_buildin {  }.ace-twilight .ace_string {  color:#8F9D6A;}.ace-twilight .ace_string.ace_regexp {  color:#E9C062;}.ace-twilight .ace_comment {  font-style:italic;color:#5F5A60;}.ace-twilight .ace_comment.ace_doc {  }.ace-twilight .ace_comment.ace_doc.ace_tag {  }.ace-twilight .ace_variable {  color:#7587A6;}.ace-twilight .ace_variable.ace_language {  }.ace-twilight .ace_xml_pe {  color:#494949;}.ace-twilight .ace_meta {  }.ace-twilight .ace_meta.ace_tag {  color:#AC885B;}.ace-twilight .ace_meta.ace_tag.ace_input {  }.ace-twilight .ace_entity.ace_other.ace_attribute-name {  }.ace-twilight .ace_entity.ace_name {  }.ace-twilight .ace_entity.ace_name.ace_function {  color:#AC885B;}.ace-twilight .ace_markup.ace_underline {    text-decoration:underline;}.ace-twilight .ace_markup.ace_heading {  color:#CF6A4C;}.ace-twilight .ace_markup.ace_heading.ace_1 {  }.ace-twilight .ace_markup.ace_heading.ace_2 {  }.ace-twilight .ace_markup.ace_heading.ace_3 {  }.ace-twilight .ace_markup.ace_heading.ace_4 {  }.ace-twilight .ace_markup.ace_heading.ace_5 {  }.ace-twilight .ace_markup.ace_heading.ace_6 {  }.ace-twilight .ace_markup.ace_list {  color:#F9EE98;}.ace-twilight .ace_collab.ace_user1 {     }";var d=a("../lib/dom");d.importCssString(b.cssText)});
 ;
 define("ace/theme/vibrant_ink",["require","exports","module"],function(a,b,c){b.cssText=".ace-vibrant-ink .ace_editor {  border: 2px solid rgb(159, 159, 159);}.ace-vibrant-ink .ace_editor.ace_focus {  border: 2px solid #327fbd;}.ace-vibrant-ink .ace_gutter {  width: 50px;  background: #e8e8e8;  color: #333;  overflow : hidden;}.ace-vibrant-ink .ace_gutter-layer {  width: 100%;  text-align: right;}.ace-vibrant-ink .ace_gutter-layer .ace_gutter-cell {  padding-right: 6px;}.ace-vibrant-ink .ace_print_margin {  width: 1px;  background: #e8e8e8;}.ace-vibrant-ink .ace_scroller {  background-color: #0F0F0F;}.ace-vibrant-ink .ace_text-layer {  cursor: text;  color: #FFFFFF;}.ace-vibrant-ink .ace_cursor {  border-left: 2px solid #FFFFFF;}.ace-vibrant-ink .ace_cursor.ace_overwrite {  border-left: 0px;  border-bottom: 1px solid #FFFFFF;} .ace-vibrant-ink .ace_marker-layer .ace_selection {  background: #6699CC;}.ace-vibrant-ink .ace_marker-layer .ace_step {  background: rgb(198, 219, 174);}.ace-vibrant-ink .ace_marker-layer .ace_bracket {  margin: -1px 0 0 -1px;  border: 1px solid #99CC99;}.ace-vibrant-ink .ace_marker-layer .ace_active_line {  background: #333333;}       .ace-vibrant-ink .ace_invisible {  color: #404040;}.ace-vibrant-ink .ace_keyword {  color:#FF6600;}.ace-vibrant-ink .ace_keyword.ace_operator {  }.ace-vibrant-ink .ace_constant {  }.ace-vibrant-ink .ace_constant.ace_language {  color:#339999;}.ace-vibrant-ink .ace_constant.ace_library {  }.ace-vibrant-ink .ace_constant.ace_numeric {  color:#99CC99;}.ace-vibrant-ink .ace_invalid {  color:#CCFF33;  background-color:#000000;}.ace-vibrant-ink .ace_invalid.ace_illegal {  }.ace-vibrant-ink .ace_invalid.ace_deprecated {  color:#CCFF33;  background-color:#000000;}.ace-vibrant-ink .ace_support {  }.ace-vibrant-ink .ace_support.ace_function {  color:#FFCC00;}.ace-vibrant-ink .ace_function.ace_buildin {  }.ace-vibrant-ink .ace_string {  color:#66FF00;}.ace-vibrant-ink .ace_string.ace_regexp {  color:#44B4CC;}.ace-vibrant-ink .ace_comment {  color:#9933CC;}.ace-vibrant-ink .ace_comment.ace_doc {  }.ace-vibrant-ink .ace_comment.ace_doc.ace_tag {  }.ace-vibrant-ink .ace_variable {  }.ace-vibrant-ink .ace_variable.ace_language {  }.ace-vibrant-ink .ace_xml_pe {  }.ace-vibrant-ink .ace_meta {  }.ace-vibrant-ink .ace_meta.ace_tag {  }.ace-vibrant-ink .ace_meta.ace_tag.ace_input {  }.ace-vibrant-ink .ace_entity.ace_other.ace_attribute-name {  font-style:italic;color:#99CC99;}.ace-vibrant-ink .ace_entity.ace_name {  }.ace-vibrant-ink .ace_entity.ace_name.ace_function {  color:#FFCC00;}.ace-vibrant-ink .ace_markup.ace_underline {    text-decoration:underline;}.ace-vibrant-ink .ace_markup.ace_heading {  }.ace-vibrant-ink .ace_markup.ace_heading.ace_1 {  }.ace-vibrant-ink .ace_markup.ace_heading.ace_2 {  }.ace-vibrant-ink .ace_markup.ace_heading.ace_3 {  }.ace-vibrant-ink .ace_markup.ace_heading.ace_4 {  }.ace-vibrant-ink .ace_markup.ace_heading.ace_5 {  }.ace-vibrant-ink .ace_markup.ace_heading.ace_6 {  }.ace-vibrant-ink .ace_markup.ace_list {  }.ace-vibrant-ink .ace_collab.ace_user1 {     }",b.cssClass="ace-vibrant-ink";var d=a("../lib/dom");d.importCssString(b.cssText)});
-function EditorTools(a,b,c){this.editor=a,this.panel=b,this.utils.editor=this.editor,this.docroot=c}function MarkdownTools(a,b,c){var d=new EditorTools(a,b,c);return d.addButton("edit-heading_png",function(a){var b=a.currentLine(),c=/^(#*)\s*(.*)$/.exec(b),d;c[1]===undefined||c[1].length===0?d="# "+c[2]:c[1].length<6?d=c[1]+"# "+c[2]:d=c[2],a.replaceAndSelectLine(d)}),d.addButton("edit-bold_png",function(a){if(a.multiline)return;var b,c;a.selected?(c=/^[*]{2}(.+?)[*]{2}$/.exec(a.selected),c?a.replaceAndSelect(c[1]):a.replaceAndSelect("**"+a.selected+"**")):(a.editor.insert("****"),a.offsetCursor(2))}),d.addButton("edit-italic_png",function(a){if(a.multiline)return;var b,c;a.selected?(c=/^[*](.+?)[*]$/.exec(a.selected),c&&(!/^[*]{2}([^*].*?)[*]{2}$/.test(a.selected)||!/^[*]{2}(.*?[^*])[*]{2}$/.test(a.selected))?a.replaceAndSelect(c[1]):a.replaceAndSelect("*"+a.selected+"*")):(a.editor.insert("**"),a.offsetCursor(1))}),d.addButton("chain_png",function(a){if(a.multiline)return;a.selected?a.replaceAndOffset("["+a.selected+"]()",-1):(a.editor.insert("[]()"),a.offsetCursor(1))}),d.addButton("edit-list_png",function(a){a.forSelectedLines(function(b,c){replaceRange=new Range(b,0,b,c.length),a.session.replace(replaceRange,"*   "+c)}),a.selectRange(a.selectedLineRange())}),d.addButton("edit-list-order_png",function(a){marker=1,a.forSelectedLines(function(b,c){replaceRange=new Range(b,0,b,c.length);var d=marker+".";a.session.replace(replaceRange,d+a.repeatString(" ",4-d.length)+c),marker++}),a.selectRange(a.selectedLineRange())}),d.addButton("edit-image_png",function(a){if(a.multiline)return;a.selected?a.joinReplaceAndSelect(["!<[alt](",a.selected,' "',"title",'")'],3):a.joinReplaceAndSelect(["!<[alt](","url",' "title")'],1)}),d.addButton("edit-image-center_png",function(a){if(a.multiline)return;a.selected?a.joinReplaceAndSelect(["![alt](",a.selected,' "',"title",'")'],3):a.joinReplaceAndSelect(["![alt](","url",' "title")'],1)}),d.addButton("edit-indent_png",function(a){if(a.multiline)return;a.selected?a.joinReplaceAndSelect(["!>[alt](",a.selected,' "',"title",'")'],3):a.joinReplaceAndSelect(["!>[alt](","url",' "title")'],1)}),d.addButton("edit-rule_png",function(a){a.replaceAndSelect("\n---\n")}),d.addButton("edit-quotation_png",function(a){if(a.multiline)return;var b=a.currentLine(),c=/^(\>?)\s*(.*)$/.exec(b),d;/^\s*$/.test(b)?(d="> \n",a.session.replace(a.selectedLineRange(),d),a.selectRange(new Range(a.selection.start.row,2,a.selection.start.row,2))):(c[1]?d=c[2]:d="> "+c[2],a.replaceAndSelectLine(d))}),d.addButton("edit-code_png",function(a){var b,c,d,e,f,g;if(a.multiline){var h=4e4;a.forSelectedLines(function(a,b){c=/^[ ]*/.exec(b),c[0].length<h&&(h=c[0].length)}),a.forSelectedLines(function(b,c){h>3?(g=new Range(b,0,b,h),a.session.replace(g,"")):(g=new Range(b,0,b,0),a.session.replace(g,(new Array(5-h)).join(" ")))}),a.selectRange(a.selectedLineRange())}else b=a.selected,f=a.currentLine(),b===""?/^\s*$/.test(f)?(d="    ",a.session.replace(a.selectedLineRange(),d),a.selectRange(new Range(a.selection.start.row,4,a.selection.start.row,4))):(a.editor.insert("``"),a.offsetCursor(1)):(c=/^(`+)(.+?)\1$/.exec(b),c?d=c[2]:(c=b.match(/`+/g),e="",c&&$.each(c,function(a,b){b.length>e.length&&(e=b)}),d="`"+e+b+e+"`"),a.replaceAndSelect(d))}),d.addButton("edit-mathematics_png",function(a){if(a.selection.start.row!==a.selection.end.row)return;var b=a.currentLine(),c;b===a.selected?(c=/^[$]{2}(.*?)[$]{2}$/.exec(a.selected),c?newline=c[1]:newline="$$"+a.selected+"$$",a.replaceAndSelectLine(newline),a.offsetCursor(2)):/^\s*$/.test(b)?(newline="$$$$\n",a.session.replace(a.selectedLineRange(),newline),a.selectRange(new Range(a.selection.start.row,2,a.selection.start.row,2))):a.selected?(c=/^[%]{2}(.*?)[%]{2}$/.exec(a.selected),c?newtext=c[1]:newtext="%%"+a.selected+"%%",a.replaceAndSelect(newtext)):(a.editor.insert("%%%%"),a.offsetCursor(2))}),d.addButton("edit-signiture_png",function(a){$("#ace").css("font-size",parseInt($("#ace").css("font-size"),10)+2)},!0),d.addButton("edit-size-up_png",function(a){$("#ace").css("font-size",parseInt($("#ace").css("font-size"),10)-2)},!0),d}function size_image(a){setTimeout(function(){a=$(a);if(a.width()>640){var b=640/a.width();a.width(a.width()*b)}},0)}function size_images(a){$("img",a).not(".MathJax_strut").each(function(a,b){size_image(b)})}(function(a,b){function c(b,c){var e=b.nodeName.toLowerCase();return"area"===e?(c=b.parentNode,e=c.name,!b.href||!e||c.nodeName.toLowerCase()!=="map"?!1:(b=a("img[usemap=#"+e+"]")[0],!!b&&d(b))):(/input|select|textarea|button|object/.test(e)?!b.disabled:"a"==e?b.href||c:c)&&d(b)}function d(b){return!a(b).parents().andSelf().filter(function(){return a.curCSS(this,"visibility")==="hidden"||a.expr.filters.hidden(this)}).length}a.ui=a.ui||{},a.ui.version||(a.extend(a.ui,{version:"1.8.16",keyCode:{ALT:18,BACKSPACE:8,CAPS_LOCK:20,COMMA:188,COMMAND:91,COMMAND_LEFT:91,COMMAND_RIGHT:93,CONTROL:17,DELETE:46,DOWN:40,END:35,ENTER:13,ESCAPE:27,HOME:36,INSERT:45,LEFT:37,MENU:93,NUMPAD_ADD:107,NUMPAD_DECIMAL:110,NUMPAD_DIVIDE:111,NUMPAD_ENTER:108,NUMPAD_MULTIPLY:106,NUMPAD_SUBTRACT:109,PAGE_DOWN:34,PAGE_UP:33,PERIOD:190,RIGHT:39,SHIFT:16,SPACE:32,TAB:9,UP:38,WINDOWS:91}}),a.fn.extend({propAttr:a.fn.prop||a.fn.attr,_focus:a.fn.focus,focus:function(b,c){return typeof b=="number"?this.each(function(){var d=this;setTimeout(function(){a(d).focus(),c&&c.call(d)},b)}):this._focus.apply(this,arguments)},scrollParent:function(){var b;return b=a.browser.msie&&/(static|relative)/.test(this.css("position"))||/absolute/.test(this.css("position"))?this.parents().filter(function(){return/(relative|absolute|fixed)/.test(a.curCSS(this,"position",1))&&/(auto|scroll)/.test(a.curCSS(this,"overflow",1)+a.curCSS(this,"overflow-y",1)+a.curCSS(this,"overflow-x",1))}).eq(0):this.parents().filter(function(){return/(auto|scroll)/.test(a.curCSS(this,"overflow",1)+a.curCSS(this,"overflow-y",1)+a.curCSS(this,"overflow-x",1))}).eq(0),/fixed/.test(this.css("position"))||!b.length?a(document):b},zIndex:function(c){if(c!==b)return this.css("zIndex",c);if(this.length){c=a(this[0]);for(var d;c.length&&c[0]!==document;){d=c.css("position");if(d==="absolute"||d==="relative"||d==="fixed"){d=parseInt(c.css("zIndex"),10);if(!isNaN(d)&&d!==0)return d}c=c.parent()}}return 0},disableSelection:function(){return this.bind((a.support.selectstart?"selectstart":"mousedown")+".ui-disableSelection",function(a){a.preventDefault()})},enableSelection:function(){return this.unbind(".ui-disableSelection")}}),a.each(["Width","Height"],function(c,d){function e(b,c,d,e){return a.each(f,function(){c-=parseFloat(a.curCSS(b,"padding"+this,!0))||0,d&&(c-=parseFloat(a.curCSS(b,"border"+this+"Width",!0))||0),e&&(c-=parseFloat(a.curCSS(b,"margin"+this,!0))||0)}),c}var f=d==="Width"?["Left","Right"]:["Top","Bottom"],g=d.toLowerCase(),h={innerWidth:a.fn.innerWidth,innerHeight:a.fn.innerHeight,outerWidth:a.fn.outerWidth,outerHeight:a.fn.outerHeight};a.fn["inner"+d]=function(c){return c===b?h["inner"+d].call(this):this.each(function(){a(this).css(g,e(this,c)+"px")})},a.fn["outer"+d]=function(b,c){return typeof b!="number"?h["outer"+d].call(this,b):this.each(function(){a(this).css(g,e(this,b,!0,c)+"px")})}}),a.extend(a.expr[":"],{data:function(b,c,d){return!!a.data(b,d[3])},focusable:function(b){return c(b,!isNaN(a.attr(b,"tabindex")))},tabbable:function(b){var d=a.attr(b,"tabindex"),e=isNaN(d);return(e||d>=0)&&c(b,!e)}}),a(function(){var b=document.body,c=b.appendChild(c=document.createElement("div"));a.extend(c.style,{minHeight:"100px",height:"auto",padding:0,borderWidth:0}),a.support.minHeight=c.offsetHeight===100,a.support.selectstart="onselectstart"in c,b.removeChild(c).style.display="none"}),a.extend(a.ui,{plugin:{add:function(b,c,d){b=a.ui[b].prototype;for(var e in d)b.plugins[e]=b.plugins[e]||[],b.plugins[e].push([c,d[e]])},call:function(a,b,c){if((b=a.plugins[b])&&a.element[0].parentNode)for(var d=0;d<b.length;d++)a.options[b[d][0]]&&b[d][1].apply(a.element,c)}},contains:function(a,b){return document.compareDocumentPosition?a.compareDocumentPosition(b)&16:a!==b&&a.contains(b)},hasScroll:function(b,c){if(a(b).css("overflow")==="hidden")return!1;c=c&&c==="left"?"scrollLeft":"scrollTop";var d=!1;return b[c]>0?!0:(b[c]=1,d=b[c]>0,b[c]=0,d)},isOverAxis:function(a,b,c){return a>b&&a<b+c},isOver:function(b,c,d,e,f,g){return a.ui.isOverAxis(b,d,f)&&a.ui.isOverAxis(c,e,g)}}))})(jQuery),jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array&&b.length==3?b:(c=/rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(b))?[parseInt(c[1],10),parseInt(c[2],10),parseInt(c[3],10)]:(c=/rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(b))?[parseFloat(c[1])*2.55,parseFloat(c[2])*2.55,parseFloat(c[3])*2.55]:(c=/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(b))?[parseInt(c[1],16),parseInt(c[2],16),parseInt(c[3],16)]:(c=/#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(b))?[parseInt(c[1]+c[1],16),parseInt(c[2]+c[2],16),parseInt(c[3]+c[3],16)]:/rgba\(0, 0, 0, 0\)/.exec(b)?j.transparent:j[a.trim(b).toLowerCase()]}function d(b,d){var e;do{e=a.curCSS(b,d);if(e!=""&&e!="transparent"||a.nodeName(b,"body"))break;d="backgroundColor"}while(b=b.parentNode);return c(e)}function e(){var a=document.defaultView?document.defaultView.getComputedStyle(this,null):this.currentStyle,b={},c,d;if(a&&a.length&&a[0]&&a[a[0]])for(var e=a.length;e--;)c=a[e],typeof a[c]=="string"&&(d=c.replace(/\-(\w)/g,function(a,b){return b.toUpperCase()}),b[d]=a[c]);else for(c in a)typeof a[c]=="string"&&(b[c]=a[c]);return b}function f(b){var c,d;for(c in b)d=b[c],(d==null||a.isFunction(d)||c in l||/scrollbar/.test(c)||!/color/i.test(c)&&isNaN(parseFloat(d)))&&delete b[c];return b}function g(a,b){var c={_:0},d;for(d in b)a[d]!=b[d]&&(c[d]=b[d]);return c}function h(b,c,d,e){typeof b=="object"&&(e=c,d=null,c=b,b=c.effect),a.isFunction(c)&&(e=c,d=null,c={});if(typeof c=="number"||a.fx.speeds[c])e=d,d=c,c={};return a.isFunction(d)&&(e=d,d=null),c=c||{},d=d||c.duration,d=a.fx.off?0:typeof d=="number"?d:d in a.fx.speeds?a.fx.speeds[d]:a.fx.speeds._default,e=e||c.complete,[b,c,d,e]}function i(b){return!b||typeof b=="number"||a.fx.speeds[b]?!0:typeof b=="string"&&!a.effects[b]?!0:!1}a.effects={},a.each(["backgroundColor","borderBottomColor","borderLeftColor","borderRightColor","borderTopColor","borderColor","color","outlineColor"],function(b,e){a.fx.step[e]=function(a){a.colorInit||(a.start=d(a.elem,e),a.end=c(a.end),a.colorInit=!0),a.elem.style[e]="rgb("+Math.max(Math.min(parseInt(a.pos*(a.end[0]-a.start[0])+a.start[0],10),255),0)+","+Math.max(Math.min(parseInt(a.pos*(a.end[1]-a.start[1])+a.start[1],10),255),0)+","+Math.max(Math.min(parseInt(a.pos*(a.end[2]-a.start[2])+a.start[2],10),255),0)+")"}});var j={aqua:[0,255,255],azure:[240,255,255],beige:[245,245,220],black:[0,0,0],blue:[0,0,255],brown:[165,42,42],cyan:[0,255,255],darkblue:[0,0,139],darkcyan:[0,139,139],darkgrey:[169,169,169],darkgreen:[0,100,0],darkkhaki:[189,183,107],darkmagenta:[139,0,139],darkolivegreen:[85,107,47],darkorange:[255,140,0],darkorchid:[153,50,204],darkred:[139,0,0],darksalmon:[233,150,122],darkviolet:[148,0,211],fuchsia:[255,0,255],gold:[255,215,0],green:[0,128,0],indigo:[75,0,130],khaki:[240,230,140],lightblue:[173,216,230],lightcyan:[224,255,255],lightgreen:[144,238,144],lightgrey:[211,211,211],lightpink:[255,182,193],lightyellow:[255,255,224],lime:[0,255,0],magenta:[255,0,255],maroon:[128,0,0],navy:[0,0,128],olive:[128,128,0],orange:[255,165,0],pink:[255,192,203],purple:[128,0,128],violet:[128,0,128],red:[255,0,0],silver:[192,192,192],white:[255,255,255],yellow:[255,255,0],transparent:[255,255,255]},k=["add","remove","toggle"],l={border:1,borderBottom:1,borderColor:1,borderLeft:1,borderRight:1,borderTop:1,borderWidth:1,margin:1,padding:1};a.effects.animateClass=function(b,c,d,h){return a.isFunction(d)&&(h=d,d=null),this.queue(function(){var i=a(this),j=i.attr("style")||" ",l=f(e.call(this)),m,n=i.attr("class");a.each(k,function(a,c){b[c]&&i[c+"Class"](b[c])}),m=f(e.call(this)),i.attr("class",n),i.animate(g(l,m),{queue:!1,duration:c,easing:d,complete:function(){a.each(k,function(a,c){b[c]&&i[c+"Class"](b[c])}),typeof i.attr("style")=="object"?(i.attr("style").cssText="",i.attr("style").cssText=j):i.attr("style",j),h&&h.apply(this,arguments),a.dequeue(this)}})})},a.fn.extend({_addClass:a.fn.addClass,addClass:function(b,c,d,e){return c?a.effects.animateClass.apply(this,[{add:b},c,d,e]):this._addClass(b)},_removeClass:a.fn.removeClass,removeClass:function(b,c,d,e){return c?a.effects.animateClass.apply(this,[{remove:b},c,d,e]):this._removeClass(b)},_toggleClass:a.fn.toggleClass,toggleClass:function(c,d,e,f,g){return typeof d=="boolean"||d===b?e?a.effects.animateClass.apply(this,[d?{add:c}:{remove:c},e,f,g]):this._toggleClass(c,d):a.effects.animateClass.apply(this,[{toggle:c},d,e,f])},switchClass:function(b,c,d,e,f){return a.effects.animateClass.apply(this,[{add:c,remove:b},d,e,f])}}),a.extend(a.effects,{version:"1.8.16",save:function(a,b){for(var c=0;c<b.length;c++)b[c]!==null&&a.data("ec.storage."+b[c],a[0].style[b[c]])},restore:function(a,b){for(var c=0;c<b.length;c++)b[c]!==null&&a.css(b[c],a.data("ec.storage."+b[c]))},setMode:function(a,b){return b=="toggle"&&(b=a.is(":hidden")?"show":"hide"),b},getBaseline:function(a,b){var c;switch(a[0]){case"top":c=0;break;case"middle":c=.5;break;case"bottom":c=1;break;default:c=a[0]/b.height}switch(a[1]){case"left":a=0;break;case"center":a=.5;break;case"right":a=1;break;default:a=a[1]/b.width}return{x:a,y:c}},createWrapper:function(b){if(b.parent().is(".ui-effects-wrapper"))return b.parent();var c={width:b.outerWidth(!0),height:b.outerHeight(!0),"float":b.css("float")},d=a("<div></div>").addClass("ui-effects-wrapper").css({fontSize:"100%",background:"transparent",border:"none",margin:0,padding:0}),e=document.activeElement;return b.wrap(d),(b[0]===e||a.contains(b[0],e))&&a(e).focus(),d=b.parent(),b.css("position")=="static"?(d.css({position:"relative"}),b.css({position:"relative"})):(a.extend(c,{position:b.css("position"),zIndex:b.css("z-index")}),a.each(["top","left","bottom","right"],function(a,d){c[d]=b.css(d),isNaN(parseInt(c[d],10))&&(c[d]="auto")}),b.css({position:"relative",top:0,left:0,right:"auto",bottom:"auto"})),d.css(c).show()},removeWrapper:function(b){var c,d=document.activeElement;return b.parent().is(".ui-effects-wrapper")?(c=b.parent().replaceWith(b),(b[0]===d||a.contains(b[0],d))&&a(d).focus(),c):b},setTransition:function(b,c,d,e){return e=e||{},a.each(c,function(a,c){unit=b.cssUnit(c),unit[0]>0&&(e[c]=unit[0]*d+unit[1])}),e}}),a.fn.extend({effect:function(b){var c=h.apply(this,arguments),d={options:c[1],duration:c[2],callback:c[3]};c=d.options.mode;var e=a.effects[b];return a.fx.off||!e?c?this[c](d.duration,d.callback):this.each(function(){d.callback&&d.callback.call(this)}):e.call(this,d)},_show:a.fn.show,show:function(a){if(i(a))return this._show.apply(this,arguments);var b=h.apply(this,arguments);return b[1].mode="show",this.effect.apply(this,b)},_hide:a.fn.hide,hide:function(a){if(i(a))return this._hide.apply(this,arguments);var b=h.apply(this,arguments);return b[1].mode="hide",this.effect.apply(this,b)},__toggle:a.fn.toggle,toggle:function(b){if(i(b)||typeof b=="boolean"||a.isFunction(b))return this.__toggle.apply(this,arguments);var c=h.apply(this,arguments);return c[1].mode="toggle",this.effect.apply(this,c)},cssUnit:function(b){var c=this.css(b),d=[];return a.each(["em","px","%","pt"],function(a,b){c.indexOf(b)>0&&(d=[parseFloat(c),b])}),d}}),a.easing.jswing=a.easing.swing,a.extend(a.easing,{def:"easeOutQuad",swing:function(b,c,d,e,f){return a.easing[a.easing.def](b,c,d,e,f)},easeInQuad:function(a,b,c,d,e){return d*(b/=e)*b+c},easeOutQuad:function(a,b,c,d,e){return-d*(b/=e)*(b-2)+c},easeInOutQuad:function(a,b,c,d,e){return(b/=e/2)<1?d/2*b*b+c:-d/2*(--b*(b-2)-1)+c},easeInCubic:function(a,b,c,d,e){return d*(b/=e)*b*b+c},easeOutCubic:function(a,b,c,d,e){return d*((b=b/e-1)*b*b+1)+c},easeInOutCubic:function(a,b,c,d,e){return(b/=e/2)<1?d/2*b*b*b+c:d/2*((b-=2)*b*b+2)+c},easeInQuart:function(a,b,c,d,e){return d*(b/=e)*b*b*b+c},easeOutQuart:function(a,b,c,d,e){return-d*((b=b/e-1)*b*b*b-1)+c},easeInOutQuart:function(a,b,c,d,e){return(b/=e/2)<1?d/2*b*b*b*b+c:-d/2*((b-=2)*b*b*b-2)+c},easeInQuint:function(a,b,c,d,e){return d*(b/=e)*b*b*b*b+c},easeOutQuint:function(a,b,c,d,e){return d*((b=b/e-1)*b*b*b*b+1)+c},easeInOutQuint:function(a,b,c,d,e){return(b/=e/2)<1?d/2*b*b*b*b*b+c:d/2*((b-=2)*b*b*b*b+2)+c},easeInSine:function(a,b,c,d,e){return-d*Math.cos(b/e*(Math.PI/2))+d+c},easeOutSine:function(a,b,c,d,e){return d*Math.sin(b/e*(Math.PI/2))+c},easeInOutSine:function(a,b,c,d,e){return-d/2*(Math.cos(Math.PI*b/e)-1)+c},easeInExpo:function(a,b,c,d,e){return b==0?c:d*Math.pow(2,10*(b/e-1))+c},easeOutExpo:function(a,b,c,d,e){return b==e?c+d:d*(-Math.pow(2,-10*b/e)+1)+c},easeInOutExpo:function(a,b,c,d,e){return b==0?c:b==e?c+d:(b/=e/2)<1?d/2*Math.pow(2,10*(b-1))+c:d/2*(-Math.pow(2,-10*--b)+2)+c},easeInCirc:function(a,b,c,d,e){return-d*(Math.sqrt(1-(b/=e)*b)-1)+c},easeOutCirc:function(a,b,c,d,e){return d*Math.sqrt(1-(b=b/e-1)*b)+c},easeInOutCirc:function(a,b,c,d,e){return(b/=e/2)<1?-d/2*(Math.sqrt(1-b*b)-1)+c:d/2*(Math.sqrt(1-(b-=2)*b)+1)+c},easeInElastic:function(a,b,c,d,e){a=1.70158;var f=0,g=d;return b==0?c:(b/=e)==1?c+d:(f||(f=e*.3),g<Math.abs(d)?(g=d,a=f/4):a=f/(2*Math.PI)*Math.asin(d/g),-(g*Math.pow(2,10*(b-=1))*Math.sin((b*e-a)*2*Math.PI/f))+c)},easeOutElastic:function(a,b,c,d,e){a=1.70158;var f=0,g=d;return b==0?c:(b/=e)==1?c+d:(f||(f=e*.3),g<Math.abs(d)?(g=d,a=f/4):a=f/(2*Math.PI)*Math.asin(d/g),g*Math.pow(2,-10*b)*Math.sin((b*e-a)*2*Math.PI/f)+d+c)},easeInOutElastic:function(a,b,c,d,e){a=1.70158;var f=0,g=d;return b==0?c:(b/=e/2)==2?c+d:(f||(f=e*.3*1.5),g<Math.abs(d)?(g=d,a=f/4):a=f/(2*Math.PI)*Math.asin(d/g),b<1?-0.5*g*Math.pow(2,10*(b-=1))*Math.sin((b*e-a)*2*Math.PI/f)+c:g*Math.pow(2,-10*(b-=1))*Math.sin((b*e-a)*2*Math.PI/f)*.5+d+c)},easeInBack:function(a,c,d,e,f,g){return g==b&&(g=1.70158),e*(c/=f)*c*((g+1)*c-g)+d},easeOutBack:function(a,c,d,e,f,g){return g==b&&(g=1.70158),e*((c=c/f-1)*c*((g+1)*c+g)+1)+d},easeInOutBack:function(a,c,d,e,f,g){return g==b&&(g=1.70158),(c/=f/2)<1?e/2*c*c*(((g*=1.525)+1)*c-g)+d:e/2*((c-=2)*c*(((g*=1.525)+1)*c+g)+2)+d},easeInBounce:function(b,c,d,e,f){return e-a.easing.easeOutBounce(b,f-c,0,e,f)+d},easeOutBounce:function(a,b,c,d,e){return(b/=e)<1/2.75?d*7.5625*b*b+c:b<2/2.75?d*(7.5625*(b-=1.5/2.75)*b+.75)+c:b<2.5/2.75?d*(7.5625*(b-=2.25/2.75)*b+.9375)+c:d*(7.5625*(b-=2.625/2.75)*b+.984375)+c},easeInOutBounce:function(b,c,d,e,f){return c<f/2?a.easing.easeInBounce(b,c*2,0,e,f)*.5+d:a.easing.easeOutBounce(b,c*2-f,0,e,f)*.5+e*.5+d}})}(jQuery),function(a){a.effects.slide=function(b){return this.queue(function(){var e=a(this),f=["position","top","bottom","left","right"],g=a.effects.setMode(e,b.options.mode||"show"),h=b.options.direction||"left";a.effects.save(e,f),e.show(),a.effects.createWrapper(e).css({overflow:"hidden"});var i=h=="up"||h=="down"?"top":"left";h=h=="up"||h=="left"?"pos":"neg";var j=b.options.distance||(i=="top"?e.outerHeight({margin:!0}):e.outerWidth({margin:!0}));g=="show"&&e.css(i,h=="pos"?isNaN(j)?"-"+j:-j:j);var k={};k[i]=(g=="show"?h=="pos"?"+=":"-=":h=="pos"?"-=":"+=")+j,e.animate(k,{queue:!1,duration:b.duration,easing:b.options.easing,complete:function(){g=="hide"&&e.hide(),a.effects.restore(e,f),a.effects.removeWrapper(e),b.callback&&b.callback.apply(this,arguments),e.dequeue()}})})}}(jQuery),function(a){a.fn.drag=function(b,c,d){var e=typeof b=="string"?b:"",g=a.isFunction(b)?b:a.isFunction(c)?c:null;return e.indexOf("drag")!==0&&(e="drag"+e),d=(b==g?c:d)||{},g?this.bind(e,d,g):this.trigger(e)};var b=a.event,c=b.special,d=c.drag={defaults:{which:1,distance:0,not:":input",handle:null,relative:!1,drop:!0,click:!1},datakey:"dragdata",livekey:"livedrag",add:function(c){var e=a.data(this,d.datakey),g=c.data||{};e.related+=1,!e.live&&c.selector&&(e.live=!0,b.add(this,"draginit."+d.livekey,d.delegate)),a.each(d.defaults,function(a){g[a]!==undefined&&(e[a]=g[a])})},remove:function(){a.data(this,d.datakey).related-=1},setup:function(){if(!a.data(this,d.datakey)){var c=a.extend({related:0},d.defaults);a.data(this,d.datakey,c),b.add(this,"mousedown",d.init,c),this.attachEvent&&this.attachEvent("ondragstart",d.dontstart)}},teardown:function(){a.data(this,d.datakey).related||(a.removeData(this,d.datakey),b.remove(this,"mousedown",d.init),b.remove(this,"draginit",d.delegate),d.textselect(!0),this.detachEvent&&this.detachEvent("ondragstart",d.dontstart))},init:function(e){var g=e.data,j;if(!(g.which>0&&e.which!=g.which)&&!a(e.target).is(g.not))if(!g.handle||!!a(e.target).closest(g.handle,e.currentTarget).length){g.propagates=1,g.interactions=[d.interaction(this,g)],g.target=e.target,g.pageX=e.pageX,g.pageY=e.pageY,g.dragging=null,j=d.hijack(e,"draginit",g);if(g.propagates)return(j=d.flatten(j))&&j.length&&(g.interactions=[],a.each(j,function(){g.interactions.push(d.interaction(this,g))})),g.propagates=g.interactions.length,g.drop!==!1&&c.drop&&c.drop.handler(e,g),d.textselect(!1),b.add(document,"mousemove mouseup",d.handler,g),!1}},interaction:function(b,c){return{drag:b,callback:new d.callback,droppable:[],offset:a(b)[c.relative?"position":"offset"]()||{top:0,left:0}}},handler:function(a){var e=a.data;switch(a.type){case!e.dragging&&"mousemove":if(Math.pow(a.pageX-e.pageX,2)+Math.pow(a.pageY-e.pageY,2)<Math.pow(e.distance,2))break;a.target=e.target,d.hijack(a,"dragstart",e),e.propagates&&(e.dragging=!0);case"mousemove":if(e.dragging){d.hijack(a,"drag",e);if(e.propagates){e.drop!==!1&&c.drop&&c.drop.handler(a,e);break}a.type="mouseup"};case"mouseup":b.remove(document,"mousemove mouseup",d.handler),e.dragging&&(e.drop!==!1&&c.drop&&c.drop.handler(a,e),d.hijack(a,"dragend",e)),d.textselect(!0),e.click===!1&&e.dragging&&(jQuery.event.triggered=!0,setTimeout(function(){jQuery.event.triggered=!1},20),e.dragging=!1)}},delegate:function(c){var e=[],g,h=a.data(this,"events")||{};return a.each(h.live||[],function(h,j){j.preType.indexOf("drag")===0&&(g=a(c.target).closest(j.selector,c.currentTarget)[0])&&(b.add(g,j.origType+"."+d.livekey,j.origHandler,j.data),a.inArray(g,e)<0&&e.push(g))}),e.length?a(e).bind("dragend."+d.livekey,function(){b.remove(this,"."+d.livekey)}):!1},hijack:function(c,e,g,h,j){if(g){var k={event:c.originalEvent,type:c.type},l=e.indexOf("drop")?"drag":"drop",m,n=h||0,o,p;h=isNaN(h)?g.interactions.length:h,c.type=e,c.originalEvent=null,g.results=[];do if(o=g.interactions[n])if(e==="dragend"||!o.cancelled)p=d.properties(c,g,o),o.results=[],a(j||o[l]||g.droppable).each(function(h,j){m=(p.target=j)?b.handle.call(j,c,p):null,m===!1?(l=="drag"&&(o.cancelled=!0,g.propagates-=1),e=="drop"&&(o[l][h]=null)):e=="dropinit"&&o.droppable.push(d.element(m)||j),e=="dragstart"&&(o.proxy=a(d.element(m)||o.drag)[0]),o.results.push(m),delete c.result;if(e!=="dropinit")return m}),g.results[n]=d.flatten(o.results),e=="dropinit"&&(o.droppable=d.flatten(o.droppable)),e=="dragstart"&&!o.cancelled&&p.update();while(++n<h);return c.type=k.type,c.originalEvent=k.event,d.flatten(g.results)}},properties:function(a,b,c){var e=c.callback;return e.drag=c.drag,e.proxy=c.proxy||c.drag,e.startX=b.pageX,e.startY=b.pageY,e.deltaX=a.pageX-b.pageX,e.deltaY=a.pageY-b.pageY,e.originalX=c.offset.left,e.originalY=c.offset.top,e.offsetX=a.pageX-(b.pageX-e.originalX),e.offsetY=a.pageY-(b.pageY-e.originalY),e.drop=d.flatten((c.drop||[]).slice()),e.available=d.flatten((c.droppable||[]).slice()),e},element:function(a){if(a&&(a.jquery||a.nodeType==1))return a},flatten:function(b){return a.map(b,function(b){return b&&b.jquery?a.makeArray(b):b&&b.length?d.flatten(b):b})},textselect:function(b){a(document)[b?"unbind":"bind"]("selectstart",d.dontstart).attr("unselectable",b?"off":"on").css("MozUserSelect",b?"":"none")},dontstart:function(){return!1},callback:function(){}};d.callback.prototype={update:function(){c.drop&&this.available.length&&a.each(this.available,function(a){c.drop.locate(this,a)})}},c.draginit=c.dragstart=c.dragend=d}(jQuery),function(a){var b={},c={},d=function(a,b){b=b.slice(0);while(b.length>0)a=a.childNodes[b.shift()];return a},e=function(a,b){var c=Math.min(a.length,b.length),d;for(d=0;d<c;d+=1)if(a[d]!==b[d])return d;return d<Math.max(a.length,b.length)?d:!0},g=function(a,b){var c=a.slice(0);return c.push(b),c},h=function(a,c,d){for(f=0;f<a.length;f++)if(b[a[f]].condition(c)&&b[a[f]].condition(d))return b[a[f]].test(c,d)?!0:!1;return undefined},i=function(b,d){var e;if(e=c[b.nodeName.toLowerCase()])for(var f=0,g=e.length;f<g;f++)if(a(b).attr(e[f])!==a(d).attr(e[f]))return!0;return!1},j=function(a,b,c,d){if(a.nodeName!==b.nodeName||i(a,b))return c;if(d){var e=h(d,a,b);if(e)return c;if(e===!1)return!1}var f=a.firstChild,k=b.firstChild,l,m=0,n;if(f&&k){do{l=j(f,k,g(c,m),d);if(l)return l;m+=1,f=f.nextSibling,k=k.nextSibling}while(f&&k);return f||k?g(c,m):!1}return f||k?c:a.data?a.data===b.data?!1:c:!1},k=function(a,b,c,d,e){if(a.nodeName!==b.nodeName||i(a,b))return[c,d];if(e){var f=h(e,a,b);if(f)return[c,d];if(f===!1)return!1}var j=a.lastChild,l=b.lastChild,m=a.childNodes.length,n=b.childNodes.length,o,p=m-1,q=n-1;if(j&&l){do{o=k(j,l,g(c,p),g(d,q),e);if(o)return o;p-=1,q-=1,j=j.previousSibling,l=l.previousSibling}while(j&&l);return j||l?[g(c,p),g(d,q)]:!1}return j||l?[c,d]:a.data?a.data===b.data?!1:[c,d]:!1},l=function(a,b,c){var d=[],e=0,f=a.firstChild;while(e<b)f=f.nextSibling,e+=1;while(e<c)d.push(f),f=f.nextSibling,e+=1;return d},m=function(a,b,c){var f=j(a,b,[],c);if(f===!1)return{type:"identical"};var g=k(a,b,[],[],c),h=e(f,g[0]),i=e(f,g[1]),m,n;if(h===!0&&i===!0)m=[d(a,f)],n=[d(b,f)];else{var o=Math.min(h,i),p=f.slice(0,o),q=d(a,p),r=d(b,p),s=f[o],t=g[0][o],u=g[1][o];if(t<u&&s>t)return{type:"insert",source:{node:q,index:s-1},replace:l(r,s,s+(u-t))};s>t||s>u?(m=l(q,s,s+(t-u)),n=[]):(m=l(q,s,t+1),n=l(r,s,u+1))}return{type:"replace",source:m,replace:n}},n=function(b){if(b.type==="identical")return;if(b.type==="insert"){b.source.index===-1?a(b.source.node).prepend(b.replace):a(a(b.source.node).contents()[b.source.index]).after(b.replace);return}b.type==="replace"&&(a(b.source[b.source.length-1]).after(b.replace),a(b.source).remove())},o={diff:function(a,b){var c=m(this.get(0),a.get(0),b);return c.patch=function(){n(c)},c},patch:function(a,b){var c=m(this.get(0),a.get(0),b);return n(c),c},filter:function(a,c,d){c&&d?b[a]={condition:c,test:d}:delete b[a]},attributes:function(a){if(a===undefined)return c;c=a}};a.fn.quickdiff=function(b){if(o[b])return o[b].apply(this,Array.prototype.slice.call(arguments,1));a.error("Method "+b+" does not exist on jQuery.quickdiff")}}(jQuery);var Showdown={};Showdown.converter=function(){var a,b,c,d,e,f=0,g=this.config={stripHTML:!1,headerautoid:!1,tables:!1,math:!1,figures:!1,refprint:!1,github_flavouring:!1};this.makeHtml=function(f){a=new Array,b=new Array,c=new Array,d={},e=0,f=f.replace(/~/g,"~T"),f=f.replace(/\$/g,"~D"),f=f.replace(/\r\n/g,"\n"),f=f.replace(/\r/g,"\n"),f="\n\n"+f+"\n\n",f=I(f),f=f.replace(/^[ \t]+$/mg,""),f=j(f),f=h(f),f=l(f),f=G(f),f=f.replace(/~D/g,"$$"),f=f.replace(/~T/g,"~"),g.stripHTML&&(f=stripUnwantedHTML(f));if(g.refprint&&e){var k='<ul class="reflist print">';for(i in d)k+="<li>["+d[i]+"]: "+i+"</li>";k+="</ul>",f+=k}return f};var h=function(c){var c=c.replace(/^[ ]{0,3}\[(.+)\]:[ \t]*\n?[ \t]*<?(\S+?)>?[ \t]*\n?[ \t]*(?:(\n*)["(](.+?)[")][ \t]*)?(?:\n+|\Z)/gm,function(c,d,e,f,g){return d=d.toLowerCase(),a[d]=C(e),f?f+g:(g&&(b[d]=g.replace(/"/g,"&quot;")),"")});return c},j=function(a){a=a.replace(/\n/g,"\n\n");var b="p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del",c="p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math";return a=a.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del)\b[^\r]*?\n<\/\2>[ \t]*(?=\n+))/gm,k),a=a.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math)\b[^\r]*?.*<\/\2>[ \t]*(?=\n+)\n)/gm,k),a=a.replace(/(\n[ ]{0,3}(<(hr)\b([^<>])*?\/?>)[ \t]*(?=\n{2,}))/g,k),a=a.replace(/(\n\n[ ]{0,3}<!(--[^\r]*?--\s*)+>[ \t]*(?=\n{2,}))/g,k),a=a.replace(/(?:\n\n)([ ]{0,3}(?:<([?%])[^\r]*?\2>)[ \t]*(?=\n{2,}))/g,k),a=a.replace(/\n\n/g,"\n"),a},k=function(a,b){var d=b;return d=d.replace(/\n\n/g,"\n"),d=d.replace(/^\n/,""),d=d.replace(/\n+$/g,""),d="\n\n~K"+(c.push(d)-1)+"K\n\n",d},l=function(a){a=s(a),a=a.replace(/\\([\|])/g,L),g.tables&&(a=M(a));var b=w("<hr />");return a=a.replace(/^[ ]{0,2}([ ]?\*[ ]?){3,}[ \t]*$/gm,b),a=a.replace(/^[ ]{0,2}([ ]?\-[ ]?){3,}[ \t]*$/gm,b),a=a.replace(/^[ ]{0,2}([ ]?\_[ ]?){3,}[ \t]*$/gm,b),a=u(a),a=v(a),a=A(a),a=j(a),a=B(a),a},m=function(a){return a=x(a),a=n(a),a=D(a),a=q(a),a=o(a),a=E(a),a=C(a),a=z(a),a=a.replace(/  +\n/g," <br />\n"),a},n=function(a){var b=/(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;return a=a.replace(b,function(a){var b=a.replace(/(.)<\/?code>(?=.)/g,"$1`");return b=J(b,"\\`*_"),b}),a},o=function(a){return a=a.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,p),a=a.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?((?:[^\(]*?\([^\)]*?\)\S*?)|(?:.*?))>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,p),a=a.replace(/(\[([^\[\]]+)\])()()()()()/g,p),a},p=function(c,f,h,i,j,k,l,m){m==undefined&&(m="");var n=f,o=h,p=i.toLowerCase(),q=j,r=m;if(q==""){p==""&&(p=o.toLowerCase().replace(/ ?\n/g," ")),q="#"+p;if(a[p]!=undefined)q=a[p],b[p]!=undefined&&(r=b[p]);else if(n.search(/\(\s*\)$/m)>-1)q="";else return n}q=J(q,"*_");var s='<a href="'+q+'"';return r!=""&&(r=r.replace(/"/g,"&quot;"),r=J(r,"*_"),s+=' title="'+r+'"'),s+=">"+o+"</a>",g.refprint&&(d[q]||(d[q]=++e),s+='<span class="linkref print">~E91E'+d[q]+"~E93E</span>"),s},q=function(a){return a=a.replace(/(![<>]?\[(.*?)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,r),a=a.replace(/(![<>]?\[(.*?)\]\s?\([ \t]*()<?((?:[^\(]*?\([^\)]*?\)\S*?)|(?:\S*?))>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,r),a},r=function(c,d,e,f,h,i,j,k){var l=d,m=e,n=f.toLowerCase(),o=h,p=k;p||(p=""),o==""&&n!==""&&a[n]!=undefined&&(o=a[n],b[n]!=undefined?p=b[n]:p=undefined);var q=!1,r;if(r=l.match(/^!([<>])/))r[1]===">"?q="right":r[1]==="<"&&(q="left");m=m.replace(/"/g,"&quot;"),o=J(o,"*_");var s='<img src="'+o+'" alt="'+m+'"';return p!==undefined&&(p=p.replace(/"/g,"&quot;"),p=J(p,"*_"),s+=' title="'+p+'"'),s+=" />",g.figures&&q!==!1&&(p===undefined||p===""?s='<div class="figure '+q+'">\n  '+s+"\n</div>":s='<div class="figure '+q+'">\n  '+s+"<br/>\n  <span>"+p+"</span>\n</div>"),s},s=function(a){function b(a){return a.replace(/[^\w]/g,"").toLowerCase()}return a=a.replace(/^(.+)[ \t]*\n=+[ \t]*\n+/gm,function(a,c){return g.headerautoid?w('<h1 id="'+b(c)+'">'+m(c)+"</h1>"):w("<h1>"+m(c)+"</h1>")}),a=a.replace(/^(.+)[ \t]*\n-+[ \t]*\n+/gm,function(a,c){return g.headerautoid?w('<h2 id="'+b(c)+'">'+m(c)+"</h2>"):w("<h2>"+m(c)+"</h2>")}),a=a.replace(/^(\#{1,6})[ \t]*(.+?)[ \t]*\#*\n+/gm,function(a,c,d){var e=c.length;return g.headerautoid?w("<h"+e+' id="'+b(d)+'">'+m(d)+"</h"+e+">"):w("<h"+e+">"+m(d)+"</h"+e+">")}),a},t,u=function(a){a+="~0";var b=/^(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm;return f?a=a.replace(b,function(a,b,c){var d=b,e=c.search(/[*+-]/g)>-1?"ul":"ol";d=d.replace(/\n{2,}/g,"\n\n\n");var f=t(d);return f=f.replace(/\s+$/,""),f="<"+e+">\n"+f+"</"+e+">\n",f}):(b=/(\n\n|^\n?)(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/g,a=a.replace(b,function(a,b,c,d){var e=b,f=c,g=d.search(/[*+-]/g)>-1?"ul":"ol",f=f.replace(/\n{2,}/g,"\n\n\n"),h=t(f);return h=e+"<"+g+">\n"+h+"</"+g+">\n",h})),a=a.replace(/~0/,""),a};t=function(a){return f++,a=a.replace(/\n{2,}$/,"\n"),a+="~0",a=a.replace(/(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,function(a,b,c,d,e){var f=e,g=b,h=c;return g||f.search(/\n{2,}/)>-1?f=l(H(f)):(f=u(H(f)),f=f.replace(/\n$/,""),f=m(f)),"<li>"+f+"</li>\n"}),a=a.replace(/<\/li></g,"</li>\n<"),a=a.replace(/~0/g,""),f--,a};var v=function(a){return a+="~0",g.github_flavouring&&(a=a.replace(/\n```([a-zA-Z]+)?\s*\n((?:.*\n+)+?)(\n*```|(?=~0))/g,function(a,b,c){var d=y(c);return d=I(d),d=d.replace(/^\n+/g,""),d=d.replace(/\n+$/g,""),b?d='<pre><code class="'+b+'">'+d+"\n</code></pre>":d="<pre><code>"+d+"\n</code></pre>",w(d)})),a=a.replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,function(a,b,c){var d=b,e=c;return d=y(H(d)),d=I(d),d=d.replace(/^\n+/g,""),d=d.replace(/\n+$/g,""),d="<pre><code>"+d+"\n</code></pre>",w(d)+e}),a=a.replace(/~0/,""),a},w=function(a){return a=a.replace(/(^\n+|\n+$)/g,""),"\n\n~K"+(c.push(a)-1)+"K\n\n"},x=function(a){return a=a.replace(/(^|[^\\])(`+)([^\r]*?[^`])\2(?!`)/gm,function(a,b,c,d,e){var f=d;return f=f.replace(/^([ \t]*)/g,""),f=f.replace(/[ \t]*$/g,""),f=y(f),b+"<code>"+f+"</code>"}),g.math&&(a=a.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,function(a,b,c,d,e){var f=d;return f=f.replace(/^([ \t]*)/g,""),f=f.replace(/[ \t]*$/g,""),f=y(f),b+'<span class="mathInline">%%'+f+"%%</span>"}),a=a.replace(/(^|[^\\])(~D~D)([^\r]*?[^~])\2(?!~D)/gm,function(a,b,c,d,e){var f=d;return f=f.replace(/^([ \t]*)/g,""),f=f.replace(/[ \t]*$/g,""),f=y(f),b+'<span class="math">~D~D'+f+"~D~D</span>"})),a},y=function(a){return a=a.replace(/&/g,"&amp;"),a=a.replace(/</g,"&lt;"),a=a.replace(/>/g,"&gt;"),a=a.replace(/~E124E/g,"\\|"),a=J(a,"*_{}[]\\",!1),a},z=function(a){return a=a.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,"<strong>$2</strong>"),a=a.replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g,"<em>$2</em>"),a},A=function(a){return a=a.replace(/((^[ \t]*>[ \t]?.+\n(.+\n)*\n*)+)/gm,function(a,b){var c=b;return c=c.replace(/^[ \t]*>[ \t]?/gm,"~0"),c=c.replace(/~0/g,""),c=c.replace(/^[ \t]+$/gm,""),c=l(c),c=c.replace(/(^|\n)/g,"$1  "),c=c.replace(/(\s*<pre>[^\r]+?<\/pre>)/gm,function(a,b){var c=b;return c=c.replace(/^  /mg,"~0"),c=c.replace(/~0/g,""),c}),w("<blockquote>\n"+c+"\n</blockquote>")}),a},B=function(a){a=a.replace(/^\n+/g,""),a=a.replace(/\n+$/g,"");var b=a.split(/\n{2,}/g),d=new Array,e=b.length;for(var f=0;f<e;f++){var g=b[f];g.search(/~K(\d+)K/g)>=0?d.push(g):g.search(/\S/)>=0&&(g=m(g),g=g.replace(/^([ \t]*)/g,"<p>"),g+="</p>",d.push(g))}e=d.length;for(var f=0;f<e;f++)while(d[f].search(/~K(\d+)K/)>=0){var h=c[RegExp.$1];h=h.replace(/\$/g,"$$$$"),d[f]=d[f].replace(/~K\d+K/,h)}return d.join("\n\n")},C=function(a){return a=a.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g,"&amp;"),a=a.replace(/<(?![a-z\/?\$!])/gi,"&lt;"),a},D=function(a){return a=a.replace(/\\(\\)/g,L),a=a.replace(/\\([`*_{}\[\]()>#+-.!])/g,L),a},E=function(a){return a=a.replace(/<((https?|ftp|dict):[^'">\s]+)>/gi,'<a href="$1">$1</a>'),a=a.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,function(a,b){return F(G(b))}),a},F=function(a){function b(a){var b="0123456789ABCDEF",c=a.charCodeAt(0);return b.charAt(c>>4)+b.charAt(c&15)}var c=[function(a){return"&#"+a.charCodeAt(0)+";"},function(a){return"&#x"+b(a)+";"},function(a){return a}];return a="mailto:"+a,a=a.replace(/./g,function(a){if(a=="@")a=c[Math.floor(Math.random()*2)](a);else if(a!=":"){var b=Math.random();a=b>.9?c[2](a):b>.45?c[1](a):c[0](a)}return a}),a='<a href="'+a+'">'+a+"</a>",a=a.replace(/">.+:/g,'">'),a},G=function(a){return a=a.replace(/~E(\d+)E/g,function(a,b){var c=parseInt(b);return String.fromCharCode(c)}),a},H=function(a){return a=a.replace(/^(\t|[ ]{1,4})/gm,"~0"),a=a.replace(/~0/g,""),a},I=function(a){return a=a.replace(/\t(?=\t)/g,"    "),a=a.replace(/\t/g,"~A~B"),a=a.replace(/~B(.+?)~A/g,function(a,b,c){var d=b,e=4-d.length%4;for(var f=0;f<e;f++)d+=" ";return d}),a=a.replace(/~A/g,"    "),a=a.replace(/~B/g,""),a},J=function(a,b,c){var d="(["+b.replace(/([\[\]\\])/g,"\\$1")+"])";c&&(d="\\\\"+d);var e=new RegExp(d,"g");return a=a.replace(e,L),a},K=function(a){return a.trim!==undefined?a.trim():typeof jQuery!="undefined"?$.trim(a):a.replace(/^\s\s*/,"").replace(/\s\s*$/,"")},L=function(a,b){var c=b.charCodeAt(0);return"~E"+c+"E"},M=function(a){return a=a.replace(/^[ ]{0,3}[|](.+)\n[ ]{0,3}[|]([ ]*[-:]+[-| :]*)\n(((?=([ ]*[|].*\n))(?:[ ]*[|].*\n))*)(?=\n)/gm,N),a=a.replace(/^[ ]{0,3}(\S.*[|].*)\n[ ]{0,3}([ ]*[-:]+[-| :]*)\n(((?=(.*[|].*\n))(?:.*[|].*\n))*)(?=\n)/gm,O),a},N=function(){var a=arguments[3];return a=a.replace(/^[ ]*[|]/gm,""),O(arguments[0],arguments[1],arguments[2],a)},O=function(){var a=arguments[1],b=arguments[2],c=arguments[3];a=a.replace(/[|][ ]*$/gm,"\n"),b=b.replace(/[|][ ]*\n/gm,"\n"),c=K(c.replace(/[|][ ]*\n/gm,"\n"));var d=b.split(/[ ]*[|][ ]*/),e={};for(var f=0,g=d.length;f<g;++f)d[f].match(/^[ ]*[-]+:[ ]*$/)?e[f]=' align="right"':d[f].match(/^[ ]*:[-]+:[ ]*$/)?e[f]=' align="center"':d[f].match(/^[ ]*:[-]+[ ]*$/)?e[f]=' align="left"':e[f]="";var h=a.split(/[ ]*[|][ ]*/),i=h.length,j="<table>\n";j+="<thead>\n",j+="<tr>\n";for(var f=0;f<i;++f)j+="  <th"+e[f]+">"+m(K(h[f]))+"</th>\n";j+="</tr>\n",j+="</thead>\n";var k=c.split(/\n/);j+="<tbody>\n";for(var f=0,g=k.length;f<g;++f){var l=k[f].split(/[ ]*[|][ ]*/);j+="<tr>\n";for(var n=0,o=l.length;n<o;++n)j+="  <td"+e[n]+">"+m(K(l[n]))+"</td>\n";j+="</tr>\n"}return j+="</tbody>\n",j+="</table>",j}};var stripUnwantedHTML=function(a){var b=arguments[1]||"a|b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|h4|h5|h6|i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr|span|table|th|tr|td|tbody|thead|tfoot|div",c=arguments[2]||{img:"src|width|height|alt",a:"href","*":"title",span:"class",tr:"rowspan",td:"colspan|align",th:"rowspan|align",div:"class",code:"class"},d=arguments[3]||!0;testAllowed=new RegExp("^("+b.toLowerCase()+")$"),findTags=/<(\/?)\s*([\w:\-]+)([^>]*)>/g,findAttribs=/(\s*)([\w:-]+)\s*=\s*(?:(?:(["'])([^\3]+?)(?:\3))|([^\s]+))/g;for(var e in c)c.hasOwnProperty(e)&&typeof c[e]=="string"&&(c[e]=new RegExp("^("+c[e].toLowerCase()+")$"));return a.replace(findTags,function(a,b,e,f){var g,h,i=f.substr(-1)=="/"&&"/"||"";return e=e.toLowerCase(),e.match(testAllowed)?(g=e in c&&c[e],h="*"in c&&c["*"],!g&&!h?"<"+b+e+i+">":(f=f.trim(),i&&(f=f.substr(0,f.length-1)),f=f.replace(findAttribs,function(a,b,c,e,f){return c=c.toLowerCase(),!f&&!e?(f="",e='"'):f||(f=e,e='"'),(c=="href"||c=="src")&&(f.trim().substr(0,"javascript:".length)=="javascript:"||c=="href"&&f.trim().substr(0,"data:".length)=="data:")&&(f="#"),d&&(c=="href"||c=="src")&&!/^[a-zA-Z]{3,5}:\/\//.test(f)&&f.length<8&&f.trim().substr(0,"&#x6D;&#97;&#105;&#108;&#116;&#111;:".length)=="&#x6D;&#97;&#105;&#108;&#116;&#111;:"&&(f="http://"+f),h&&c.match(h)||g&&c.match(g)?b+c+"="+e+f+e:""}),"<"+b+e+(f?" "+f:"")+i+">")):""})};typeof exports!="undefined"&&(exports.Showdown=Showdown),this.JSON||(this.JSON={}),function(){function f(a){return a<10?"0"+a:a}function quote(a){return escapable.lastIndex=0,escapable.test(a)?'"'+a.replace(escapable,function(a){var b=meta[a];return typeof b=="string"?b:"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+a+'"'}function str(a,b){var c,d,e,f,g=gap,h,i=b[a];i&&typeof i=="object"&&typeof i.toJSON=="function"&&(i=i.toJSON(a)),typeof rep=="function"&&(i=rep.call(b,a,i));switch(typeof i){case"string":return quote(i);case"number":return isFinite(i)?String(i):"null";case"boolean":case"null":return String(i);case"object":if(!i)return"null";gap+=indent,h=[];if(Object.prototype.toString.apply(i)==="[object Array]"){f=i.length;for(c=0;c<f;c+=1)h[c]=str(c,i)||"null";return e=h.length===0?"[]":gap?"[\n"+gap+h.join(",\n"+gap)+"\n"+g+"]":"["+h.join(",")+"]",gap=g,e}if(rep&&typeof rep=="object"){f=rep.length;for(c=0;c<f;c+=1)d=rep[c],typeof d=="string"&&(e=str(d,i),e&&h.push(quote(d)+(gap?": ":":")+e))}else for(d in i)Object.hasOwnProperty.call(i,d)&&(e=str(d,i),e&&h.push(quote(d)+(gap?": ":":")+e));return e=h.length===0?"{}":gap?"{\n"+gap+h.join(",\n"+gap)+"\n"+g+"}":"{"+h.join(",")+"}",gap=g,e}}typeof Date.prototype.toJSON!="function"&&(Date.prototype.toJSON=function(a){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(a){return this.valueOf()});var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={"\b":"\\b","\t":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},rep;typeof JSON.stringify!="function"&&(JSON.stringify=function(a,b,c){var d;gap="",indent="";if(typeof c=="number")for(d=0;d<c;d+=1)indent+=" ";else typeof c=="string"&&(indent=c);rep=b;if(!b||typeof b=="function"||typeof b=="object"&&typeof b.length=="number")return str("",{"":a});throw new Error("JSON.stringify")}),typeof JSON.parse!="function"&&(JSON.parse=function(text,reviver){function walk(a,b){var c,d,e=a[b];if(e&&typeof e=="object")for(c in e)Object.hasOwnProperty.call(e,c)&&(d=walk(e,c),d!==undefined?e[c]=d:delete e[c]);return reviver.call(a,b,e)}var j;text=String(text),cx.lastIndex=0,cx.test(text)&&(text=text.replace(cx,function(a){return"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)}));if(/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,"")))return j=eval("("+text+")"),typeof reviver=="function"?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}();var store=function(){function h(){try{return d in b&&b[d]}catch(a){return!1}}function i(){try{return e in b&&b[e]&&b[e][b.location.hostname]}catch(a){return!1}}var a={},b=window,c=b.document,d="localStorage",e="globalStorage",f="__storejs__",g;a.disabled=!1,a.set=function(a,b){},a.get=function(a){},a.remove=function(a){},a.clear=function(){},a.transact=function(b,c){var d=a.get(b);typeof d=="undefined"&&(d={}),c(d),a.set(b,d)},a.serialize=function(a){return JSON.stringify(a)},a.deserialize=function(a){return typeof a!="string"?undefined:JSON.parse(a)};if(h())g=b[d],a.set=function(b,c){g.setItem(b,a.serialize(c))},a.get=function(b){return a.deserialize(g.getItem(b))},a.remove=function(a){g.removeItem(a)},a.clear=function(){g.clear()};else if(i())g=b[e][b.location.hostname],a.set=function(b,c){g[b]=a.serialize(c)},a.get=function(b){return a.deserialize(g[b]&&g[b].value)},a.remove=function(a){delete g[a]},a.clear=function(){for(var a in g)delete g[a]};else if(c.documentElement.addBehavior){var g=c.createElement("div");function j(b){return function(){var e=Array.prototype.slice.call(arguments,0);e.unshift(g),c.body.appendChild(g),g.addBehavior("#default#userData"),g.load(d);var f=b.apply(a,e);return c.body.removeChild(g),f}}a.set=j(function(b,c,e){b.setAttribute(c,a.serialize(e)),b.save(d)}),a.get=j(function(b,c){return a.deserialize(b.getAttribute(c))}),a.remove=j(function(a,b){a.removeAttribute(b),a.save(d)}),a.clear=j(function(a){var b=a.XMLDocument.documentElement.attributes;a.load(d);for(var c=0,e;e=b[c];c++)a.removeAttribute(e.name);a.save(d)})}try{a.set(f,f),a.get(f)!=f&&(a.disabled=!0),a.remove(f)}catch(k){a.disabled=!0}return a}();typeof module!="undefined"&&(module.exports=store),define("ace/highlight",function(a,b,c){function h(a){if(/(a)|(b)/.exec("b")[1]!==undefined)return;this.element=$(a),this.session=new d(""),this.session.setUseWorker(!1),this.session.setValue(this.element.text()),this.session.setUseWrapMode(!0),this.width=this.element.width(),this.highlightDiv=$("<div>").addClass("acecode ace_editor "+this.twilightTheme.cssClass).css({position:"static"}),this.element.append(this.highlightDiv),$("code",this.element).hide(),this.textlayer=new e(this.highlightDiv.get(0)),this.textlayer.setSession(this.session),$(this.textlayer.element).addClass("ace_scroller").css({width:this.width}),this.setMode($("code",this.element).attr("class")),this.session.adjustWrapLimit(Math.floor(this.width/this.textlayer.getCharacterWidth())),this.update();var b=this;this.element.bind("remove",function(){b.textlayer.destroy()}),this.element.data("highlighter",this)}(function(){var a=new $.Event("remove"),b=$.fn.remove;$.fn.remove=function(){return $(this).trigger(a),b.apply(this,arguments)}})();var d=a("ace/edit_session").EditSession,e=a("ace/layer/text").Text,f=a("ace/mode/text").Mode,g=a("ace/mode/javascript").Mode;((function(){this.textMode=new f,this.jsMode=new g,this.twilightTheme=a("ace/theme/twilight"),this.setMode=function(a){if(a===this.mode_string)return;this.mode_string=a;switch(a){case"javascript":this.mode=this.jsMode;break;default:this.mode=this.textMode}this.session.setMode(this.mode),this.update()},this.setValue=function(a){this.session.setValue(a),this.update()},this.getValue=function(){return this.session.getValue()},this.rowCount=function(){var a=0;for(var b=0;b<this.session.getLength();b++)a+=this.session.getRowLength(b);return a},this.update=function(){var a=this.textlayer.getLineHeight(),b=this.rowCount(),c=(b-1)*a;this.textlayer.update({firstRow:0,lastRow:this.session.getLength(),lineHeight:a,width:this.width}),this.highlightDiv.css({height:c}),$(this.textlayer.element).css({height:c})}})).call(h.prototype),b.Highlight=h}),$(document).ready(function(){function y(){if(u.slid){var a=($(window).width()-q.edit-$("#page").width())/2;a<10&&(a=10),u.stop().css({marginLeft:$("#page").offset().left}).animate({marginLeft:a})}else u.css({margin:"30px auto"})}function z(a){$("#toolpanel, #editpanel").width(q[a]),y(),editor.resize()}function B(){if(A)return;e=!0,D=editor.getSession().getValue()!==v,$("#save").css({opacity:D?1:.5}),h&&clearTimeout(h),h=setTimeout(j,g)}var a=window.location.pathname;a==="/"&&(a="index"),$.get("/documents/"+a+".md",function(a){$("#output > div").first().empty().append(markdown.makeHtml(a))}).error(function(a){a.status==404?$("#output > div").first().empty().append("<h1>New page</h1>"):$("#output > div").first().empty().append("<h1>Error</h1>"+a.responseText)});var b=require("ace/highlight").Highlight,c=require("notepages/notify").Notify,d=new c($("#notify"));d.onDisplay(function(){$(this).css({right:$("#toolpanel").width()/2-200})});var e=!1,f,g=0,h,i=function(a){a>50?g=400:a>10&&(g=50)},j=function(){if(!e)return;e=!1;var a=(new Date).getTime();f=$("<div></div>").html(markdown.makeHtml(editor.getSession().getValue()));var c=$("#output > div").quickdiff("diff",f,["mathSpan","mathSpanInline","codePre"]);if(c.type==="identical"){i((new Date).getTime()-a);return}if(c.type==="replace"&&c.source.length===1&&c.replace.length===1&&$(c.replace[0]).is("pre")&&$(c.source[0]).data("highlighter")){$(c.source[0]).data("highlighter").setValue($(c.replace[0]).text()),i((new Date).getTime()-a);return}if(c.type==="replace"&&c.source.length===1&&c.replace.length===1&&$(c.replace[0]).is("img")&&$(c.source[0]).is("img")&&$(c.replace[0]).attr("src")===$(c.source[0]).attr("src")){$(c.source[0]).attr("title",$(c.replace[0]).attr("title")),$(c.source[0]).attr("alt",$(c.replace[0]).attr("alt"));return}c.patch(),c.type!=="identical"&&c.replace.length>0?$.each(c.replace,function(c,d){$("pre",d).each(function(a,c){new b($(c))}),$(d).is("pre")?new b($(d)):d.innerHTML?(MathJax.Hub.Typeset(d,function(){i((new Date).getTime()-a)}),size_images(d)):d.tagName&&d.tagName.toLowerCase()==="img"?size_image(d):i((new Date).getTime()-a)}):i((new Date).getTime()-a)},k=require("ace/mode/markdown").Mode,l=require("ace/mode/text").Mode,m=require("ace/mode/javascript").Mode;window.editor=ace.edit("ace"),editor.getSession().setUseSoftTabs(!0),editor.getSession().setMode(new k),editor.renderer.setShowGutter(!1),editor.renderer.setHScrollBarAlwaysVisible(!1),editor.getSession().setUseWrapMode(!0),editor.setShowPrintMargin(!1),editor.setBehavioursEnabled(!0);var n=store.get("userTheme");n?(editor.setTheme(n),$("#themeselect").val(n)):editor.setTheme("ace/theme/twilight"),$("#themeselect").change(function(){editor.setTheme($(this).val()),store.set("userTheme",$(this).val())});var o=store.get("userTab");o?(editor.getSession().setTabSize(parseInt(o,10)),$("#tabselect").val(o)):editor.getSession().setTabSize(4),$("#tabselect").change(function(){editor.getSession().setTabSize(parseInt($(this).val(),10)),store.set("userTab",$(this).val())}),$("#wrapselect").change(function(){editor.getSession().setUseWrapMode($(this).val()=="soft")});var p=$("pre");p.each(function(a,c){new b($(c))});var q={tool:80,edit:500},r=$("#editpanel"),s=$("#toolpanel"),t=new MarkdownTools(editor,$("#acetools"),"/images/fugue/"),u=$("#page"),v="",w=editing,x=editing;$(window).resize(y),r.slide=function(a,b){b||d.conceal();if(r.slid===a)return;a?(r.css({width:q.edit,marginRight:-q.edit}).animate({marginRight:0}),editor.resize()):r.animate({marginRight:-q.edit}),r.slid=a},s.slide=function(a){if(s.slid===a)return;a?s.css({right:20,width:q.tool}).animate({width:q.edit,right:0},function(){s.toggleClass("edit",!0),s.toggleClass("readonly",!1)}):(s.css({right:0,width:q.edit}).animate({width:q.tool,right:20}),s.toggleClass("edit",!1),s.toggleClass("readonly",!0)),s.slid=a},u.slide=function(a){if(u.slid===a)return;u.slid=a,a?y():u.animate({marginLeft:($(window).width()-$("#page").width())/2},function(){u.css({margin:"30px auto"})})};var A=!1,C=!1,D=!1,E,F=function(){return r.slide(!0),s.slide(!0),u.slide(!0),x||(A=!0,editor.getSession().setValue("Loading.."),$.get("/documents/"+a+".md",function(a){v=a,editor.getSession().setValue(a),editor.renderer.scrollToY(0),x=!0,A=!1}).error(function(a){a.status==404?editor.getSession().setValue("# New page"):(d.showMessage(a.responseText,"warning"),editor.getSession().setValue(""))})),editor.focus(),!1};$("#edit").click(F),editing&&(s.show(),F());var G=function(){r.slide(!1),s.slide(!1),u.slide(!1),C=!1,D=!1;var a=editor.renderer.getScrollTop();editor.getSession().setValue(v),editor.renderer.scrollToY(a),B()};$("#cancel").click(function(){return D?d.showConfirm("Closing editor will lose unsaved changes.",G):G(),!1}),$("#save").click(function(){return B(),D?(w?d.showConfirm("Saving.",H):H(),!1):!1});var H=function(){var b=editor.getSession().getValue(),c={text:b};return $.post("/documents/"+a+".json",c,function(a){a&&a.status==="success"?(v=b,d.showMessage("Saved.","success"),w=!1,B()):a&&a.status==="failure"?d.showMessage(a.message,"warning"):d.showMessage("Unknown response from the server.","warning")},"json"),!1};return editor.getSession().on("change",B),$("#dragger").drag("start",function(a,b){$.data(this,"startw",r.width())}).drag(function(a,b){q.edit=$.data(this,"startw")-b.deltaX,z("edit")}),$("#preview").click(function(){return u.slide(C),r.slide(C,!0),C=!C,!1}),!1});var Range=require("ace/range").Range;EditorTools.prototype={},EditorTools.prototype.utils={editor:undefined,session:undefined,selection:undefined,replaceAndSelect:function(a){this.session.replace(this.selection,a),this.editor.selection.setSelectionRange(new Range(this.selection.start.row,this.selection.start.column,this.selection.start.row,this.selection.start.column+a.length))},replaceAndSelectLine:function(a){this.session.replace(new Range(this.selection.start.row,0,this.selection.start.row,this.currentLine().length),a),this.editor.selection.setSelectionRange(new Range(this.selection.start.row,0,this.selection.start.row,a.length))},currentLine:function(){return this.session.getLine(this.selection.start.row)},offsetCursor:function(a){this.editor.selection.setSelectionRange(new Range(this.selection.start.row,this.selection.start.column+a,this.selection.start.row,this.selection.start.column+a))},joinReplaceAndSelect:function(a,b){var c=0,d="",e;for(var f=0,g=a.length;f<g;f++)f!=b?c+=a[f].length:e=new Range(this.selection.start.row,this.selection.start.column+c,this.selection.start.row,this.selection.start.column+c+a[f].length),d+=a[f];this.session.replace(this.selection,d),this.editor.selection.setSelectionRange(e)},replaceAndOffset:function(a,b){this.session.replace(this.selection,a),b>=0?this.editor.selection.setSelectionRange(new Range(this.selection.start.row,this.selection.start.column+b,this.selection.start.row,this.selection.start.column+b)):this.editor.selection.setSelectionRange(new Range(this.selection.start.row,this.selection.start.column+a.length+b,this.selection.start.row,this.selection.start.column+a.length+b))},forSelectedLines:function(a){var b=this.session.getLines(this.selection.start.row,this.selection.end.row),c=this.selection.start.row;$.each(b,function(b,d){a(c+b,d)})},selectedLineRange:function(){return new Range(this.selection.start.row,0,this.selection.end.row,this.session.getLine(this.selection.end.row).length)},selectRange:function(a){this.editor.selection.setSelectionRange(a)},repeatString:function(a,b){return(new Array(b+1)).join(a)}},EditorTools.prototype.callback=function(a){var b=this;return function(){b.utils.session=b.editor.getSession(),b.utils.selection=b.editor.getSelectionRange(),b.utils.selected=b.utils.session.doc.getTextRange(b.utils.selection),b.utils.multiline=b.utils.selection.isMultiLine(),a(b.utils),b.editor.focus()}},EditorTools.prototype.addButton=function(a,b,c){var d=$('<div class="button_container"><div class="sprites" id="'+a+'"></div></div>').click(this.callback(b));c&&d.css({"float":"right"}),this.panel.append(d)},define("notepages/notify",function(a,b,c){function d(a){this.element=a,this.timer=null,this.cancel=null,this.ondisplay=null}((function(){this.setFade=function(a){var b=this;this.timer=setTimeout(function(){b.element.hide("slide",{direction:"up"}),b.timer=null},a)},this.onDisplay=function(a){this.ondisplay=a},this.display=function(a,b,c){var d=this;this.conceal(),this.element.empty().removeClass().addClass(a),this.ondisplay.call(this.element),$.each(b,function(a,b){d.element.append(b)}),this.element.is(":visible")?(this.element.stop(!0,!0).show(),this.timer&&clearTimeout(this.timer),c&&c()):this.element.show("slide",{direction:"up"},function(){c&&c()})},this.conceal=function(){return this.cancel&&(this.cancel(),this.cancel=null),this.element.hide(),this},this.showMessage=function(a,b){var c=this;this.display(b,$('<span class="message"></span>').text(a),function(){c.setFade(1500)})},this.showConfirm=function(a,b,c){var d=this,e=$('<input type="submit" value="continue"></input>').click(function(a){a.preventDefault(),d.setFade(0),b&&b()}),f=$('<input type="button" value="cancel"></input>').click(function(a){a.preventDefault(),d.setFade(0),c&&c()}),g=$("<form>").append(f).append(e),h=$('<span class="buttons"></span>').append(g),i=$('<span class="confirm"></span>').text(a);this.display("help",[i,h],function(){e.focus()}),e.focus(),this.cancel=function(){c&&c()}}})).call(d.prototype),b.Notify=d}),$(window).load(function(){size_images($("#output")[0])}),$.fn.quickdiff("filter","mathSpanInline",function(a){return a.nodeName==="SPAN"&&$(a).hasClass("mathInline")},function(a,b){var c=$.trim($("script",a).html()),d=$.trim($(b).html());return"%%"+c+"%%"!==d}),$.fn.quickdiff("filter","mathSpan",function(a){return a.nodeName==="SPAN"&&$(a).hasClass("math")},function(a,b){var c=$.trim($("script",a).html()),d=$.trim($(b).html());return"$$"+c+"$$"!==d}),$.fn.quickdiff("filter","codePre",function(a){return a.nodeName==="PRE"},function(a,b){if($(a).data("highlighter")){var c=$.trim($(a).data("highlighter").getValue());$(a).data("highlighter").setMode($("code",b).attr("class"))}else var c=$.trim($(a).text());return bValue=$.trim($(b).text()),c!==bValue}),$.fn.quickdiff("attributes",{td:["align"],th:["align"],img:["src","alt","title"],a:["href","title"],code:["class"]});var markdown=new Showdown.converter;$.extend(markdown.config,{stripHTML:!0,tables:!0,math:!0,figures:!0,refprint:!0,github_flavouring:!0})
+;
+/*!
+ * jQuery UI 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI
+ */
+(function(c,j){function k(a,b){var d=a.nodeName.toLowerCase();if("area"===d){b=a.parentNode;d=b.name;if(!a.href||!d||b.nodeName.toLowerCase()!=="map")return false;a=c("img[usemap=#"+d+"]")[0];return!!a&&l(a)}return(/input|select|textarea|button|object/.test(d)?!a.disabled:"a"==d?a.href||b:b)&&l(a)}function l(a){return!c(a).parents().andSelf().filter(function(){return c.curCSS(this,"visibility")==="hidden"||c.expr.filters.hidden(this)}).length}c.ui=c.ui||{};if(!c.ui.version){c.extend(c.ui,{version:"1.8.16",
+keyCode:{ALT:18,BACKSPACE:8,CAPS_LOCK:20,COMMA:188,COMMAND:91,COMMAND_LEFT:91,COMMAND_RIGHT:93,CONTROL:17,DELETE:46,DOWN:40,END:35,ENTER:13,ESCAPE:27,HOME:36,INSERT:45,LEFT:37,MENU:93,NUMPAD_ADD:107,NUMPAD_DECIMAL:110,NUMPAD_DIVIDE:111,NUMPAD_ENTER:108,NUMPAD_MULTIPLY:106,NUMPAD_SUBTRACT:109,PAGE_DOWN:34,PAGE_UP:33,PERIOD:190,RIGHT:39,SHIFT:16,SPACE:32,TAB:9,UP:38,WINDOWS:91}});c.fn.extend({propAttr:c.fn.prop||c.fn.attr,_focus:c.fn.focus,focus:function(a,b){return typeof a==="number"?this.each(function(){var d=
+this;setTimeout(function(){c(d).focus();b&&b.call(d)},a)}):this._focus.apply(this,arguments)},scrollParent:function(){var a;a=c.browser.msie&&/(static|relative)/.test(this.css("position"))||/absolute/.test(this.css("position"))?this.parents().filter(function(){return/(relative|absolute|fixed)/.test(c.curCSS(this,"position",1))&&/(auto|scroll)/.test(c.curCSS(this,"overflow",1)+c.curCSS(this,"overflow-y",1)+c.curCSS(this,"overflow-x",1))}).eq(0):this.parents().filter(function(){return/(auto|scroll)/.test(c.curCSS(this,
+"overflow",1)+c.curCSS(this,"overflow-y",1)+c.curCSS(this,"overflow-x",1))}).eq(0);return/fixed/.test(this.css("position"))||!a.length?c(document):a},zIndex:function(a){if(a!==j)return this.css("zIndex",a);if(this.length){a=c(this[0]);for(var b;a.length&&a[0]!==document;){b=a.css("position");if(b==="absolute"||b==="relative"||b==="fixed"){b=parseInt(a.css("zIndex"),10);if(!isNaN(b)&&b!==0)return b}a=a.parent()}}return 0},disableSelection:function(){return this.bind((c.support.selectstart?"selectstart":
+"mousedown")+".ui-disableSelection",function(a){a.preventDefault()})},enableSelection:function(){return this.unbind(".ui-disableSelection")}});c.each(["Width","Height"],function(a,b){function d(f,g,m,n){c.each(e,function(){g-=parseFloat(c.curCSS(f,"padding"+this,true))||0;if(m)g-=parseFloat(c.curCSS(f,"border"+this+"Width",true))||0;if(n)g-=parseFloat(c.curCSS(f,"margin"+this,true))||0});return g}var e=b==="Width"?["Left","Right"]:["Top","Bottom"],h=b.toLowerCase(),i={innerWidth:c.fn.innerWidth,innerHeight:c.fn.innerHeight,
+outerWidth:c.fn.outerWidth,outerHeight:c.fn.outerHeight};c.fn["inner"+b]=function(f){if(f===j)return i["inner"+b].call(this);return this.each(function(){c(this).css(h,d(this,f)+"px")})};c.fn["outer"+b]=function(f,g){if(typeof f!=="number")return i["outer"+b].call(this,f);return this.each(function(){c(this).css(h,d(this,f,true,g)+"px")})}});c.extend(c.expr[":"],{data:function(a,b,d){return!!c.data(a,d[3])},focusable:function(a){return k(a,!isNaN(c.attr(a,"tabindex")))},tabbable:function(a){var b=c.attr(a,
+"tabindex"),d=isNaN(b);return(d||b>=0)&&k(a,!d)}});c(function(){var a=document.body,b=a.appendChild(b=document.createElement("div"));c.extend(b.style,{minHeight:"100px",height:"auto",padding:0,borderWidth:0});c.support.minHeight=b.offsetHeight===100;c.support.selectstart="onselectstart"in b;a.removeChild(b).style.display="none"});c.extend(c.ui,{plugin:{add:function(a,b,d){a=c.ui[a].prototype;for(var e in d){a.plugins[e]=a.plugins[e]||[];a.plugins[e].push([b,d[e]])}},call:function(a,b,d){if((b=a.plugins[b])&&
+a.element[0].parentNode)for(var e=0;e<b.length;e++)a.options[b[e][0]]&&b[e][1].apply(a.element,d)}},contains:function(a,b){return document.compareDocumentPosition?a.compareDocumentPosition(b)&16:a!==b&&a.contains(b)},hasScroll:function(a,b){if(c(a).css("overflow")==="hidden")return false;b=b&&b==="left"?"scrollLeft":"scrollTop";var d=false;if(a[b]>0)return true;a[b]=1;d=a[b]>0;a[b]=0;return d},isOverAxis:function(a,b,d){return a>b&&a<b+d},isOver:function(a,b,d,e,h,i){return c.ui.isOverAxis(a,d,h)&&
+c.ui.isOverAxis(b,e,i)}})}})(jQuery);
+;/*
+ * jQuery UI Effects 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Effects/
+ */
+jQuery.effects||function(f,j){function m(c){var a;if(c&&c.constructor==Array&&c.length==3)return c;if(a=/rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(c))return[parseInt(a[1],10),parseInt(a[2],10),parseInt(a[3],10)];if(a=/rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(c))return[parseFloat(a[1])*2.55,parseFloat(a[2])*2.55,parseFloat(a[3])*2.55];if(a=/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(c))return[parseInt(a[1],
+16),parseInt(a[2],16),parseInt(a[3],16)];if(a=/#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(c))return[parseInt(a[1]+a[1],16),parseInt(a[2]+a[2],16),parseInt(a[3]+a[3],16)];if(/rgba\(0, 0, 0, 0\)/.exec(c))return n.transparent;return n[f.trim(c).toLowerCase()]}function s(c,a){var b;do{b=f.curCSS(c,a);if(b!=""&&b!="transparent"||f.nodeName(c,"body"))break;a="backgroundColor"}while(c=c.parentNode);return m(b)}function o(){var c=document.defaultView?document.defaultView.getComputedStyle(this,null):this.currentStyle,
+a={},b,d;if(c&&c.length&&c[0]&&c[c[0]])for(var e=c.length;e--;){b=c[e];if(typeof c[b]=="string"){d=b.replace(/\-(\w)/g,function(g,h){return h.toUpperCase()});a[d]=c[b]}}else for(b in c)if(typeof c[b]==="string")a[b]=c[b];return a}function p(c){var a,b;for(a in c){b=c[a];if(b==null||f.isFunction(b)||a in t||/scrollbar/.test(a)||!/color/i.test(a)&&isNaN(parseFloat(b)))delete c[a]}return c}function u(c,a){var b={_:0},d;for(d in a)if(c[d]!=a[d])b[d]=a[d];return b}function k(c,a,b,d){if(typeof c=="object"){d=
+a;b=null;a=c;c=a.effect}if(f.isFunction(a)){d=a;b=null;a={}}if(typeof a=="number"||f.fx.speeds[a]){d=b;b=a;a={}}if(f.isFunction(b)){d=b;b=null}a=a||{};b=b||a.duration;b=f.fx.off?0:typeof b=="number"?b:b in f.fx.speeds?f.fx.speeds[b]:f.fx.speeds._default;d=d||a.complete;return[c,a,b,d]}function l(c){if(!c||typeof c==="number"||f.fx.speeds[c])return true;if(typeof c==="string"&&!f.effects[c])return true;return false}f.effects={};f.each(["backgroundColor","borderBottomColor","borderLeftColor","borderRightColor",
+"borderTopColor","borderColor","color","outlineColor"],function(c,a){f.fx.step[a]=function(b){if(!b.colorInit){b.start=s(b.elem,a);b.end=m(b.end);b.colorInit=true}b.elem.style[a]="rgb("+Math.max(Math.min(parseInt(b.pos*(b.end[0]-b.start[0])+b.start[0],10),255),0)+","+Math.max(Math.min(parseInt(b.pos*(b.end[1]-b.start[1])+b.start[1],10),255),0)+","+Math.max(Math.min(parseInt(b.pos*(b.end[2]-b.start[2])+b.start[2],10),255),0)+")"}});var n={aqua:[0,255,255],azure:[240,255,255],beige:[245,245,220],black:[0,
+0,0],blue:[0,0,255],brown:[165,42,42],cyan:[0,255,255],darkblue:[0,0,139],darkcyan:[0,139,139],darkgrey:[169,169,169],darkgreen:[0,100,0],darkkhaki:[189,183,107],darkmagenta:[139,0,139],darkolivegreen:[85,107,47],darkorange:[255,140,0],darkorchid:[153,50,204],darkred:[139,0,0],darksalmon:[233,150,122],darkviolet:[148,0,211],fuchsia:[255,0,255],gold:[255,215,0],green:[0,128,0],indigo:[75,0,130],khaki:[240,230,140],lightblue:[173,216,230],lightcyan:[224,255,255],lightgreen:[144,238,144],lightgrey:[211,
+211,211],lightpink:[255,182,193],lightyellow:[255,255,224],lime:[0,255,0],magenta:[255,0,255],maroon:[128,0,0],navy:[0,0,128],olive:[128,128,0],orange:[255,165,0],pink:[255,192,203],purple:[128,0,128],violet:[128,0,128],red:[255,0,0],silver:[192,192,192],white:[255,255,255],yellow:[255,255,0],transparent:[255,255,255]},q=["add","remove","toggle"],t={border:1,borderBottom:1,borderColor:1,borderLeft:1,borderRight:1,borderTop:1,borderWidth:1,margin:1,padding:1};f.effects.animateClass=function(c,a,b,
+d){if(f.isFunction(b)){d=b;b=null}return this.queue(function(){var e=f(this),g=e.attr("style")||" ",h=p(o.call(this)),r,v=e.attr("class");f.each(q,function(w,i){c[i]&&e[i+"Class"](c[i])});r=p(o.call(this));e.attr("class",v);e.animate(u(h,r),{queue:false,duration:a,easing:b,complete:function(){f.each(q,function(w,i){c[i]&&e[i+"Class"](c[i])});if(typeof e.attr("style")=="object"){e.attr("style").cssText="";e.attr("style").cssText=g}else e.attr("style",g);d&&d.apply(this,arguments);f.dequeue(this)}})})};
+f.fn.extend({_addClass:f.fn.addClass,addClass:function(c,a,b,d){return a?f.effects.animateClass.apply(this,[{add:c},a,b,d]):this._addClass(c)},_removeClass:f.fn.removeClass,removeClass:function(c,a,b,d){return a?f.effects.animateClass.apply(this,[{remove:c},a,b,d]):this._removeClass(c)},_toggleClass:f.fn.toggleClass,toggleClass:function(c,a,b,d,e){return typeof a=="boolean"||a===j?b?f.effects.animateClass.apply(this,[a?{add:c}:{remove:c},b,d,e]):this._toggleClass(c,a):f.effects.animateClass.apply(this,
+[{toggle:c},a,b,d])},switchClass:function(c,a,b,d,e){return f.effects.animateClass.apply(this,[{add:a,remove:c},b,d,e])}});f.extend(f.effects,{version:"1.8.16",save:function(c,a){for(var b=0;b<a.length;b++)a[b]!==null&&c.data("ec.storage."+a[b],c[0].style[a[b]])},restore:function(c,a){for(var b=0;b<a.length;b++)a[b]!==null&&c.css(a[b],c.data("ec.storage."+a[b]))},setMode:function(c,a){if(a=="toggle")a=c.is(":hidden")?"show":"hide";return a},getBaseline:function(c,a){var b;switch(c[0]){case "top":b=
+0;break;case "middle":b=0.5;break;case "bottom":b=1;break;default:b=c[0]/a.height}switch(c[1]){case "left":c=0;break;case "center":c=0.5;break;case "right":c=1;break;default:c=c[1]/a.width}return{x:c,y:b}},createWrapper:function(c){if(c.parent().is(".ui-effects-wrapper"))return c.parent();var a={width:c.outerWidth(true),height:c.outerHeight(true),"float":c.css("float")},b=f("<div></div>").addClass("ui-effects-wrapper").css({fontSize:"100%",background:"transparent",border:"none",margin:0,padding:0}),
+d=document.activeElement;c.wrap(b);if(c[0]===d||f.contains(c[0],d))f(d).focus();b=c.parent();if(c.css("position")=="static"){b.css({position:"relative"});c.css({position:"relative"})}else{f.extend(a,{position:c.css("position"),zIndex:c.css("z-index")});f.each(["top","left","bottom","right"],function(e,g){a[g]=c.css(g);if(isNaN(parseInt(a[g],10)))a[g]="auto"});c.css({position:"relative",top:0,left:0,right:"auto",bottom:"auto"})}return b.css(a).show()},removeWrapper:function(c){var a,b=document.activeElement;
+if(c.parent().is(".ui-effects-wrapper")){a=c.parent().replaceWith(c);if(c[0]===b||f.contains(c[0],b))f(b).focus();return a}return c},setTransition:function(c,a,b,d){d=d||{};f.each(a,function(e,g){unit=c.cssUnit(g);if(unit[0]>0)d[g]=unit[0]*b+unit[1]});return d}});f.fn.extend({effect:function(c){var a=k.apply(this,arguments),b={options:a[1],duration:a[2],callback:a[3]};a=b.options.mode;var d=f.effects[c];if(f.fx.off||!d)return a?this[a](b.duration,b.callback):this.each(function(){b.callback&&b.callback.call(this)});
+return d.call(this,b)},_show:f.fn.show,show:function(c){if(l(c))return this._show.apply(this,arguments);else{var a=k.apply(this,arguments);a[1].mode="show";return this.effect.apply(this,a)}},_hide:f.fn.hide,hide:function(c){if(l(c))return this._hide.apply(this,arguments);else{var a=k.apply(this,arguments);a[1].mode="hide";return this.effect.apply(this,a)}},__toggle:f.fn.toggle,toggle:function(c){if(l(c)||typeof c==="boolean"||f.isFunction(c))return this.__toggle.apply(this,arguments);else{var a=k.apply(this,
+arguments);a[1].mode="toggle";return this.effect.apply(this,a)}},cssUnit:function(c){var a=this.css(c),b=[];f.each(["em","px","%","pt"],function(d,e){if(a.indexOf(e)>0)b=[parseFloat(a),e]});return b}});f.easing.jswing=f.easing.swing;f.extend(f.easing,{def:"easeOutQuad",swing:function(c,a,b,d,e){return f.easing[f.easing.def](c,a,b,d,e)},easeInQuad:function(c,a,b,d,e){return d*(a/=e)*a+b},easeOutQuad:function(c,a,b,d,e){return-d*(a/=e)*(a-2)+b},easeInOutQuad:function(c,a,b,d,e){if((a/=e/2)<1)return d/
+2*a*a+b;return-d/2*(--a*(a-2)-1)+b},easeInCubic:function(c,a,b,d,e){return d*(a/=e)*a*a+b},easeOutCubic:function(c,a,b,d,e){return d*((a=a/e-1)*a*a+1)+b},easeInOutCubic:function(c,a,b,d,e){if((a/=e/2)<1)return d/2*a*a*a+b;return d/2*((a-=2)*a*a+2)+b},easeInQuart:function(c,a,b,d,e){return d*(a/=e)*a*a*a+b},easeOutQuart:function(c,a,b,d,e){return-d*((a=a/e-1)*a*a*a-1)+b},easeInOutQuart:function(c,a,b,d,e){if((a/=e/2)<1)return d/2*a*a*a*a+b;return-d/2*((a-=2)*a*a*a-2)+b},easeInQuint:function(c,a,b,
+d,e){return d*(a/=e)*a*a*a*a+b},easeOutQuint:function(c,a,b,d,e){return d*((a=a/e-1)*a*a*a*a+1)+b},easeInOutQuint:function(c,a,b,d,e){if((a/=e/2)<1)return d/2*a*a*a*a*a+b;return d/2*((a-=2)*a*a*a*a+2)+b},easeInSine:function(c,a,b,d,e){return-d*Math.cos(a/e*(Math.PI/2))+d+b},easeOutSine:function(c,a,b,d,e){return d*Math.sin(a/e*(Math.PI/2))+b},easeInOutSine:function(c,a,b,d,e){return-d/2*(Math.cos(Math.PI*a/e)-1)+b},easeInExpo:function(c,a,b,d,e){return a==0?b:d*Math.pow(2,10*(a/e-1))+b},easeOutExpo:function(c,
+a,b,d,e){return a==e?b+d:d*(-Math.pow(2,-10*a/e)+1)+b},easeInOutExpo:function(c,a,b,d,e){if(a==0)return b;if(a==e)return b+d;if((a/=e/2)<1)return d/2*Math.pow(2,10*(a-1))+b;return d/2*(-Math.pow(2,-10*--a)+2)+b},easeInCirc:function(c,a,b,d,e){return-d*(Math.sqrt(1-(a/=e)*a)-1)+b},easeOutCirc:function(c,a,b,d,e){return d*Math.sqrt(1-(a=a/e-1)*a)+b},easeInOutCirc:function(c,a,b,d,e){if((a/=e/2)<1)return-d/2*(Math.sqrt(1-a*a)-1)+b;return d/2*(Math.sqrt(1-(a-=2)*a)+1)+b},easeInElastic:function(c,a,b,
+d,e){c=1.70158;var g=0,h=d;if(a==0)return b;if((a/=e)==1)return b+d;g||(g=e*0.3);if(h<Math.abs(d)){h=d;c=g/4}else c=g/(2*Math.PI)*Math.asin(d/h);return-(h*Math.pow(2,10*(a-=1))*Math.sin((a*e-c)*2*Math.PI/g))+b},easeOutElastic:function(c,a,b,d,e){c=1.70158;var g=0,h=d;if(a==0)return b;if((a/=e)==1)return b+d;g||(g=e*0.3);if(h<Math.abs(d)){h=d;c=g/4}else c=g/(2*Math.PI)*Math.asin(d/h);return h*Math.pow(2,-10*a)*Math.sin((a*e-c)*2*Math.PI/g)+d+b},easeInOutElastic:function(c,a,b,d,e){c=1.70158;var g=
+0,h=d;if(a==0)return b;if((a/=e/2)==2)return b+d;g||(g=e*0.3*1.5);if(h<Math.abs(d)){h=d;c=g/4}else c=g/(2*Math.PI)*Math.asin(d/h);if(a<1)return-0.5*h*Math.pow(2,10*(a-=1))*Math.sin((a*e-c)*2*Math.PI/g)+b;return h*Math.pow(2,-10*(a-=1))*Math.sin((a*e-c)*2*Math.PI/g)*0.5+d+b},easeInBack:function(c,a,b,d,e,g){if(g==j)g=1.70158;return d*(a/=e)*a*((g+1)*a-g)+b},easeOutBack:function(c,a,b,d,e,g){if(g==j)g=1.70158;return d*((a=a/e-1)*a*((g+1)*a+g)+1)+b},easeInOutBack:function(c,a,b,d,e,g){if(g==j)g=1.70158;
+if((a/=e/2)<1)return d/2*a*a*(((g*=1.525)+1)*a-g)+b;return d/2*((a-=2)*a*(((g*=1.525)+1)*a+g)+2)+b},easeInBounce:function(c,a,b,d,e){return d-f.easing.easeOutBounce(c,e-a,0,d,e)+b},easeOutBounce:function(c,a,b,d,e){return(a/=e)<1/2.75?d*7.5625*a*a+b:a<2/2.75?d*(7.5625*(a-=1.5/2.75)*a+0.75)+b:a<2.5/2.75?d*(7.5625*(a-=2.25/2.75)*a+0.9375)+b:d*(7.5625*(a-=2.625/2.75)*a+0.984375)+b},easeInOutBounce:function(c,a,b,d,e){if(a<e/2)return f.easing.easeInBounce(c,a*2,0,d,e)*0.5+b;return f.easing.easeOutBounce(c,
+a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
+;/*
+ * jQuery UI Effects Slide 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Effects/Slide
+ *
+ * Depends:
+ *	jquery.effects.core.js
+ */
+(function(c){c.effects.slide=function(d){return this.queue(function(){var a=c(this),h=["position","top","bottom","left","right"],f=c.effects.setMode(a,d.options.mode||"show"),b=d.options.direction||"left";c.effects.save(a,h);a.show();c.effects.createWrapper(a).css({overflow:"hidden"});var g=b=="up"||b=="down"?"top":"left";b=b=="up"||b=="left"?"pos":"neg";var e=d.options.distance||(g=="top"?a.outerHeight({margin:true}):a.outerWidth({margin:true}));if(f=="show")a.css(g,b=="pos"?isNaN(e)?"-"+e:-e:e);
+var i={};i[g]=(f=="show"?b=="pos"?"+=":"-=":b=="pos"?"-=":"+=")+e;a.animate(i,{queue:false,duration:d.duration,easing:d.options.easing,complete:function(){f=="hide"&&a.hide();c.effects.restore(a,h);c.effects.removeWrapper(a);d.callback&&d.callback.apply(this,arguments);a.dequeue()}})})}})(jQuery);
+;;
+;
+/*! 
+ * jquery.event.drag - v 2.0.0 
+ * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+ * Open Source MIT License - http://threedubmedia.com/code/license
+ */
+;(function(f){f.fn.drag=function(b,a,d){var e=typeof b=="string"?b:"",k=f.isFunction(b)?b:f.isFunction(a)?a:null;if(e.indexOf("drag")!==0)e="drag"+e;d=(b==k?a:d)||{};return k?this.bind(e,d,k):this.trigger(e)};var i=f.event,h=i.special,c=h.drag={defaults:{which:1,distance:0,not:":input",handle:null,relative:false,drop:true,click:false},datakey:"dragdata",livekey:"livedrag",add:function(b){var a=f.data(this,c.datakey),d=b.data||{};a.related+=1;if(!a.live&&b.selector){a.live=true;i.add(this,"draginit."+ c.livekey,c.delegate)}f.each(c.defaults,function(e){if(d[e]!==undefined)a[e]=d[e]})},remove:function(){f.data(this,c.datakey).related-=1},setup:function(){if(!f.data(this,c.datakey)){var b=f.extend({related:0},c.defaults);f.data(this,c.datakey,b);i.add(this,"mousedown",c.init,b);this.attachEvent&&this.attachEvent("ondragstart",c.dontstart)}},teardown:function(){if(!f.data(this,c.datakey).related){f.removeData(this,c.datakey);i.remove(this,"mousedown",c.init);i.remove(this,"draginit",c.delegate);c.textselect(true); this.detachEvent&&this.detachEvent("ondragstart",c.dontstart)}},init:function(b){var a=b.data,d;if(!(a.which>0&&b.which!=a.which))if(!f(b.target).is(a.not))if(!(a.handle&&!f(b.target).closest(a.handle,b.currentTarget).length)){a.propagates=1;a.interactions=[c.interaction(this,a)];a.target=b.target;a.pageX=b.pageX;a.pageY=b.pageY;a.dragging=null;d=c.hijack(b,"draginit",a);if(a.propagates){if((d=c.flatten(d))&&d.length){a.interactions=[];f.each(d,function(){a.interactions.push(c.interaction(this,a))})}a.propagates= a.interactions.length;a.drop!==false&&h.drop&&h.drop.handler(b,a);c.textselect(false);i.add(document,"mousemove mouseup",c.handler,a);return false}}},interaction:function(b,a){return{drag:b,callback:new c.callback,droppable:[],offset:f(b)[a.relative?"position":"offset"]()||{top:0,left:0}}},handler:function(b){var a=b.data;switch(b.type){case !a.dragging&&"mousemove":if(Math.pow(b.pageX-a.pageX,2)+Math.pow(b.pageY-a.pageY,2)<Math.pow(a.distance,2))break;b.target=a.target;c.hijack(b,"dragstart",a); if(a.propagates)a.dragging=true;case "mousemove":if(a.dragging){c.hijack(b,"drag",a);if(a.propagates){a.drop!==false&&h.drop&&h.drop.handler(b,a);break}b.type="mouseup"}case "mouseup":i.remove(document,"mousemove mouseup",c.handler);if(a.dragging){a.drop!==false&&h.drop&&h.drop.handler(b,a);c.hijack(b,"dragend",a)}c.textselect(true);if(a.click===false&&a.dragging){jQuery.event.triggered=true;setTimeout(function(){jQuery.event.triggered=false},20);a.dragging=false}break}},delegate:function(b){var a= [],d,e=f.data(this,"events")||{};f.each(e.live||[],function(k,j){if(j.preType.indexOf("drag")===0)if(d=f(b.target).closest(j.selector,b.currentTarget)[0]){i.add(d,j.origType+"."+c.livekey,j.origHandler,j.data);f.inArray(d,a)<0&&a.push(d)}});if(!a.length)return false;return f(a).bind("dragend."+c.livekey,function(){i.remove(this,"."+c.livekey)})},hijack:function(b,a,d,e,k){if(d){var j={event:b.originalEvent,type:b.type},n=a.indexOf("drop")?"drag":"drop",l,o=e||0,g,m;e=!isNaN(e)?e:d.interactions.length; b.type=a;b.originalEvent=null;d.results=[];do if(g=d.interactions[o])if(!(a!=="dragend"&&g.cancelled)){m=c.properties(b,d,g);g.results=[];f(k||g[n]||d.droppable).each(function(q,p){l=(m.target=p)?i.handle.call(p,b,m):null;if(l===false){if(n=="drag"){g.cancelled=true;d.propagates-=1}if(a=="drop")g[n][q]=null}else if(a=="dropinit")g.droppable.push(c.element(l)||p);if(a=="dragstart")g.proxy=f(c.element(l)||g.drag)[0];g.results.push(l);delete b.result;if(a!=="dropinit")return l});d.results[o]=c.flatten(g.results); if(a=="dropinit")g.droppable=c.flatten(g.droppable);a=="dragstart"&&!g.cancelled&&m.update()}while(++o<e);b.type=j.type;b.originalEvent=j.event;return c.flatten(d.results)}},properties:function(b,a,d){var e=d.callback;e.drag=d.drag;e.proxy=d.proxy||d.drag;e.startX=a.pageX;e.startY=a.pageY;e.deltaX=b.pageX-a.pageX;e.deltaY=b.pageY-a.pageY;e.originalX=d.offset.left;e.originalY=d.offset.top;e.offsetX=b.pageX-(a.pageX-e.originalX);e.offsetY=b.pageY-(a.pageY-e.originalY);e.drop=c.flatten((d.drop||[]).slice()); e.available=c.flatten((d.droppable||[]).slice());return e},element:function(b){if(b&&(b.jquery||b.nodeType==1))return b},flatten:function(b){return f.map(b,function(a){return a&&a.jquery?f.makeArray(a):a&&a.length?c.flatten(a):a})},textselect:function(b){f(document)[b?"unbind":"bind"]("selectstart",c.dontstart).attr("unselectable",b?"off":"on").css("MozUserSelect",b?"":"none")},dontstart:function(){return false},callback:function(){}};c.callback.prototype={update:function(){h.drop&&this.available.length&& f.each(this.available,function(b){h.drop.locate(this,b)})}};h.draginit=h.dragstart=h.dragend=c})(jQuery);;
+(function ($) {
+
+  var filters = {};
+  var attributes = {};
+
+  // Given a root element and a path of offsets, return the targetted element.
+  var navigatePath = function (root, path) {
+    path = path.slice(0);
+    while (path.length > 0) {
+      root = root.childNodes[path.shift()];
+    }
+    return root;
+  }
+
+  // Return the shared elements of 2 arrays from the beginning.
+  var arrayPrefix = function (a, b) {
+    var sharedlen = Math.min(a.length, b.length), i;
+  
+    for (i = 0; i < sharedlen; i += 1) {
+      if (a[i] !== b[i]) {
+        return i;
+      }
+    }
+    if (i < Math.max(a.length, b.length)) {
+      return i;
+    }
+    return true;
+  }
+
+  var cons = function (arr, c) {
+    var n = arr.slice(0);
+    n.push(c);
+    return n;
+  }
+
+  var checkFilters = function (selectedFilters, a, b) {
+    for (f = 0; f < selectedFilters.length; f++) {
+      if (filters[selectedFilters[f]].condition(a) && filters[selectedFilters[f]].condition(b)) {
+        if (filters[selectedFilters[f]].test(a,b)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  var checkAttributes = function (a, b) {
+    var attrs;
+    if (attrs = attributes[a.nodeName.toLowerCase()]) {
+      for (var i = 0, len = attrs.length; i < len; i++) {
+        if ($(a).attr(attrs[i]) !==
+              $(b).attr(attrs[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // Scan over two DOM trees a, b and return the first path at which they differ.
+  var forwardScan = function (a, b, apath, selectedFilters) {
+    // Quick exit.
+    if (a.nodeName !== b.nodeName || checkAttributes(a, b)) {
+      return apath;
+    }
+    
+    if (selectedFilters) {
+      var check = checkFilters(selectedFilters, a, b);
+      if (check) {
+        return apath;
+      } else if (check === false) {
+        return false;
+      }
+    }
+
+    var aNode = a.firstChild, bNode = b.firstChild, ret, i = 0, f;
+    
+    // Recur nodes
+    if (aNode && bNode) {
+      do {
+        ret = forwardScan(aNode, bNode, cons(apath, i), selectedFilters);
+        if (ret) {
+          return ret;
+        }
+        i += 1;
+        aNode = aNode.nextSibling;
+        bNode = bNode.nextSibling;
+      } while (aNode && bNode);
+    
+      if (aNode || bNode) {
+        return cons(apath, i);
+      } else {
+        return false;
+      }
+    } else if (aNode || bNode) {
+      return apath;
+    } else if (a.data) {
+      if (a.data === b.data) {
+        return false;
+      } else {
+        return apath;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  // Scan backwards over two DOM trees a, b and return the paths where they differ
+  var reverseScan = function (a, b, apath, bpath, selectedFilters) {
+    if (a.nodeName !== b.nodeName || checkAttributes(a, b)) {
+      return [apath, bpath];
+    }
+  
+    if (selectedFilters) {
+      var check = checkFilters(selectedFilters, a, b);
+      if (check) {
+        return [apath, bpath];
+      } else if (check === false) {
+        return false;
+      }
+    }
+    
+    var aNode = a.lastChild, bNode = b.lastChild,
+      aLen = a.childNodes.length, bLen = b.childNodes.length,
+      ret, i = aLen - 1, j = bLen - 1;
+
+    if (aNode && bNode) {
+      do {
+        ret = reverseScan(aNode, bNode, cons(apath, i), cons(bpath, j), selectedFilters);
+        if (ret) {
+          return ret;
+        }
+        i -= 1;
+        j -= 1;
+        aNode = aNode.previousSibling;
+        bNode = bNode.previousSibling;
+      } while (aNode && bNode);
+    
+      if (aNode || bNode) {
+        return [cons(apath, i), cons(bpath, j)];
+      } else {
+        return false;
+      }
+    } else if (aNode || bNode) {
+        return [apath, bpath];
+    } else if (a.data) {
+      if (a.data === b.data) {
+        return false;
+      } else {
+        return [apath, bpath];
+      }
+    } else {
+      return false;
+    }
+  }
+
+  // Return a slice of childNodes from a parent.
+  var childNodesSlice = function (parentNode, start, end) {
+    var arr = [], i = 0, cnode = parentNode.firstChild;
+    while (i < start) {
+      cnode = cnode.nextSibling;
+      i += 1;
+    }
+    while (i < end) {
+      arr.push(cnode);
+      cnode = cnode.nextSibling;
+      i += 1;
+    }
+    return arr;
+  }
+
+  // Find the difference between two DOM trees, and the operation to change a to b
+  var scanDiff = function (a, b, filters) {
+    var for_diff = forwardScan(a, b, [], filters);
+    if (for_diff === false) {
+      return {type: "identical"};
+    }
+
+    var rev_diff = reverseScan(a, b, [], [], filters),
+      prefixA = arrayPrefix(for_diff, rev_diff[0]),
+      prefixB = arrayPrefix(for_diff, rev_diff[1]),
+      sourceSegment,
+      destSegment;
+   
+    if (prefixA === true && prefixB === true) {
+      sourceSegment = [navigatePath(a, for_diff)];
+      destSegment = [navigatePath(b, for_diff)];
+    } else {
+      var sharedroot = Math.min(prefixA, prefixB),
+        pathi = for_diff.slice(0, sharedroot),
+        sourceel = navigatePath(a, pathi),
+        destel = navigatePath(b, pathi),
+        leftPointer = for_diff[sharedroot],
+        rightPointerA = rev_diff[0][sharedroot],
+        rightPointerB = rev_diff[1][sharedroot];
+    
+      if (rightPointerA < rightPointerB && leftPointer > rightPointerA) {
+        return {
+          type: "insert",
+          source: {node: sourceel,
+            index: leftPointer-1},
+          replace: childNodesSlice(destel, leftPointer, leftPointer + (rightPointerB-rightPointerA))
+        };
+      } else if (leftPointer > rightPointerA || leftPointer > rightPointerB) {
+        sourceSegment = childNodesSlice(sourceel, leftPointer, leftPointer + (rightPointerA-rightPointerB));
+        destSegment = [];
+      } else {
+        sourceSegment = childNodesSlice(sourceel, leftPointer, rightPointerA + 1);
+        destSegment = childNodesSlice(destel, leftPointer, rightPointerB + 1);
+      }
+    }
+    return {type: "replace", source: sourceSegment, replace: destSegment};
+  }
+  
+  // Use the scan result to patch one DOM tree into the other.
+  // This is the only part of the code dependent upon jQuery (as it removes nodes,
+  // framework specific data may need to be removed).
+  var executePatch = function (patch) {
+    
+    if (patch.type === "identical") {
+      return;
+    }
+  
+    if (patch.type === "insert") {
+      if (patch.source.index === -1) {
+        $(patch.source.node).prepend(patch.replace);
+      } else {
+        $($(patch.source.node).contents()[patch.source.index]).after(patch.replace);
+      }
+      return;
+    }
+  
+    if (patch.type === "replace") {
+      $(patch.source[patch.source.length - 1]).after(patch.replace);
+      $(patch.source).remove();
+    }
+  }
+  
+  var methods = {
+    diff: function (targetDOM, filters) {
+      var patch = scanDiff(this.get(0), targetDOM.get(0), filters);
+      patch.patch = function () {
+        executePatch(patch);
+      }
+      return patch;
+    },
+    patch: function (targetDOM, filters) {
+      var patch = scanDiff(this.get(0), targetDOM.get(0), filters);
+      executePatch(patch);
+      return patch;
+    },
+    filter: function (name, condition, test) {
+      if (condition && test) {
+        filters[name] = {condition: condition, test: test};
+      } else {
+        delete filters[name];
+      }
+    },
+    attributes: function (newAttributes) {
+      if (newAttributes === undefined) {
+        return attributes;
+      } else {
+        attributes = newAttributes;
+      }
+    }
+  }
+  
+  $.fn.quickdiff = function( method ) {
+    // Method calling logic
+    if ( methods[method] ) {
+      return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+    } /* else if ( typeof method === 'object' || ! method ) {
+      //return methods.init.apply( this, arguments );
+    }*/ else {
+      $.error( 'Method ' +  method + ' does not exist on jQuery.quickdiff' );
+    }
+  };
+
+})(jQuery);
+//
+// showdown.js -- A javascript port of Markdown.
+//
+// Modifications
+// Copyright (c) 2011 Chris Spencer
+// 
+// PHP Markdown Extra
+// Copyright (c) 2009 Michel Fortin
+//
+// node-markdown
+// Copyright (c) 2010 Andris Reinman
+// 
+// Original showdown.js
+// Copyright (c) 2007 John Fraser.
+//
+// Original Markdown Copyright (c) 2004-2005 John Gruber
+//   <http://daringfireball.net/projects/markdown/>
+//
+// Redistributable under a BSD-style open source license.
+// See license.txt for more information.
+//
+// The full source distribution is at:
+//
+//        A A L
+//        T C A
+//        T K B
+//
+//   <http://www.attacklab.net/>
+//
+
+//
+// Wherever possible, Showdown is a straight, line-by-line port
+// of the Perl version of Markdown.
+//
+// This is not a normal parser design; it's basically just a
+// series of string substitutions.  It's hard to read and
+// maintain this way,  but keeping Showdown close to the original
+// design makes it easier to port new features.
+//
+// More importantly, Showdown behaves like markdown.pl in most
+// edge cases.  So web applications can do client-side preview
+// in Javascript, and then build identical HTML on the server.
+//
+// This port needs the new RegExp functionality of ECMA 262,
+// 3rd Edition (i.e. Javascript 1.5).  Most modern web browsers
+// should do fine.  Even with the new regular expression features,
+// We do a lot of work to emulate Perl's regex functionality.
+// The tricky changes in this file mostly have the "attacklab:"
+// label.  Major or self-explanatory changes don't.
+//
+// Smart diff tools like Araxis Merge will be able to match up
+// this file with markdown.pl in a useful way.  A little tweaking
+// helps: in a copy of markdown.pl, replace "#" with "//" and
+// replace "$text" with "text".  Be sure to ignore whitespace
+// and line endings.
+//
+
+
+//
+// Showdown usage:
+//
+//   var text = "Markdown *rocks*.";
+//
+//   var converter = new Showdown.converter();
+//   var html = converter.makeHtml(text);
+//
+//   alert(html);
+//
+// Note: move the sample code to the bottom of this
+// file before uncommenting it.
+//
+
+
+//
+// Showdown namespace
+//
+var Showdown = {};
+
+//
+// converter
+//
+// Wraps all "globals" so that the only thing
+// exposed is makeHtml().
+//
+Showdown.converter = function() {
+
+//
+// Globals:
+//
+
+// Global hashes, used by various utility routines
+var g_urls;
+var g_titles;
+var g_html_blocks;
+var g_print_refs;
+var g_print_refs_count;
+
+// Used to track when we're inside an ordered or unordered list
+// (see _ProcessListItems() for details):
+var g_list_level = 0;
+
+var config = this.config = {
+  stripHTML: false,
+  headerautoid: false,
+  tables: false,
+  math: false,
+  figures: false,
+  refprint: false,
+  github_flavouring: false
+}
+
+this.makeHtml = function(text) {
+//
+// Main function. The order in which other subs are called here is
+// essential. Link and image substitutions need to happen before
+// _EscapeSpecialCharsWithinTagAttributes(), so that any *'s or _'s in the <a>
+// and <img> tags get encoded.
+//
+
+  // Clear the global hashes. If we don't clear these, you get conflicts
+  // from other articles when generating a page which contains more than
+  // one article (e.g. an index page that shows the N most recent
+  // articles):
+  g_urls = new Array();
+  g_titles = new Array();
+  g_html_blocks = new Array();
+  g_print_refs = {};
+  g_print_refs_count = 0;
+
+  // attacklab: Replace ~ with ~T
+  // This lets us use tilde as an escape char to avoid md5 hashes
+  // The choice of character is arbitray; anything that isn't
+    // magic in Markdown will work.
+  text = text.replace(/~/g,"~T");
+
+  // attacklab: Replace $ with ~D
+  // RegExp interprets $ as a special character
+  // when it's in a replacement string
+  text = text.replace(/\$/g,"~D");
+
+  // Standardize line endings
+  text = text.replace(/\r\n/g,"\n"); // DOS to Unix
+  text = text.replace(/\r/g,"\n"); // Mac to Unix
+
+  // Make sure text begins and ends with a couple of newlines:
+  text = "\n\n" + text + "\n\n";
+
+  // Convert all tabs to spaces.
+  text = _Detab(text);
+
+  // Strip any lines consisting only of spaces and tabs.
+  // This makes subsequent regexen easier to write, because we can
+  // match consecutive blank lines with /\n+/ instead of something
+  // contorted like /[ \t]*\n+/ .
+  text = text.replace(/^[ \t]+$/mg,"");
+
+  // Turn block-level HTML blocks into hash entries
+  text = _HashHTMLBlocks(text);
+
+  // Strip link definitions, store in hashes.
+  text = _StripLinkDefinitions(text);
+
+  text = _RunBlockGamut(text);
+
+  text = _UnescapeSpecialChars(text);
+
+  // attacklab: Restore dollar signs
+  text = text.replace(/~D/g,"$$");
+
+  // attacklab: Restore tildes
+  text = text.replace(/~T/g,"~");
+  
+  if (config.stripHTML) {
+    text = stripUnwantedHTML(text);
+  }
+  
+  if (config.refprint && g_print_refs_count) {
+    var link_table = '<ul class="reflist print">';
+    for (i in g_print_refs) {
+      link_table += '<li>[' + g_print_refs[i] + ']: ' + i + '</li>'
+    }
+    link_table += '</ul>';
+    text += link_table;
+  }
+
+  return text;
+}
+
+
+var _StripLinkDefinitions = function(text) {
+//
+// Strips link definitions from text, stores the URLs and titles in
+// hash references.
+//
+
+  // Link defs are in the form: ^[id]: url "optional title"
+
+  /*
+    var text = text.replace(/
+        ^[ ]{0,3}\[(.+)\]:  // id = $1  attacklab: g_tab_width - 1
+          [ \t]*
+          \n?        // maybe *one* newline
+          [ \t]*
+        <?(\S+?)>?      // url = $2
+          [ \t]*
+          \n?        // maybe one newline
+          [ \t]*
+        (?:
+          (\n*)        // any lines skipped = $3 attacklab: lookbehind removed
+          ["(]
+          (.+?)        // title = $4
+          [")]
+          [ \t]*
+        )?          // title is optional
+        (?:\n+|$)
+        /gm,
+        function(){...});
+  */
+  var text = text.replace(/^[ ]{0,3}\[(.+)\]:[ \t]*\n?[ \t]*<?(\S+?)>?[ \t]*\n?[ \t]*(?:(\n*)["(](.+?)[")][ \t]*)?(?:\n+|\Z)/gm,
+    function (wholeMatch,m1,m2,m3,m4) {
+      m1 = m1.toLowerCase();
+      g_urls[m1] = _EncodeAmpsAndAngles(m2);  // Link IDs are case-insensitive
+      if (m3) {
+        // Oops, found blank lines, so it's not a title.
+        // Put back the parenthetical statement we stole.
+        return m3+m4;
+      } else if (m4) {
+        g_titles[m1] = m4.replace(/"/g,"&quot;");
+      }
+      
+      // Completely remove the definition from the text
+      return "";
+    }
+  );
+
+  return text;
+}
+
+
+var _HashHTMLBlocks = function(text) {
+  // attacklab: Double up blank lines to reduce lookaround
+  text = text.replace(/\n/g,"\n\n");
+
+  // Hashify HTML blocks:
+  // We only want to do this for block-level HTML tags, such as headers,
+  // lists, and tables. That's because we still want to wrap <p>s around
+  // "paragraphs" that are wrapped in non-block-level tags, such as anchors,
+  // phrase emphasis, and spans. The list of tags we're looking for is
+  // hard-coded:
+  var block_tags_a = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del"
+  var block_tags_b = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math"
+
+  // First, look for nested blocks, e.g.:
+  //   <div>
+  //     <div>
+  //     tags for inner block must be indented.
+  //     </div>
+  //   </div>
+  //
+  // The outermost tags must start at the left margin for this to match, and
+  // the inner nested divs must be indented.
+  // We need to do this before the next, more liberal match, because the next
+  // match will start at the first `<div>` and stop at the first `</div>`.
+
+  // attacklab: This regex can be expensive when it fails.
+  /*
+    var text = text.replace(/
+    (            // save in $1
+      ^          // start of line  (with /m)
+      <($block_tags_a)  // start tag = $2
+      \b          // word break
+                // attacklab: hack around khtml/pcre bug...
+      [^\r]*?\n      // any number of lines, minimally matching
+      </\2>        // the matching end tag
+      [ \t]*        // trailing spaces/tabs
+      (?=\n+)        // followed by a newline
+    )            // attacklab: there are sentinel newlines at end of document
+    /gm,function(){...}};
+  */
+  text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del)\b[^\r]*?\n<\/\2>[ \t]*(?=\n+))/gm,hashElement);
+
+  //
+  // Now match more liberally, simply from `\n<tag>` to `</tag>\n`
+  //
+
+  /*
+    var text = text.replace(/
+    (            // save in $1
+      ^          // start of line  (with /m)
+      <($block_tags_b)  // start tag = $2
+      \b          // word break
+                // attacklab: hack around khtml/pcre bug...
+      [^\r]*?        // any number of lines, minimally matching
+      .*</\2>        // the matching end tag
+      [ \t]*        // trailing spaces/tabs
+      (?=\n+)        // followed by a newline
+    )            // attacklab: there are sentinel newlines at end of document
+    /gm,function(){...}};
+  */
+  text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math)\b[^\r]*?.*<\/\2>[ \t]*(?=\n+)\n)/gm,hashElement);
+
+  // Special case just for <hr />. It was easier to make a special case than
+  // to make the other regex more complicated.  
+
+  /*
+    text = text.replace(/
+    (            // save in $1
+      \n\n        // Starting after a blank line
+      [ ]{0,3}
+      (<(hr)        // start tag = $2
+      \b          // word break
+      ([^<>])*?      // 
+      \/?>)        // the matching end tag
+      [ \t]*
+      (?=\n{2,})      // followed by a blank line
+    )
+    /g,hashElement);
+  */
+  text = text.replace(/(\n[ ]{0,3}(<(hr)\b([^<>])*?\/?>)[ \t]*(?=\n{2,}))/g,hashElement);
+
+  // Special case for standalone HTML comments:
+
+  /*
+    text = text.replace(/
+    (            // save in $1
+      \n\n        // Starting after a blank line
+      [ ]{0,3}      // attacklab: g_tab_width - 1
+      <!
+      (--[^\r]*?--\s*)+
+      >
+      [ \t]*
+      (?=\n{2,})      // followed by a blank line
+    )
+    /g,hashElement);
+  */
+  text = text.replace(/(\n\n[ ]{0,3}<!(--[^\r]*?--\s*)+>[ \t]*(?=\n{2,}))/g,hashElement);
+
+  // PHP and ASP-style processor instructions (<?...?> and <%...%>)
+
+  /*
+    text = text.replace(/
+    (?:
+      \n\n        // Starting after a blank line
+    )
+    (            // save in $1
+      [ ]{0,3}      // attacklab: g_tab_width - 1
+      (?:
+        <([?%])      // $2
+        [^\r]*?
+        \2>
+      )
+      [ \t]*
+      (?=\n{2,})      // followed by a blank line
+    )
+    /g,hashElement);
+  */
+  text = text.replace(/(?:\n\n)([ ]{0,3}(?:<([?%])[^\r]*?\2>)[ \t]*(?=\n{2,}))/g,hashElement);
+
+  // attacklab: Undo double lines (see comment at top of this function)
+  text = text.replace(/\n\n/g,"\n");
+  return text;
+}
+
+var hashElement = function(wholeMatch,m1) {
+  var blockText = m1;
+
+  // Undo double lines
+  blockText = blockText.replace(/\n\n/g,"\n");
+  blockText = blockText.replace(/^\n/,"");
+  
+  // strip trailing blank lines
+  blockText = blockText.replace(/\n+$/g,"");
+  
+  // Replace the element text with a marker ("~KxK" where x is its key)
+  blockText = "\n\n~K" + (g_html_blocks.push(blockText)-1) + "K\n\n";
+  
+  return blockText;
+};
+
+var _RunBlockGamut = function(text) {
+//
+// These are all the transformations that form block-level
+// tags like paragraphs, headers, and list items.
+//
+  text = _DoHeaders(text);
+  
+  // Escape pipes early for tables.
+  text = text.replace(/\\([\|])/g,escapeCharacters_callback);
+  
+  if (config.tables) {
+    text = _DoTables(text);
+  }
+
+  // Do Horizontal Rules:
+  var key = hashBlock("<hr />");
+  text = text.replace(/^[ ]{0,2}([ ]?\*[ ]?){3,}[ \t]*$/gm,key);
+  text = text.replace(/^[ ]{0,2}([ ]?\-[ ]?){3,}[ \t]*$/gm,key);
+  text = text.replace(/^[ ]{0,2}([ ]?\_[ ]?){3,}[ \t]*$/gm,key);
+
+  text = _DoLists(text);
+  text = _DoCodeBlocks(text);
+  text = _DoBlockQuotes(text);
+
+  // We already ran _HashHTMLBlocks() before, in Markdown(), but that
+  // was to escape raw HTML in the original Markdown source. This time,
+  // we're escaping the markup we've just created, so that we don't wrap
+  // <p> tags around block-level tags.
+  text = _HashHTMLBlocks(text);
+  text = _FormParagraphs(text);
+
+  return text;
+}
+
+
+var _RunSpanGamut = function(text) {
+//
+// These are all the transformations that occur *within* block-level
+// tags like paragraphs, headers, and list items.
+//
+
+  text = _DoCodeSpans(text);
+  text = _EscapeSpecialCharsWithinTagAttributes(text);
+  text = _EncodeBackslashEscapes(text);
+
+  // Process anchor and image tags. Images must come first,
+  // because ![foo][f] looks like an anchor.
+  text = _DoImages(text);
+  text = _DoAnchors(text);
+
+  // Make links out of things like `<http://example.com/>`
+  // Must come after _DoAnchors(), because you can use < and >
+  // delimiters in inline links like [this](<url>).
+  text = _DoAutoLinks(text);
+  text = _EncodeAmpsAndAngles(text);
+  text = _DoItalicsAndBold(text);
+
+  // Do hard breaks:
+  text = text.replace(/  +\n/g," <br />\n");
+
+  return text;
+}
+
+var _EscapeSpecialCharsWithinTagAttributes = function(text) {
+//
+// Within tags -- meaning between < and > -- encode [\ ` * _] so they
+// don't conflict with their use in Markdown for code, italics and strong.
+//
+
+  // Build a regex to find HTML tags and comments.  See Friedl's 
+  // "Mastering Regular Expressions", 2nd Ed., pp. 200-201.
+  var regex = /(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;
+
+  text = text.replace(regex, function(wholeMatch) {
+    var tag = wholeMatch.replace(/(.)<\/?code>(?=.)/g,"$1`");
+    tag = escapeCharacters(tag,"\\`*_");
+    return tag;
+  });
+
+  return text;
+}
+
+var _DoAnchors = function(text) {
+//
+// Turn Markdown link shortcuts into XHTML <a> tags.
+//
+  //
+  // First, handle reference-style links: [link text] [id]
+  //
+
+  /*
+    text = text.replace(/
+    (              // wrap whole match in $1
+      \[
+      (
+        (?:
+          \[[^\]]*\]    // allow brackets nested one level
+          |
+          [^\[]      // or anything else
+        )*
+      )
+      \]
+
+      [ ]?          // one optional space
+      (?:\n[ ]*)?        // one optional newline followed by spaces
+
+      \[
+      (.*?)          // id = $3
+      \]
+    )()()()()          // pad remaining backreferences
+    /g,_DoAnchors_callback);
+  */
+  text = text.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,writeAnchorTag);
+
+  //
+  // Next, inline-style links: [link text](url "optional title")
+  //
+
+  /*
+    text = text.replace(/
+      (            // wrap whole match in $1
+        \[
+        (
+          (?:
+            \[[^\]]*\]  // allow brackets nested one level
+          |
+          [^\[\]]      // or anything else
+        )
+      )
+      \]
+      \(            // literal paren
+      [ \t]*
+      ()            // no id, so leave $3 empty
+      (?:[^\(]*?\([^\)]*?\).*?)
+      <?
+        (       // href = $4
+          (?:[^\(]*?\([^\)]*?\)\S*?)  // Match one depth of parentheses
+          |
+          (?:.*?) // Match no parentheses
+        )
+      >?        
+      [ \t]*
+      (            // $5
+        (['"])        // quote char = $6
+        (.*?)        // Title = $7
+        \6          // matching quote
+        [ \t]*        // ignore any spaces/tabs between closing quote and )
+      )?            // title is optional
+      \)
+    )
+    /g,writeAnchorTag);
+  */
+  text = text.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?((?:[^\(]*?\([^\)]*?\)\S*?)|(?:.*?))>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeAnchorTag);
+
+  //
+  // Last, handle reference-style shortcuts: [link text]
+  // These must come last in case you've also got [link test][1]
+  // or [link test](/foo)
+  //
+
+  /*
+    text = text.replace(/
+    (               // wrap whole match in $1
+      \[
+      ([^\[\]]+)        // link text = $2; can't contain '[' or ']'
+      \]
+    )()()()()()          // pad rest of backreferences
+    /g, writeAnchorTag);
+  */
+  text = text.replace(/(\[([^\[\]]+)\])()()()()()/g, writeAnchorTag);
+
+  return text;
+}
+
+var writeAnchorTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
+  if (m7 == undefined) m7 = "";
+  var whole_match = m1;
+  var link_text   = m2;
+  var link_id   = m3.toLowerCase();
+  var url    = m4;
+  var title  = m7;
+  
+  if (url == "") {
+    if (link_id == "") {
+      // lower-case and turn embedded newlines into spaces
+      link_id = link_text.toLowerCase().replace(/ ?\n/g," ");
+    }
+    url = "#"+link_id;
+    
+    if (g_urls[link_id] != undefined) {
+      url = g_urls[link_id];
+      if (g_titles[link_id] != undefined) {
+        title = g_titles[link_id];
+      }
+    }
+    else {
+      if (whole_match.search(/\(\s*\)$/m)>-1) {
+        // Special case for explicit empty url
+        url = "";
+      } else {
+        return whole_match;
+      }
+    }
+  }
+  
+  url = escapeCharacters(url,"*_");
+  var result = "<a href=\"" + url + "\"";
+  
+  if (title != "") {
+    title = title.replace(/"/g,"&quot;");
+    title = escapeCharacters(title,"*_");
+    result +=  " title=\"" + title + "\"";
+  }
+  
+  result += ">" + link_text + "</a>";
+  
+  if (config.refprint) {
+    if (!g_print_refs[url]) {
+      g_print_refs[url] = ++g_print_refs_count;
+    }
+    result += '<span class="linkref print">~E91E' + g_print_refs[url] + '~E93E</span>';
+  }
+  
+  return result;
+}
+
+
+var _DoImages = function(text) {
+//
+// Turn Markdown image shortcuts into <img> tags.
+//
+
+  //
+  // First, handle reference-style labeled images: ![alt text][id]
+  //
+
+  /*
+    text = text.replace(/
+    (            // wrap whole match in $1
+      !\[
+      (.*?)        // alt text = $2
+      \]
+
+      [ ]?        // one optional space
+      (?:\n[ ]*)?      // one optional newline followed by spaces
+
+      \[
+      (.*?)        // id = $3
+      \]
+    )()()()()        // pad rest of backreferences
+    /g,writeImageTag);
+  */
+  text = text.replace(/(![<>]?\[(.*?)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,writeImageTag);
+
+  //
+  // Next, handle inline images:  ![alt text](url "optional title")
+  // Don't forget: encode * and _
+
+  /*
+    text = text.replace(/
+    (            // wrap whole match in $1
+      !\[
+      (.*?)        // alt text = $2
+      \]
+      \s?          // One optional whitespace character
+      \(          // literal paren
+      [ \t]*
+      ()          // no id, so leave $3 empty
+      <?
+        (         // src url = $4
+          (?:[^\(]*?\([^\)]*?\)\S*?)  // Match one depth of parentheses
+          |
+          (?:\S+?)  // Match 0 depth of parentheses
+        )
+      >?      
+      [ \t]*
+      (          // $5
+        (['"])      // quote char = $6
+        (.*?)      // title = $7
+        \6        // matching quote
+        [ \t]*
+      )?          // title is optional
+    \)
+    )
+    /g,writeImageTag);
+  */
+  text = text.replace(/(![<>]?\[(.*?)\]\s?\([ \t]*()<?((?:[^\(]*?\([^\)]*?\)\S*?)|(?:\S*?))>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeImageTag);
+
+  return text;
+}
+
+var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
+  var whole_match = m1;
+  var alt_text   = m2;
+  var link_id   = m3.toLowerCase();
+  var url    = m4;
+  var title  = m7;
+
+  if (!title) title = "";
+  
+  if (url == "" && link_id !== "") {
+    // lower-case and turn embedded newlines into spaces
+    if (g_urls[link_id] != undefined) {
+      url = g_urls[link_id];
+      if (g_titles[link_id] != undefined) {
+        title = g_titles[link_id];
+      } else {
+        title = undefined;
+      }
+    }
+  }
+  
+  var figure = false, match;
+  if (match = whole_match.match(/^!([<>])/)) {
+    if (match[1] === ">") {
+      figure = "right";
+    } else if (match[1] === "<") {
+      figure = "left";
+    }
+  }
+  
+  alt_text = alt_text.replace(/"/g,"&quot;");
+  url = escapeCharacters(url,"*_");
+  var result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
+
+  // attacklab: Markdown.pl adds empty title attributes to images.
+  // Replicate this bug.
+
+  if (title !== undefined) {
+    title = title.replace(/"/g,"&quot;");
+    title = escapeCharacters(title,"*_");
+    result +=  " title=\"" + title + "\"";
+  }
+  
+  result += " />";
+  
+  if (config.figures && figure !== false) {
+    if (title === undefined || title === "") {
+      result = '<div class="figure ' + figure + '">\n  ' + result + '\n</div>';
+    } else {
+      result = '<div class="figure ' + figure + '">\n  ' + result +
+        '<br/>\n  <span>' + title + '</span>\n</div>';
+    }
+  }
+  
+  return result;
+}
+
+
+var _DoHeaders = function(text) {
+
+  // Setext-style headers:
+  //  Header 1
+  //  ========
+  //  
+  //  Header 2
+  //  --------
+  //
+  text = text.replace(/^(.+)[ \t]*\n=+[ \t]*\n+/gm,
+    function(wholeMatch,m1) {
+      if (config.headerautoid) {
+        return hashBlock('<h1 id="' + headerId(m1) + '">' + _RunSpanGamut(m1) + "</h1>");
+      } else {
+        return hashBlock('<h1>' + _RunSpanGamut(m1) + "</h1>");
+      }
+    }
+  );
+
+  text = text.replace(/^(.+)[ \t]*\n-+[ \t]*\n+/gm,
+    function(matchFound,m1) {
+      if (config.headerautoid) {
+        return hashBlock('<h2 id="' + headerId(m1) + '">' + _RunSpanGamut(m1) + "</h2>");
+      } else {
+        return hashBlock('<h2>' + _RunSpanGamut(m1) + "</h2>");
+      }
+    }
+  );
+
+  // atx-style headers:
+  //  # Header 1
+  //  ## Header 2
+  //  ## Header 2 with closing hashes ##
+  //  ...
+  //  ###### Header 6
+  //
+
+  /*
+    text = text.replace(/
+      ^(\#{1,6})        // $1 = string of #'s
+      [ \t]*
+      (.+?)          // $2 = Header text
+      [ \t]*
+      \#*            // optional closing #'s (not counted)
+      \n+
+    /gm, function() {...});
+  */
+
+  text = text.replace(/^(\#{1,6})[ \t]*(.+?)[ \t]*\#*\n+/gm,
+    function(wholeMatch,m1,m2) {
+      var h_level = m1.length;
+      if (config.headerautoid) {
+        return hashBlock("<h" + h_level + ' id="' + headerId(m2) + '">' + _RunSpanGamut(m2) + "</h" + h_level + ">");
+      } else {
+        return hashBlock("<h" + h_level + '>' + _RunSpanGamut(m2) + "</h" + h_level + ">");
+      }
+    });
+
+  function headerId(m) {
+    return m.replace(/[^\w]/g, '').toLowerCase();
+  }
+  return text;
+}
+
+// This declaration keeps Dojo compressor from outputting garbage:
+var _ProcessListItems;
+
+var _DoLists = function(text) {
+//
+// Form HTML ordered (numbered) and unordered (bulleted) lists.
+//
+
+  // attacklab: add sentinel to hack around khtml/safari bug:
+  // http://bugs.webkit.org/show_bug.cgi?id=11231
+  text += "~0";
+
+  // Re-usable pattern to match any entirel ul or ol list:
+
+  /*
+    var whole_list = /
+    (                  // $1 = whole list
+      (                // $2
+        [ ]{0,3}          // attacklab: g_tab_width - 1
+        ([*+-]|\d+[.])        // $3 = first list item marker
+        [ \t]+
+      )
+      [^\r]+?
+      (                // $4
+        ~0              // sentinel for workaround; should be $
+      |
+        \n{2,}
+        (?=\S)
+        (?!              // Negative lookahead for another list item marker
+          [ \t]*
+          (?:[*+-]|\d+[.])[ \t]+
+        )
+      )
+    )/g
+  */
+  var whole_list = /^(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm;
+
+  if (g_list_level) {
+    text = text.replace(whole_list,function(wholeMatch,m1,m2) {
+      var list = m1;
+      var list_type = (m2.search(/[*+-]/g)>-1) ? "ul" : "ol";
+
+      // Turn double returns into triple returns, so that we can make a
+      // paragraph for the last item in a list, if necessary:
+      list = list.replace(/\n{2,}/g,"\n\n\n");;
+      var result = _ProcessListItems(list);
+  
+      // Trim any trailing whitespace, to put the closing `</$list_type>`
+      // up on the preceding line, to get it past the current stupid
+      // HTML block parser. This is a hack to work around the terrible
+      // hack that is the HTML block parser.
+      result = result.replace(/\s+$/,"");
+      result = "<"+list_type+">\n" + result + "</"+list_type+">\n";
+      return result;
+    });
+  } else {
+    whole_list = /(\n\n|^\n?)(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/g;
+    text = text.replace(whole_list,function(wholeMatch,m1,m2,m3) {
+      var runup = m1;
+      var list = m2;
+
+      var list_type = (m3.search(/[*+-]/g)>-1) ? "ul" : "ol";
+      // Turn double returns into triple returns, so that we can make a
+      // paragraph for the last item in a list, if necessary:
+      var list = list.replace(/\n{2,}/g,"\n\n\n");;
+      var result = _ProcessListItems(list);
+      result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n";  
+      return result;
+    });
+  }
+
+  // attacklab: strip sentinel
+  text = text.replace(/~0/,"");
+
+  return text;
+}
+
+_ProcessListItems = function(list_str) {
+//
+//  Process the contents of a single ordered or unordered list, splitting it
+//  into individual list items.
+//
+  // The $g_list_level global keeps track of when we're inside a list.
+  // Each time we enter a list, we increment it; when we leave a list,
+  // we decrement. If it's zero, we're not in a list anymore.
+  //
+  // We do this because when we're not inside a list, we want to treat
+  // something like this:
+  //
+  //    I recommend upgrading to version
+  //    8. Oops, now this line is treated
+  //    as a sub-list.
+  //
+  // As a single paragraph, despite the fact that the second line starts
+  // with a digit-period-space sequence.
+  //
+  // Whereas when we're inside a list (or sub-list), that line will be
+  // treated as the start of a sub-list. What a kludge, huh? This is
+  // an aspect of Markdown's syntax that's hard to parse perfectly
+  // without resorting to mind-reading. Perhaps the solution is to
+  // change the syntax rules such that sub-lists must start with a
+  // starting cardinal number; e.g. "1." or "a.".
+
+  g_list_level++;
+
+  // trim trailing blank lines:
+  list_str = list_str.replace(/\n{2,}$/,"\n");
+
+  // attacklab: add sentinel to emulate \z
+  list_str += "~0";
+
+  /*
+    list_str = list_str.replace(/
+      (\n)?              // leading line = $1
+      (^[ \t]*)            // leading whitespace = $2
+      ([*+-]|\d+[.]) [ \t]+      // list marker = $3
+      ([^\r]+?            // list item text   = $4
+      (\n{1,2}))
+      (?= \n* (~0 | \2 ([*+-]|\d+[.]) [ \t]+))
+    /gm, function(){...});
+  */
+  list_str = list_str.replace(/(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,
+    function(wholeMatch,m1,m2,m3,m4){
+      var item = m4;
+      var leading_line = m1;
+      var leading_space = m2;
+
+      if (leading_line || (item.search(/\n{2,}/)>-1)) {
+        item = _RunBlockGamut(_Outdent(item));
+      }
+      else {
+        // Recursion for sub-lists:
+        item = _DoLists(_Outdent(item));
+        item = item.replace(/\n$/,""); // chomp(item)
+        item = _RunSpanGamut(item);
+      }
+
+      return  "<li>" + item + "</li>\n";
+    }
+  );
+
+  // attacklab: strip sentinel
+  list_str = list_str.replace(/<\/li></g, "</li>\n<");
+  list_str = list_str.replace(/~0/g,"");
+  
+  g_list_level--;
+  return list_str;
+}
+
+var _DoCodeBlocks = function(text) {
+//
+//  Process Markdown `<pre><code>` blocks.
+//  
+
+  /*
+    text = text.replace(text,
+      /(?:\n\n|^)
+      (                // $1 = the code block -- one or more lines, starting with a space/tab
+        (?:
+          (?:[ ]{4}|\t)      // Lines must start with a tab or a tab-width of spaces - attacklab: g_tab_width
+          .*\n+
+        )+
+      )
+      (\n*[ ]{0,3}[^ \t\n]|(?=~0))  // attacklab: g_tab_width
+    /g,function(){...});
+  */
+
+  // attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
+  text += "~0";
+  
+  if (config.github_flavouring) {  
+    text = text.replace(/\n```([a-zA-Z]+)?\s*\n((?:.*\n+)+?)(\n*```|(?=~0))/g,
+      function (wholeMatch, m1, m2) {
+        var codeblock = _EncodeCode(m2);
+        codeblock = _Detab(codeblock);
+        codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
+        codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
+      
+        if (m1) {
+          codeblock = "<pre><code class=\"" + m1 + "\">" + codeblock + "\n</code></pre>";
+        } else {
+          codeblock = "<pre><code>" + codeblock + "\n</code></pre>";
+        }
+        return hashBlock(codeblock);
+      });
+  }
+  
+  text = text.replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
+    function(wholeMatch,m1,m2) {
+      var codeblock = m1;
+      var nextChar = m2;
+    
+      codeblock = _EncodeCode( _Outdent(codeblock));
+      codeblock = _Detab(codeblock);
+      codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
+      codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
+
+      codeblock = "<pre><code>" + codeblock + "\n</code></pre>";
+
+      return hashBlock(codeblock) + nextChar;
+    }
+  );
+
+  // attacklab: strip sentinel
+  text = text.replace(/~0/,"");
+
+  return text;
+}
+
+var hashBlock = function(text) {
+  text = text.replace(/(^\n+|\n+$)/g,"");
+  return "\n\n~K" + (g_html_blocks.push(text)-1) + "K\n\n";
+}
+
+
+var _DoCodeSpans = function(text) {
+//
+//   *  Backtick quotes are used for <code></code> spans.
+// 
+//   *  You can use multiple backticks as the delimiters if you want to
+//   include literal backticks in the code span. So, this input:
+//   
+//     Just type ``foo `bar` baz`` at the prompt.
+//   
+//     Will translate to:
+//   
+//     <p>Just type <code>foo `bar` baz</code> at the prompt.</p>
+//   
+//  There's no arbitrary limit to the number of backticks you
+//  can use as delimters. If you need three consecutive backticks
+//  in your code, use four for delimiters, etc.
+//
+//  *  You can use spaces to get literal backticks at the edges:
+//   
+//     ... type `` `bar` `` ...
+//   
+//     Turns to:
+//   
+//     ... type <code>`bar`</code> ...
+//
+
+  /*
+    text = text.replace(/
+      (^|[^\\])          // Character before opening ` can't be a backslash
+      (`+)            // $2 = Opening run of `
+      (              // $3 = The code block
+        [^\r]*?
+        [^`]          // attacklab: work around lack of lookbehind
+      )
+      \2              // Matching closer
+      (?!`)
+    /gm, function(){...});
+  */
+
+  text = text.replace(/(^|[^\\])(`+)([^\r]*?[^`])\2(?!`)/gm,
+    function(wholeMatch,m1,m2,m3,m4) {
+      var c = m3;
+      c = c.replace(/^([ \t]*)/g,"");  // leading whitespace
+      c = c.replace(/[ \t]*$/g,"");  // trailing whitespace
+      c = _EncodeCode(c);
+      return m1+"<code>"+c+"</code>";
+    });
+    
+  if (config.math) {
+    text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,
+      function(wholeMatch,m1,m2,m3,m4) {
+        var c = m3;
+        c = c.replace(/^([ \t]*)/g,"");  // leading whitespace
+        c = c.replace(/[ \t]*$/g,"");  // trailing whitespace
+        c = _EncodeCode(c);
+        return m1+'<span class="mathInline">%%'+c+"%%</span>";
+      });
+
+    text = text.replace(/(^|[^\\])(~D~D)([^\r]*?[^~])\2(?!~D)/gm,
+      function(wholeMatch,m1,m2,m3,m4) {
+        var c = m3;
+        c = c.replace(/^([ \t]*)/g,"");  // leading whitespace
+        c = c.replace(/[ \t]*$/g,"");  // trailing whitespace
+        c = _EncodeCode(c);
+        return m1+'<span class="math">~D~D'+c+"~D~D</span>";
+      });
+  }
+
+  return text;
+}
+
+
+var _EncodeCode = function(text) {
+//
+// Encode/escape certain characters inside Markdown code runs.
+// The point is that in code, these characters are literals,
+// and lose their special Markdown meanings.
+//
+  // Encode all ampersands; HTML entities are not
+  // entities within a Markdown code span.
+  text = text.replace(/&/g,"&amp;");
+
+  // Do the angle bracket song and dance:
+  text = text.replace(/</g,"&lt;");
+  text = text.replace(/>/g,"&gt;");
+
+  // Pipes are escaped early, unescape them into escaped pipes.
+  // Need to find better solution.
+  text = text.replace(/~E124E/g, "\\|");
+  
+  // Now, escape characters that are magic in Markdown:
+  text = escapeCharacters(text,"\*_{}[]\\",false);
+
+// jj the line above breaks this:
+//---
+
+//* Item
+
+//   1. Subitem
+
+//            special char: *
+//---
+
+  return text;
+}
+
+
+var _DoItalicsAndBold = function(text) {
+
+  // <strong> must go first:
+  text = text.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,
+    "<strong>$2</strong>");
+
+  text = text.replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g,
+    "<em>$2</em>");
+
+  return text;
+}
+
+
+var _DoBlockQuotes = function(text) {
+
+  /*
+    text = text.replace(/
+    (                // Wrap whole match in $1
+      (
+        ^[ \t]*>[ \t]?      // '>' at the start of a line
+        .+\n          // rest of the first line
+        (.+\n)*          // subsequent consecutive lines
+        \n*            // blanks
+      )+
+    )
+    /gm, function(){...});
+  */
+
+  text = text.replace(/((^[ \t]*>[ \t]?.+\n(.+\n)*\n*)+)/gm,
+    function(wholeMatch,m1) {
+      var bq = m1;
+
+      // attacklab: hack around Konqueror 3.5.4 bug:
+      // "----------bug".replace(/^-/g,"") == "bug"
+
+      bq = bq.replace(/^[ \t]*>[ \t]?/gm,"~0");  // trim one level of quoting
+
+      // attacklab: clean up hack
+      bq = bq.replace(/~0/g,"");
+
+      bq = bq.replace(/^[ \t]+$/gm,"");    // trim whitespace-only lines
+      bq = _RunBlockGamut(bq);        // recurse
+      
+      bq = bq.replace(/(^|\n)/g,"$1  ");
+      // These leading spaces screw with <pre> content, so we need to fix that:
+      bq = bq.replace(
+          /(\s*<pre>[^\r]+?<\/pre>)/gm,
+        function(wholeMatch,m1) {
+          var pre = m1;
+          // attacklab: hack around Konqueror 3.5.4 bug:
+          pre = pre.replace(/^  /mg,"~0");
+          pre = pre.replace(/~0/g,"");
+          return pre;
+        });
+      
+      return hashBlock("<blockquote>\n" + bq + "\n</blockquote>");
+    });
+  return text;
+}
+
+
+var _FormParagraphs = function(text) {
+//
+//  Params:
+//    $text - string to process with html <p> tags
+//
+
+  // Strip leading and trailing lines:
+  text = text.replace(/^\n+/g,"");
+  text = text.replace(/\n+$/g,"");
+
+  var grafs = text.split(/\n{2,}/g);
+  var grafsOut = new Array();
+
+  //
+  // Wrap <p> tags.
+  //
+  var end = grafs.length;
+  for (var i=0; i<end; i++) {
+    var str = grafs[i];
+
+    // if this is an HTML marker, copy it
+    if (str.search(/~K(\d+)K/g) >= 0) {
+      grafsOut.push(str);
+    }
+    else if (str.search(/\S/) >= 0) {
+      str = _RunSpanGamut(str);
+      str = str.replace(/^([ \t]*)/g,"<p>");
+      str += "</p>"
+      grafsOut.push(str);
+    }
+
+  }
+
+  //
+  // Unhashify HTML blocks
+  //
+  end = grafsOut.length;
+  for (var i=0; i<end; i++) {
+    // if this is a marker for an html block...
+    while (grafsOut[i].search(/~K(\d+)K/) >= 0) {
+      var blockText = g_html_blocks[RegExp.$1];
+      blockText = blockText.replace(/\$/g,"$$$$"); // Escape any dollar signs
+      grafsOut[i] = grafsOut[i].replace(/~K\d+K/,blockText);
+    }
+  }
+
+  return grafsOut.join("\n\n");
+}
+
+
+var _EncodeAmpsAndAngles = function(text) {
+// Smart processing for ampersands and angle brackets that need to be encoded.
+  
+  // Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
+  //   http://bumppo.net/projects/amputator/
+  text = text.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g,"&amp;");
+  
+  // Encode naked <'s
+  text = text.replace(/<(?![a-z\/?\$!])/gi,"&lt;");
+  
+  return text;
+}
+
+
+var _EncodeBackslashEscapes = function(text) {
+//
+//   Parameter:  String.
+//   Returns:  The string, with after processing the following backslash
+//         escape sequences.
+//
+
+  // attacklab: The polite way to do this is with the new
+  // escapeCharacters() function:
+  //
+  //   text = escapeCharacters(text,"\\",true);
+  //   text = escapeCharacters(text,"`*_{}[]()>#+-.!",true);
+  //
+  // ...but we're sidestepping its use of the (slow) RegExp constructor
+  // as an optimization for Firefox.  This function gets called a LOT.
+
+  text = text.replace(/\\(\\)/g,escapeCharacters_callback);
+  text = text.replace(/\\([`*_{}\[\]()>#+-.!])/g,escapeCharacters_callback);
+  return text;
+}
+
+
+var _DoAutoLinks = function(text) {
+
+  text = text.replace(/<((https?|ftp|dict):[^'">\s]+)>/gi,"<a href=\"$1\">$1</a>");
+
+  // Email addresses: <address@domain.foo>
+
+  /*
+    text = text.replace(/
+      <
+      (?:mailto:)?
+      (
+        [-.\w]+
+        \@
+        [-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+
+      )
+      >
+    /gi, _DoAutoLinks_callback());
+  */
+  text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,
+    function(wholeMatch,m1) {
+      return _EncodeEmailAddress( _UnescapeSpecialChars(m1) );
+    }
+  );
+
+  return text;
+}
+
+
+var _EncodeEmailAddress = function(addr) {
+//
+//  Input: an email address, e.g. "foo@example.com"
+//
+//  Output: the email address as a mailto link, with each character
+//  of the address encoded as either a decimal or hex entity, in
+//  the hopes of foiling most address harvesting spam bots. E.g.:
+//
+//  <a href="&#x6D;&#97;&#105;&#108;&#x74;&#111;:&#102;&#111;&#111;&#64;&#101;
+//     x&#x61;&#109;&#x70;&#108;&#x65;&#x2E;&#99;&#111;&#109;">&#102;&#111;&#111;
+//     &#64;&#101;x&#x61;&#109;&#x70;&#108;&#x65;&#x2E;&#99;&#111;&#109;</a>
+//
+//  Based on a filter by Matthew Wickline, posted to the BBEdit-Talk
+//  mailing list: <http://tinyurl.com/yu7ue>
+//
+
+  // attacklab: why can't javascript speak hex?
+  function char2hex(ch) {
+    var hexDigits = '0123456789ABCDEF';
+    var dec = ch.charCodeAt(0);
+    return(hexDigits.charAt(dec>>4) + hexDigits.charAt(dec&15));
+  }
+
+  var encode = [
+    function(ch){return "&#"+ch.charCodeAt(0)+";";},
+    function(ch){return "&#x"+char2hex(ch)+";";},
+    function(ch){return ch;}
+  ];
+
+  addr = "mailto:" + addr;
+
+  addr = addr.replace(/./g, function(ch) {
+    if (ch == "@") {
+         // this *must* be encoded. I insist.
+      ch = encode[Math.floor(Math.random()*2)](ch);
+    } else if (ch !=":") {
+      // leave ':' alone (to spot mailto: later)
+      var r = Math.random();
+      // roughly 10% raw, 45% hex, 45% dec
+      ch =  (
+          r > .9  ?  encode[2](ch)   :
+          r > .45 ?  encode[1](ch)   :
+                encode[0](ch)
+        );
+    }
+    return ch;
+  });
+
+  addr = "<a href=\"" + addr + "\">" + addr + "</a>";
+  addr = addr.replace(/">.+:/g,"\">"); // strip the mailto: from the visible part
+
+  return addr;
+}
+
+
+var _UnescapeSpecialChars = function(text) {
+//
+// Swap back in all the special characters we've hidden.
+//
+  text = text.replace(/~E(\d+)E/g,
+    function(wholeMatch,m1) {
+      var charCodeToReplace = parseInt(m1);
+      return String.fromCharCode(charCodeToReplace);
+    }
+  );
+  return text;
+}
+
+
+var _Outdent = function(text) {
+//
+// Remove one level of line-leading tabs or spaces
+//
+
+  // attacklab: hack around Konqueror 3.5.4 bug:
+  // "----------bug".replace(/^-/g,"") == "bug"
+
+  text = text.replace(/^(\t|[ ]{1,4})/gm,"~0"); // attacklab: g_tab_width
+
+  // attacklab: clean up hack
+  text = text.replace(/~0/g,"")
+
+  return text;
+}
+
+var _Detab = function(text) {
+// attacklab: Detab's completely rewritten for speed.
+// In perl we could fix it by anchoring the regexp with \G.
+// In javascript we're less fortunate.
+
+  // expand first n-1 tabs
+  text = text.replace(/\t(?=\t)/g,"    "); // attacklab: g_tab_width
+
+  // replace the nth with two sentinels
+  text = text.replace(/\t/g,"~A~B");
+
+  // use the sentinel to anchor our regex so it doesn't explode
+  text = text.replace(/~B(.+?)~A/g,
+    function(wholeMatch,m1,m2) {
+      var leadingText = m1;
+      var numSpaces = 4 - leadingText.length % 4;  // attacklab: g_tab_width
+
+      // there *must* be a better way to do this:
+      for (var i=0; i<numSpaces; i++) leadingText+=" ";
+
+      return leadingText;
+    }
+  );
+
+  // clean up sentinels
+  text = text.replace(/~A/g,"    ");  // attacklab: g_tab_width
+  text = text.replace(/~B/g,"");
+
+  return text;
+}
+
+
+//
+//  attacklab: Utility functions
+//
+
+
+var escapeCharacters = function(text, charsToEscape, afterBackslash) {
+  // First we have to escape the escape characters so that
+  // we can build a character class out of them
+  var regexString = "([" + charsToEscape.replace(/([\[\]\\])/g,"\\$1") + "])";
+
+  if (afterBackslash) {
+    regexString = "\\\\" + regexString;
+  }
+
+  var regex = new RegExp(regexString,"g");
+  text = text.replace(regex,escapeCharacters_callback);
+
+  return text;
+}
+
+var doTrim = function(str) {
+  if (str.trim !== undefined) {
+    return str.trim();
+  } else if (typeof jQuery !== 'undefined') {
+    return $.trim(str);
+  } else {
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  }
+}
+
+var escapeCharacters_callback = function(wholeMatch,m1) {
+  var charCodeToEscape = m1.charCodeAt(0);
+  return "~E"+charCodeToEscape+"E";
+}
+
+//
+// Markdown Extra ported functions
+//
+
+var _DoTables = function (text) {
+//
+// Form HTML tables.
+//
+  //
+  // Find tables with leading pipe.
+  //
+  //  | Header 1 | Header 2
+  //  | -------- | --------
+  //  | Cell 1   | Cell 2
+  //  | Cell 3   | Cell 4
+  //
+  /*$text = preg_replace_callback('
+    {
+      ^              # Start of a line
+      [ ]{0,3}  # Allowed whitespace.
+      [|]              # Optional leading pipe (present)
+      (.+) \n            # $1: Header row (at least one pipe)
+      
+      [ ]{0,3}  # Allowed whitespace.
+      [|] ([ ]*[-:]+[-| :]*) \n  # $2: Header underline
+      
+      (              # $3: Cells
+        (?>
+          [ ]*        # Allowed whitespace.
+          [|] .* \n      # Row content.
+        )*
+      )
+      (?=\n|\Z)          # Stop at final double newline.
+    }xm',
+    array(&$this, '_doTable_leadingPipe_callback'), $text);*/
+  
+  text = text.replace(/^[ ]{0,3}[|](.+)\n[ ]{0,3}[|]([ ]*[-:]+[-| :]*)\n(((?=([ ]*[|].*\n))(?:[ ]*[|].*\n))*)(?=\n)/gm,
+    _doTable_leadingPipe_callback);
+  
+  //
+  // Find tables without leading pipe.
+  //
+  //  Header 1 | Header 2
+  //  -------- | --------
+  //  Cell 1   | Cell 2
+  //  Cell 3   | Cell 4
+  //
+  /*
+  $text = preg_replace_callback('
+    {
+      ^              # Start of a line
+      [ ]{0,'.$less_than_tab.'}  # Allowed whitespace.
+      (\S.*[|].*) \n        # $1: Header row (at least one pipe)
+      
+      [ ]{0,'.$less_than_tab.'}  # Allowed whitespace.
+      ([-:]+[ ]*[|][-| :]*) \n  # $2: Header underline
+      
+      (              # $3: Cells
+        (?>
+          .* [|] .* \n    # Row content
+        )*
+      )
+      (?=\n|\Z)          # Stop at final double newline.
+    }xm',
+    array(&$this, '_DoTable_callback'), $text);*/
+  text = text.replace(/^[ ]{0,3}(\S.*[|].*)\n[ ]{0,3}([ ]*[-:]+[-| :]*)\n(((?=(.*[|].*\n))(?:.*[|].*\n))*)(?=\n)/gm,
+    _doTable_callback);
+
+  return text;
+}
+var _doTable_leadingPipe_callback = function () {
+  var content = arguments[3];
+  
+  // Remove leading pipe for each row.
+  content = content.replace(/^[ ]*[|]/gm, '');
+  
+  return _doTable_callback(arguments[0], arguments[1], arguments[2], content);
+}
+var _doTable_callback = function () {
+  var head       = arguments[1];
+  var underline  = arguments[2];
+  var content    = arguments[3];
+
+  // Remove any tailing pipes for each line.
+  head       = head.replace(/[|][ ]*$/gm, '\n');
+  underline  = underline.replace(/[|][ ]*\n/gm, '\n');
+  content    = doTrim(content.replace(/[|][ ]*\n/gm, '\n'));
+  
+  // Reading alignement from header underline.
+  var separators = underline.split(/[ ]*[|][ ]*/);
+  var attr = {};
+  for (var i = 0, len = separators.length; i < len; ++i) {
+    if (separators[i].match(/^[ ]*[-]+:[ ]*$/))       attr[i] = ' align="right"';
+    else if (separators[i].match(/^[ ]*:[-]+:[ ]*$/)) attr[i] = ' align="center"';
+    else if (separators[i].match(/^[ ]*:[-]+[ ]*$/))  attr[i] = ' align="left"';
+    else                                              attr[i] = '';
+  }
+  
+  // Parsing span elements, including code spans, character escapes, 
+  // and inline HTML tags, so that pipes inside those gets ignored.
+  // head    = $this->parseSpan($head); // TODO
+  var headers  = head.split(/[ ]*[|][ ]*/);
+  var col_count = headers.length;
+  
+  // Write column headers.
+  var text = "<table>\n";
+  text += "<thead>\n";
+  text += "<tr>\n";
+  for (var i = 0; i < col_count; ++i) {
+    text += "  <th"+attr[i]+">" + _RunSpanGamut(doTrim(headers[i])) + "</th>\n";
+  }
+  text += "</tr>\n";
+  text += "</thead>\n";
+  
+  // Split content by row.
+  var rows = content.split(/\n/);
+  
+  text += "<tbody>\n";
+  for (var i = 0, len = rows.length; i < len; ++i) {
+    // Parsing span elements, including code spans, character escapes, 
+    // and inline HTML tags, so that pipes inside those gets ignored.
+    // $row = $this->parseSpan($row); // TODO
+    
+    // Split row by cell.
+    var row_cells = rows[i].split(/[ ]*[|][ ]*/);
+    // row_cells = array_pad($row_cells, $col_count, '');  // TODO
+    
+    text += "<tr>\n";
+    for (var j = 0, len2 = row_cells.length; j < len2; ++j) {
+      text += "  <td"+attr[j]+">" + _RunSpanGamut(doTrim(row_cells[j])) + "</td>\n";
+    }
+    text += "</tr>\n";
+  }
+  text += "</tbody>\n";
+  text += "</table>";
+  
+  return text;
+}
+
+} // end of Showdown.converter
+
+// Sourced from https://github.com/andris9/node-markdown
+var stripUnwantedHTML = function (html /*, allowedTags, allowedAttributes, forceProtocol */){
+    var allowedTags = arguments[1] || 
+            'a|b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|h4|h5|h6|'+
+            'i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr|span|'+
+            'table|th|tr|td|tbody|thead|tfoot|div',
+        allowedAttributes = arguments[2] || {
+            'img': 'src|width|height|alt',
+            'a':   'href',
+            '*':   'title',
+            'span': 'class',
+            'tr': 'rowspan',
+            'td': 'colspan|align',
+            'th': 'rowspan|align',
+            'div': 'class',
+            'code': 'class'
+        }, forceProtocol = arguments[3] || true;
+        
+        testAllowed = new RegExp('^('+allowedTags.toLowerCase()+')$'),
+        findTags = /<(\/?)\s*([\w:\-]+)([^>]*)>/g,
+        findAttribs = /(\s*)([\w:-]+)\s*=\s*(?:(?:(["'])([^\3]+?)(?:\3))|([^\s]+))/g;
+    
+    // convert all strings patterns into regexp objects (if not already converted)
+    for(var i in allowedAttributes){
+        if(allowedAttributes.hasOwnProperty(i) && typeof allowedAttributes[i] === 'string'){
+            allowedAttributes[i] = new RegExp('^('+
+                allowedAttributes[i].toLowerCase()+')$');
+        }
+    }
+    
+    // find and match html tags
+    return html.replace(findTags, function(original, lslash, tag, params){
+        var tagAttr, wildcardAttr, 
+            rslash = params.substr(-1)=="/" && "/" || "";
+
+        tag = tag.toLowerCase();
+        
+        // tag is not allowed, return empty string
+        if(!tag.match(testAllowed))
+            return "";
+        
+        // tag is allowed
+        else{
+            // regexp objects for a particular tag
+            tagAttr = tag in allowedAttributes && allowedAttributes[tag];
+            wildcardAttr = "*" in allowedAttributes && allowedAttributes["*"];
+            
+            // if no attribs are allowed
+            if(!tagAttr && !wildcardAttr)
+                return "<"+lslash+tag+rslash+">";
+            
+            // remove trailing slash if any
+            params = params.trim();
+            if(rslash){
+                params = params.substr(0, params.length-1);
+            }
+            
+            // find and remove unwanted attributes
+            params = params.replace(findAttribs, function(original, space,
+                                                            name, quot, value){
+                name = name.toLowerCase();
+                
+                if (!value && !quot) {
+                  value = "";
+                  quot = '"';
+                } else if (!value) {
+                  value = quot;
+                  quot = '"';
+                }
+                
+                // force data: and javascript: links and images to #
+                if((name=="href" || name=="src") &&
+                   (value.trim().substr(0, "javascript:".length)=="javascript:"
+                    || (name == "href" && value.trim().substr(0, "data:".length)=="data:"))) {
+                    value = "#";
+                }
+                
+                // scope links and sources to http protocol
+                if (forceProtocol &&
+                     (name=="href" || name=="src") &&
+                     !/^[a-zA-Z]{3,5}:\/\//.test(value) &&
+                     (value.length < 8 && value.trim().substr(0, "&#x6D;&#97;&#105;&#108;&#116;&#111;:".length)=="&#x6D;&#97;&#105;&#108;&#116;&#111;:")) {
+                  value = "http://" + value;
+                }
+                
+                if((wildcardAttr && name.match(wildcardAttr)) ||
+                        (tagAttr && name.match(tagAttr))){
+                    return space+name+"="+quot+value+quot;
+                }else
+                    return "";
+            });
+
+            return "<"+lslash+tag+(params?" "+params:"")+rslash+">";
+        }
+            
+    });
+}
+
+// export
+if (typeof exports != 'undefined') exports.Showdown = Showdown;
+/*
+    http://www.JSON.org/json2.js
+    2010-03-20
+
+    Public Domain.
+
+    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+
+    See http://www.JSON.org/js.html
+
+
+    This code should be minified before deployment.
+    See http://javascript.crockford.com/jsmin.html
+
+    USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
+    NOT CONTROL.
+
+
+    This file creates a global JSON object containing two methods: stringify
+    and parse.
+
+        JSON.stringify(value, replacer, space)
+            value       any JavaScript value, usually an object or array.
+
+            replacer    an optional parameter that determines how object
+                        values are stringified for objects. It can be a
+                        function or an array of strings.
+
+            space       an optional parameter that specifies the indentation
+                        of nested structures. If it is omitted, the text will
+                        be packed without extra whitespace. If it is a number,
+                        it will specify the number of spaces to indent at each
+                        level. If it is a string (such as '\t' or '&nbsp;'),
+                        it contains the characters used to indent at each level.
+
+            This method produces a JSON text from a JavaScript value.
+
+            When an object value is found, if the object contains a toJSON
+            method, its toJSON method will be called and the result will be
+            stringified. A toJSON method does not serialize: it returns the
+            value represented by the name/value pair that should be serialized,
+            or undefined if nothing should be serialized. The toJSON method
+            will be passed the key associated with the value, and this will be
+            bound to the value
+
+            For example, this would serialize Dates as ISO strings.
+
+                Date.prototype.toJSON = function (key) {
+                    function f(n) {
+                        // Format integers to have at least two digits.
+                        return n < 10 ? '0' + n : n;
+                    }
+
+                    return this.getUTCFullYear()   + '-' +
+                         f(this.getUTCMonth() + 1) + '-' +
+                         f(this.getUTCDate())      + 'T' +
+                         f(this.getUTCHours())     + ':' +
+                         f(this.getUTCMinutes())   + ':' +
+                         f(this.getUTCSeconds())   + 'Z';
+                };
+
+            You can provide an optional replacer method. It will be passed the
+            key and value of each member, with this bound to the containing
+            object. The value that is returned from your method will be
+            serialized. If your method returns undefined, then the member will
+            be excluded from the serialization.
+
+            If the replacer parameter is an array of strings, then it will be
+            used to select the members to be serialized. It filters the results
+            such that only members with keys listed in the replacer array are
+            stringified.
+
+            Values that do not have JSON representations, such as undefined or
+            functions, will not be serialized. Such values in objects will be
+            dropped; in arrays they will be replaced with null. You can use
+            a replacer function to replace those with JSON values.
+            JSON.stringify(undefined) returns undefined.
+
+            The optional space parameter produces a stringification of the
+            value that is filled with line breaks and indentation to make it
+            easier to read.
+
+            If the space parameter is a non-empty string, then that string will
+            be used for indentation. If the space parameter is a number, then
+            the indentation will be that many spaces.
+
+            Example:
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}]);
+            // text is '["e",{"pluribus":"unum"}]'
+
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}], null, '\t');
+            // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
+
+            text = JSON.stringify([new Date()], function (key, value) {
+                return this[key] instanceof Date ?
+                    'Date(' + this[key] + ')' : value;
+            });
+            // text is '["Date(---current time---)"]'
+
+
+        JSON.parse(text, reviver)
+            This method parses a JSON text to produce an object or array.
+            It can throw a SyntaxError exception.
+
+            The optional reviver parameter is a function that can filter and
+            transform the results. It receives each of the keys and values,
+            and its return value is used instead of the original value.
+            If it returns what it received, then the structure is not modified.
+            If it returns undefined then the member is deleted.
+
+            Example:
+
+            // Parse the text. Values that look like ISO date strings will
+            // be converted to Date objects.
+
+            myData = JSON.parse(text, function (key, value) {
+                var a;
+                if (typeof value === 'string') {
+                    a =
+/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                    if (a) {
+                        return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
+                            +a[5], +a[6]));
+                    }
+                }
+                return value;
+            });
+
+            myData = JSON.parse('["Date(09/09/2001)"]', function (key, value) {
+                var d;
+                if (typeof value === 'string' &&
+                        value.slice(0, 5) === 'Date(' &&
+                        value.slice(-1) === ')') {
+                    d = new Date(value.slice(5, -1));
+                    if (d) {
+                        return d;
+                    }
+                }
+                return value;
+            });
+
+
+    This is a reference implementation. You are free to copy, modify, or
+    redistribute.
+*/
+
+/*jslint evil: true, strict: false */
+
+/*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
+    call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
+    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
+    lastIndex, length, parse, prototype, push, replace, slice, stringify,
+    test, toJSON, toString, valueOf
+*/
+
+
+// Create a JSON object only if one does not already exist. We create the
+// methods in a closure to avoid creating global variables.
+
+if (!this.JSON) {
+    this.JSON = {};
+}
+
+(function () {
+
+    function f(n) {
+        // Format integers to have at least two digits.
+        return n < 10 ? '0' + n : n;
+    }
+
+    if (typeof Date.prototype.toJSON !== 'function') {
+
+        Date.prototype.toJSON = function (key) {
+
+            return isFinite(this.valueOf()) ?
+                   this.getUTCFullYear()   + '-' +
+                 f(this.getUTCMonth() + 1) + '-' +
+                 f(this.getUTCDate())      + 'T' +
+                 f(this.getUTCHours())     + ':' +
+                 f(this.getUTCMinutes())   + ':' +
+                 f(this.getUTCSeconds())   + 'Z' : null;
+        };
+
+        String.prototype.toJSON =
+        Number.prototype.toJSON =
+        Boolean.prototype.toJSON = function (key) {
+            return this.valueOf();
+        };
+    }
+
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        gap,
+        indent,
+        meta = {    // table of character substitutions
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        },
+        rep;
+
+
+    function quote(string) {
+
+// If the string contains no control characters, no quote characters, and no
+// backslash characters, then we can safely slap some quotes around it.
+// Otherwise we must also replace the offending characters with safe escape
+// sequences.
+
+        escapable.lastIndex = 0;
+        return escapable.test(string) ?
+            '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' :
+            '"' + string + '"';
+    }
+
+
+    function str(key, holder) {
+
+// Produce a string from holder[key].
+
+        var i,          // The loop counter.
+            k,          // The member key.
+            v,          // The member value.
+            length,
+            mind = gap,
+            partial,
+            value = holder[key];
+
+// If the value has a toJSON method, call it to obtain a replacement value.
+
+        if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+            value = value.toJSON(key);
+        }
+
+// If we were called with a replacer function, then call the replacer to
+// obtain a replacement value.
+
+        if (typeof rep === 'function') {
+            value = rep.call(holder, key, value);
+        }
+
+// What happens next depends on the value's type.
+
+        switch (typeof value) {
+        case 'string':
+            return quote(value);
+
+        case 'number':
+
+// JSON numbers must be finite. Encode non-finite numbers as null.
+
+            return isFinite(value) ? String(value) : 'null';
+
+        case 'boolean':
+        case 'null':
+
+// If the value is a boolean or null, convert it to a string. Note:
+// typeof null does not produce 'null'. The case is included here in
+// the remote chance that this gets fixed someday.
+
+            return String(value);
+
+// If the type is 'object', we might be dealing with an object or an array or
+// null.
+
+        case 'object':
+
+// Due to a specification blunder in ECMAScript, typeof null is 'object',
+// so watch out for that case.
+
+            if (!value) {
+                return 'null';
+            }
+
+// Make an array to hold the partial results of stringifying this object value.
+
+            gap += indent;
+            partial = [];
+
+// Is the value an array?
+
+            if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+// The value is an array. Stringify every element. Use null as a placeholder
+// for non-JSON values.
+
+                length = value.length;
+                for (i = 0; i < length; i += 1) {
+                    partial[i] = str(i, value) || 'null';
+                }
+
+// Join all of the elements together, separated with commas, and wrap them in
+// brackets.
+
+                v = partial.length === 0 ? '[]' :
+                    gap ? '[\n' + gap +
+                            partial.join(',\n' + gap) + '\n' +
+                                mind + ']' :
+                          '[' + partial.join(',') + ']';
+                gap = mind;
+                return v;
+            }
+
+// If the replacer is an array, use it to select the members to be stringified.
+
+            if (rep && typeof rep === 'object') {
+                length = rep.length;
+                for (i = 0; i < length; i += 1) {
+                    k = rep[i];
+                    if (typeof k === 'string') {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            } else {
+
+// Otherwise, iterate through all of the keys in the object.
+
+                for (k in value) {
+                    if (Object.hasOwnProperty.call(value, k)) {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            }
+
+// Join all of the member texts together, separated with commas,
+// and wrap them in braces.
+
+            v = partial.length === 0 ? '{}' :
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+                        mind + '}' : '{' + partial.join(',') + '}';
+            gap = mind;
+            return v;
+        }
+    }
+
+// If the JSON object does not yet have a stringify method, give it one.
+
+    if (typeof JSON.stringify !== 'function') {
+        JSON.stringify = function (value, replacer, space) {
+
+// The stringify method takes a value and an optional replacer, and an optional
+// space parameter, and returns a JSON text. The replacer can be a function
+// that can replace values, or an array of strings that will select the keys.
+// A default replacer method can be provided. Use of the space parameter can
+// produce text that is more easily readable.
+
+            var i;
+            gap = '';
+            indent = '';
+
+// If the space parameter is a number, make an indent string containing that
+// many spaces.
+
+            if (typeof space === 'number') {
+                for (i = 0; i < space; i += 1) {
+                    indent += ' ';
+                }
+
+// If the space parameter is a string, it will be used as the indent string.
+
+            } else if (typeof space === 'string') {
+                indent = space;
+            }
+
+// If there is a replacer, it must be a function or an array.
+// Otherwise, throw an error.
+
+            rep = replacer;
+            if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                     typeof replacer.length !== 'number')) {
+                throw new Error('JSON.stringify');
+            }
+
+// Make a fake root object containing our value under the key of ''.
+// Return the result of stringifying the value.
+
+            return str('', {'': value});
+        };
+    }
+
+
+// If the JSON object does not yet have a parse method, give it one.
+
+    if (typeof JSON.parse !== 'function') {
+        JSON.parse = function (text, reviver) {
+
+// The parse method takes a text and an optional reviver function, and returns
+// a JavaScript value if the text is a valid JSON text.
+
+            var j;
+
+            function walk(holder, key) {
+
+// The walk method is used to recursively walk the resulting structure so
+// that modifications can be made.
+
+                var k, v, value = holder[key];
+                if (value && typeof value === 'object') {
+                    for (k in value) {
+                        if (Object.hasOwnProperty.call(value, k)) {
+                            v = walk(value, k);
+                            if (v !== undefined) {
+                                value[k] = v;
+                            } else {
+                                delete value[k];
+                            }
+                        }
+                    }
+                }
+                return reviver.call(holder, key, value);
+            }
+
+
+// Parsing happens in four stages. In the first stage, we replace certain
+// Unicode characters with escape sequences. JavaScript handles many characters
+// incorrectly, either silently deleting them, or treating them as line endings.
+
+            text = String(text);
+            cx.lastIndex = 0;
+            if (cx.test(text)) {
+                text = text.replace(cx, function (a) {
+                    return '\\u' +
+                        ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                });
+            }
+
+// In the second stage, we run the text against regular expressions that look
+// for non-JSON patterns. We are especially concerned with '()' and 'new'
+// because they can cause invocation, and '=' because it can cause mutation.
+// But just to be safe, we want to reject all unexpected forms.
+
+// We split the second stage into 4 regexp operations in order to work around
+// crippling inefficiencies in IE's and Safari's regexp engines. First we
+// replace the JSON backslash pairs with '@' (a non-JSON character). Second, we
+// replace all simple value tokens with ']' characters. Third, we delete all
+// open brackets that follow a colon or comma or that begin the text. Finally,
+// we look to see that the remaining characters are only whitespace or ']' or
+// ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.
+
+            if (/^[\],:{}\s]*$/.
+test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+// In the third stage we use the eval function to compile the text into a
+// JavaScript structure. The '{' operator is subject to a syntactic ambiguity
+// in JavaScript: it can begin a block or an object literal. We wrap the text
+// in parens to eliminate the ambiguity.
+
+                j = eval('(' + text + ')');
+
+// In the optional fourth stage, we recursively walk the new structure, passing
+// each name/value pair to a reviver function for possible transformation.
+
+                return typeof reviver === 'function' ?
+                    walk({'': j}, '') : j;
+            }
+
+// If the text is not JSON parseable, then a SyntaxError is thrown.
+
+            throw new SyntaxError('JSON.parse');
+        };
+    }
+}());
+/* Copyright (c) 2010-2011 Marcus Westin
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+var store = (function(){
+	var api = {},
+		win = window,
+		doc = win.document,
+		localStorageName = 'localStorage',
+		globalStorageName = 'globalStorage',
+		namespace = '__storejs__',
+		storage
+
+	api.disabled = false
+	api.set = function(key, value) {}
+	api.get = function(key) {}
+	api.remove = function(key) {}
+	api.clear = function() {}
+	api.transact = function(key, transactionFn) {
+		var val = api.get(key)
+		if (typeof val == 'undefined') { val = {} }
+		transactionFn(val)
+		api.set(key, val)
+	}
+
+	api.serialize = function(value) {
+		return JSON.stringify(value)
+	}
+	api.deserialize = function(value) {
+		if (typeof value != 'string') { return undefined }
+		return JSON.parse(value)
+	}
+
+	// Functions to encapsulate questionable FireFox 3.6.13 behavior 
+	// when about.config::dom.storage.enabled === false
+	// See https://github.com/marcuswestin/store.js/issues#issue/13
+	function isLocalStorageNameSupported() {
+		try { return (localStorageName in win && win[localStorageName]) }
+		catch(err) { return false }
+	}
+	
+	function isGlobalStorageNameSupported() {
+		try { return (globalStorageName in win && win[globalStorageName] && win[globalStorageName][win.location.hostname]) }
+		catch(err) { return false }
+	}	
+
+	if (isLocalStorageNameSupported()) {
+		storage = win[localStorageName]
+		api.set = function(key, val) { storage.setItem(key, api.serialize(val)) }
+		api.get = function(key) { return api.deserialize(storage.getItem(key)) }
+		api.remove = function(key) { storage.removeItem(key) }
+		api.clear = function() { storage.clear() }
+
+	} else if (isGlobalStorageNameSupported()) {
+		storage = win[globalStorageName][win.location.hostname]
+		api.set = function(key, val) { storage[key] = api.serialize(val) }
+		api.get = function(key) { return api.deserialize(storage[key] && storage[key].value) }
+		api.remove = function(key) { delete storage[key] }
+		api.clear = function() { for (var key in storage ) { delete storage[key] } }
+
+	} else if (doc.documentElement.addBehavior) {
+		var storage = doc.createElement('div')
+		function withIEStorage(storeFunction) {
+			return function() {
+				var args = Array.prototype.slice.call(arguments, 0)
+				args.unshift(storage)
+				// See http://msdn.microsoft.com/en-us/library/ms531081(v=VS.85).aspx
+				// and http://msdn.microsoft.com/en-us/library/ms531424(v=VS.85).aspx
+				doc.body.appendChild(storage)
+				storage.addBehavior('#default#userData')
+				storage.load(localStorageName)
+				var result = storeFunction.apply(api, args)
+				doc.body.removeChild(storage)
+				return result
+			}
+		}
+		api.set = withIEStorage(function(storage, key, val) {
+			storage.setAttribute(key, api.serialize(val))
+			storage.save(localStorageName)
+		})
+		api.get = withIEStorage(function(storage, key) {
+			return api.deserialize(storage.getAttribute(key))
+		})
+		api.remove = withIEStorage(function(storage, key) {
+			storage.removeAttribute(key)
+			storage.save(localStorageName)
+		})
+		api.clear = withIEStorage(function(storage) {
+			var attributes = storage.XMLDocument.documentElement.attributes
+			storage.load(localStorageName)
+			for (var i=0, attr; attr = attributes[i]; i++) {
+				storage.removeAttribute(attr.name)
+			}
+			storage.save(localStorageName)
+		})
+	}
+	
+	try {
+		api.set(namespace, namespace)
+		if (api.get(namespace) != namespace) { api.disabled = true }
+		api.remove(namespace)
+	} catch(e) {
+		api.disabled = true
+	}
+	
+	return api
+})();
+
+if (typeof module != 'undefined') { module.exports = store }
+
+define('ace/highlight', function (require, exports, module) {
+
+// Add a removal event
+(function () {
+  var ev = new $.Event('remove'),
+    orig = $.fn.remove;
+  $.fn.remove = function () {
+    $(this).trigger(ev);
+    return orig.apply(this, arguments);
+  };
+})();
+
+var EditSession = require("ace/edit_session").EditSession;
+var TextLayer = require("ace/layer/text").Text;
+var TextMode = require("ace/mode/text").Mode;
+var JavaScriptMode = require("ace/mode/javascript").Mode;
+
+function Highlight(element) {
+  if (/(a)|(b)/.exec("b")[1] !== undefined) return;
+  
+  this.element = $(element);
+  this.session = new EditSession("");
+  this.session.setUseWorker(false);
+  this.session.setValue(this.element.text());
+  this.session.setUseWrapMode(true);
+  
+  this.width = this.element.width();
+  
+  this.highlightDiv = $("<div>")
+    .addClass("acecode ace_editor " + this.twilightTheme.cssClass)
+    .css({ position: "static" });
+    
+  this.element.append(this.highlightDiv);
+  $("code", this.element).hide();
+  
+  this.textlayer = new TextLayer(this.highlightDiv.get(0));
+  this.textlayer.setSession(this.session);
+  $(this.textlayer.element).addClass("ace_scroller").css({
+    width: this.width
+  });
+  
+  this.setMode($("code", this.element).attr("class"));
+  this.session.adjustWrapLimit(Math.floor(this.width / this.textlayer.getCharacterWidth()));
+  
+  this.update();
+  
+  var self = this;
+  this.element.bind("remove", function () {
+    self.textlayer.destroy();
+  });
+  
+  this.element.data("highlighter", this);
+}
+
+(function () {
+  
+  this.textMode = new TextMode();
+  this.jsMode = new JavaScriptMode();
+  this.twilightTheme = require("ace/theme/twilight");
+  
+  this.setMode = function(mode_string) {
+    if (mode_string === this.mode_string) return;
+    
+    this.mode_string = mode_string;
+    switch (mode_string) {
+      case "javascript":
+        this.mode = this.jsMode;
+        break;
+      default:
+        this.mode = this.textMode;
+    }
+    this.session.setMode(this.mode);
+    this.update();
+  };
+  
+  this.setValue = function(newcontent) {
+    this.session.setValue(newcontent);
+    this.update();
+  };
+  
+  this.getValue = function () {
+    return this.session.getValue();
+  };
+  
+  this.rowCount = function() {
+    var total = 0;
+    for (var i = 0; i < this.session.getLength(); i++) {
+      total += this.session.getRowLength(i);
+    }
+    return total;
+  };
+  
+  this.update = function() {
+    var lineHeight = this.textlayer.getLineHeight();
+    var numRows = this.rowCount();
+    var height = (numRows-1) * lineHeight;
+    
+    this.textlayer.update({
+      firstRow: 0,
+      lastRow: this.session.getLength(),
+      lineHeight: lineHeight,
+      width: this.width
+    });
+    
+    this.highlightDiv.css({height: height});
+    $(this.textlayer.element).css({height: height});
+  };
+  
+}).call(Highlight.prototype);
+
+exports.Highlight = Highlight;
+});
+$(document).ready(function () {
+  // Determine page-name, and attempt to load it.
+  var pagename = window.location.pathname;
+  if (pagename === "/") {
+    pagename = "index";
+  }
+
+  $.get("/documents/" + pagename + ".md", function (data) {
+    $("#output > div").first().empty().append(markdown.makeHtml(data));
+  }).error(function(xhr) {
+    if (xhr.status == 404) {
+      $("#output > div").first().empty().append("<h1>New page</h1>");
+    } else {
+      $("#output > div").first().empty().append("<h1>Error</h1>" + xhr.responseText);
+    }
+  });
+  
+  // Ace highlighter
+  
+  var Highlight = require("ace/highlight").Highlight;
+  
+  // Notification script
+  
+  var Notify = require("notepages/notify").Notify;
+  var notify = new Notify($("#notify"));
+  
+  notify.onDisplay(function () {
+    $(this).css({right:$("#toolpanel").width()/2 - 200});
+  });
+  
+  // Render script
+  
+  var redrawNeeded = false, preproc, renderDelay = 0, timer;
+  
+  // If draw latency sufficiently small, use a small delay on rendering.
+  // Otherwise use a significantly larger one.
+  var setRenderDelay = function (rendertime) {
+    if (rendertime > 50) {
+      renderDelay = 400;
+    } else if (rendertime > 10) {
+      renderDelay = 50;
+    }
+  };
+
+  // Redraws the output using the content of the input.
+  var redraw = function () {
+    if (!redrawNeeded) {
+      return;
+    } else {
+      redrawNeeded = false;
+    }
+
+    var startTime = (new Date()).getTime();
+    preproc = $("<div></div>").html(markdown.makeHtml(editor.getSession().getValue()));
+    var patch = $("#output > div").quickdiff("diff", preproc, ["mathSpan", "mathSpanInline", "codePre"]);
+    
+    if (patch.type === "identical") {
+      setRenderDelay((new Date()).getTime() - startTime);
+      return;
+    }
+    
+    if (patch.type === "replace" && patch.source.length === 1 && patch.replace.length === 1 && $(patch.replace[0]).is("pre") && $(patch.source[0]).data("highlighter")) {
+      $(patch.source[0]).data("highlighter").setValue($(patch.replace[0]).text());
+      setRenderDelay((new Date()).getTime() - startTime);
+      return;
+    }
+    
+    if (patch.type === "replace" && patch.source.length === 1 && patch.replace.length === 1 && $(patch.replace[0]).is("img") && $(patch.source[0]).is("img") && $(patch.replace[0]).attr("src") === $(patch.source[0]).attr("src")) {
+      $(patch.source[0]).attr("title", $(patch.replace[0]).attr("title"));
+      $(patch.source[0]).attr("alt", $(patch.replace[0]).attr("alt"));
+      return;
+    }
+    
+    patch.patch();
+    
+    if (patch.type !== "identical" && patch.replace.length > 0) {
+      $.each(patch.replace, function (i, el) {
+        $("pre", el).each(function (i, el) {
+          new Highlight($(el));
+        });
+        
+        if ($(el).is("pre")) {
+          new Highlight($(el));
+        } else if (el.innerHTML) {
+          MathJax.Hub.Typeset(el, function () {
+            setRenderDelay((new Date()).getTime() - startTime);
+          });
+          size_images(el);
+        } else if (el.tagName && el.tagName.toLowerCase() === 'img') {
+          size_image(el);
+        } else {
+          setRenderDelay((new Date()).getTime() - startTime);
+        }
+      });
+    } else {
+      setRenderDelay((new Date()).getTime() - startTime);
+    }
+  };
+  
+  var MarkdownMode = require("ace/mode/markdown").Mode;
+  var TextMode = require("ace/mode/text").Mode;
+  var JavaScriptMode = require("ace/mode/javascript").Mode;
+  
+  window.editor = ace.edit("ace");
+  editor.getSession().setUseSoftTabs(true);
+  editor.getSession().setMode(new MarkdownMode());
+  editor.renderer.setShowGutter(false);
+  editor.renderer.setHScrollBarAlwaysVisible(false);
+  editor.getSession().setUseWrapMode(true);
+  editor.setShowPrintMargin(false);
+  editor.setBehavioursEnabled(true);
+  
+  var userTheme = store.get('userTheme');
+  if (userTheme) {
+    editor.setTheme(userTheme);
+    $("#themeselect").val(userTheme);
+  } else {
+    editor.setTheme("ace/theme/twilight");
+  }
+  $("#themeselect").change(function () {
+    editor.setTheme($(this).val());
+    store.set("userTheme", $(this).val());
+  });
+  
+  var userTab = store.get('userTab');
+  if (userTab) {
+    editor.getSession().setTabSize(parseInt(userTab, 10));
+    $("#tabselect").val(userTab);
+  } else {
+    editor.getSession().setTabSize(4);
+  }
+  $("#tabselect").change(function () {
+    editor.getSession().setTabSize(parseInt($(this).val(), 10));
+    store.set("userTab", $(this).val());
+  });
+  
+  $("#wrapselect").change(function () {
+    editor.getSession().setUseWrapMode($(this).val() == "soft");
+  });
+  
+  var pre_els = $("pre");
+  
+  pre_els.each(function (i, el) {
+    new Highlight($(el));
+  });
+  
+  var panels = {
+    tool: 80,
+    edit: 500
+  };
+  
+  var editpanel = $("#editpanel"),
+    toolpanel = $("#toolpanel"),
+    edittools = new MarkdownTools(editor, $("#acetools"), "/images/fugue/"),
+    page = $("#page"),
+    content = "",
+    newdocument = editing,
+    loaded = editing;
+  
+  function alignPage() {
+    if (page.slid) {
+      var leftMargin = (($(window).width()-panels.edit) - ($("#page").width() ))/2;
+      if (leftMargin < 10)
+        leftMargin = 10;
+      page.stop()
+        .css({marginLeft: $("#page").offset().left})
+        .animate({marginLeft:leftMargin});
+    } else {
+      page.css({margin:"30px auto"});
+    }
+  }
+  
+  function setWidths(i) {
+    $("#toolpanel, #editpanel").width(panels[i]);
+    alignPage();
+    editor.resize();
+  }
+  
+  $(window).resize(alignPage);
+  
+  editpanel.slide = function (show, preview) {
+    if (!preview) {
+      notify.conceal();
+    }
+  
+    if (editpanel.slid === show) return;
+    
+    if (show) {
+      editpanel
+        .css({width: panels.edit, marginRight: -panels.edit})
+        .animate({marginRight:0});
+      editor.resize();
+    } else {
+      editpanel.animate({marginRight:-panels.edit});
+    }
+    editpanel.slid = show;
+  };
+  
+  toolpanel.slide = function (show) {
+    if (toolpanel.slid === show) return;
+    
+    if (show) {
+      toolpanel
+        .css({right: 20, width: panels.tool})
+        .animate({width: panels.edit, right: 0}, function () {
+          toolpanel.toggleClass("edit", true);
+          toolpanel.toggleClass("readonly", false);
+        });
+    } else {
+      toolpanel
+        .css({right: 0, width: panels.edit})
+        .animate({width: panels.tool, right: 20});
+      toolpanel.toggleClass("edit", false);
+      toolpanel.toggleClass("readonly", true);
+    }
+    toolpanel.slid = show;
+  };
+    
+  page.slide = function (show) {
+    if (page.slid === show) return;
+    page.slid = show;
+    
+    if (show) {
+      alignPage();
+    } else {
+      page
+        .animate({marginLeft: ($(window).width()-$("#page").width())/2},
+          function () {
+            page.css({margin:"30px auto"});
+          });
+    }
+  };
+  
+  var suppress_redraw = false;
+  function refreshModified() {
+    if (suppress_redraw) return;
+    redrawNeeded = true;
+    modified = editor.getSession().getValue() !== content;
+    $("#save").css({opacity:modified ? 1 : 0.5});
+    
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(redraw, renderDelay);
+  }
+  
+  var previewing = false, modified = false, origcontent;
+    
+  // Toggle editing. If we haven't loaded the content, then load it via AJAX.
+  var toggleEditOn = function () {
+    editpanel.slide(true);
+    toolpanel.slide(true);
+    page.slide(true);
+    if (!loaded) {
+      suppress_redraw = true;
+      editor.getSession().setValue("Loading..");
+      $.get("/documents/" + pagename + ".md", function (data) {
+        content = data;
+        editor.getSession().setValue(data);
+        editor.renderer.scrollToY(0);
+        loaded = true;
+        suppress_redraw = false;
+      }).error(function(xhr) {
+        if (xhr.status == 404) {
+          editor.getSession().setValue("# New page");
+        } else {
+          notify.showMessage(xhr.responseText, "warning");
+          editor.getSession().setValue("");
+        }
+      });
+    }
+    editor.focus();
+    return false;
+  };
+  
+  $("#edit").click(toggleEditOn);
+  
+  if (editing) {
+    toolpanel.show();
+    toggleEditOn();
+  }
+  
+  var doCancel = function () {
+    editpanel.slide(false);
+    toolpanel.slide(false);
+    page.slide(false);
+    previewing = false;
+    modified = false;
+    var y = editor.renderer.getScrollTop();
+    editor.getSession().setValue(content);
+    editor.renderer.scrollToY(y);
+    refreshModified();
+  }
+  
+  $("#cancel").click(function () {
+    if (!modified) {
+      doCancel()
+    } else {
+      notify.showConfirm("Closing editor will lose unsaved changes.", doCancel);
+    }
+    return false;
+  });
+  $("#save").click(function () {
+    refreshModified();
+    if (!modified) return false;
+    
+    if (newdocument) {
+      notify.showConfirm("Saving.", doSave);
+    } else {
+      doSave();
+    }
+    
+    return false;
+  });
+    
+  var doSave = function () {
+    var cont = editor.getSession().getValue();
+    var payload = {text: cont};
+    $.post("/documents/" + pagename + ".json", payload, function (ret) {
+      if (ret && ret.status === "success") {
+        content = cont;
+        notify.showMessage("Saved.", "success");
+        newdocument = false;
+        refreshModified();
+      } else {
+        if (ret && ret.status === "failure") {
+          notify.showMessage(ret.message, "warning");
+        } else {
+          notify.showMessage("Unknown response from the server.", "warning");
+        }
+      }
+    }, "json");
+    
+    return false;
+  };
+  
+  editor.getSession().on('change', refreshModified);
+  
+  $("#dragger").drag("start", function (ev, dd) {
+    $.data(this, 'startw', editpanel.width());
+  }).drag(function(ev, dd) {
+    panels.edit = $.data(this, 'startw') - dd.deltaX;
+    setWidths("edit");
+  });
+  
+  $("#preview").click(function () {
+    page.slide(previewing);
+    editpanel.slide(previewing, true);
+    previewing = !previewing;
+    return false;
+  });
+  
+  return false;
+});
+
+var Range = require("ace/range").Range;
+
+function EditorTools (editor, panel, docroot) {
+  this.editor = editor;
+  this.panel = panel;
+  this.utils.editor = this.editor;
+  this.docroot = docroot;
+}
+
+EditorTools.prototype = {}
+
+EditorTools.prototype.utils = {
+  editor: undefined,
+  session: undefined,
+  selection: undefined,
+  replaceAndSelect: function(newtext) {
+    this.session.replace(this.selection, newtext);
+    this.editor.selection.setSelectionRange(
+      new Range(this.selection.start.row, this.selection.start.column,
+                this.selection.start.row, this.selection.start.column + newtext.length));
+  },
+  replaceAndSelectLine: function(newline) {
+    this.session.replace(
+      new Range(this.selection.start.row, 0,
+                this.selection.start.row, this.currentLine().length),
+      newline);
+    this.editor.selection.setSelectionRange(
+      new Range(this.selection.start.row, 0,
+                this.selection.start.row, newline.length));
+  },
+  currentLine: function () {
+    return this.session.getLine(this.selection.start.row);
+  },
+  offsetCursor: function (offset) {
+    this.editor.selection.setSelectionRange(
+      new Range(this.selection.start.row, this.selection.start.column+offset,
+                this.selection.start.row, this.selection.start.column+offset));
+  },
+  joinReplaceAndSelect: function (arr, selectedIndex) {
+    var sum_length = 0, joined = "", to_select;
+    for (var i = 0, len = arr.length; i < len; i++) {
+      if (i != selectedIndex) {
+        sum_length += arr[i].length;
+      } else {
+        to_select = new Range(this.selection.start.row, this.selection.start.column + sum_length,
+                              this.selection.start.row, this.selection.start.column + sum_length + arr[i].length);
+      }
+      joined += arr[i];
+    }
+    this.session.replace(this.selection, joined);
+    this.editor.selection.setSelectionRange(to_select);
+  },
+  replaceAndOffset: function (newtext, offset) {
+    this.session.replace(this.selection, newtext);
+    if (offset >= 0) {
+      this.editor.selection.setSelectionRange(
+        new Range(this.selection.start.row, this.selection.start.column + offset,
+                  this.selection.start.row, this.selection.start.column + offset));
+    } else {
+      this.editor.selection.setSelectionRange(
+        new Range(this.selection.start.row, this.selection.start.column + newtext.length + offset,
+                  this.selection.start.row, this.selection.start.column + newtext.length + offset));
+    }
+  },
+  forSelectedLines: function (callback) {
+    var lines = this.session.getLines(this.selection.start.row, this.selection.end.row);
+    var start_row = this.selection.start.row;
+    $.each(lines, function (i, line) {
+      callback(start_row + i, line);
+    });
+  },
+  selectedLineRange: function () {
+    return new Range(this.selection.start.row, 0, this.selection.end.row, this.session.getLine(this.selection.end.row).length);
+  },
+  selectRange: function (range) {
+    this.editor.selection.setSelectionRange(range);
+  },
+  repeatString: function (str, n) {
+    return new Array(n + 1).join(str);
+  }
+}
+
+EditorTools.prototype.callback = function (callback) {
+  var tools = this;
+  return function () {
+    tools.utils.session = tools.editor.getSession();
+    tools.utils.selection = tools.editor.getSelectionRange();
+    tools.utils.selected = tools.utils.session.doc.getTextRange(tools.utils.selection);
+    tools.utils.multiline = tools.utils.selection.isMultiLine();
+    callback(tools.utils);
+    tools.editor.focus();
+  }
+}
+
+EditorTools.prototype.addButton = function (path, callback, float) {
+  var element = $('<div class="button_container"><div class="sprites" id="' + path + '"></div></div>').click(this.callback(callback));
+  if (float) {
+    element.css({float:"right"});
+  }
+  this.panel.append(element);
+}
+
+// Markdown
+
+function MarkdownTools (editor, panel, docroot) {
+  var tools = new EditorTools(editor, panel, docroot);
+  
+  tools.addButton("edit-heading_png",
+    function (u) {
+      var line = u.currentLine(),
+        match = /^(#*)\s*(.*)$/.exec(line),
+        newline;
+      
+      if ((match[1] === undefined) || (match[1].length === 0)) {
+        newline = "# " + match[2];
+      } else if (match[1].length < 6) {
+        newline = match[1] + "# " + match[2];
+      } else {
+        newline = match[2];
+      }
+      
+      u.replaceAndSelectLine(newline);
+    });
+    
+  tools.addButton('edit-bold_png',
+    function (u) {
+      if (u.multiline) return;
+      
+      var newtext, match;
+
+      if (u.selected) {
+        match = /^[*]{2}(.+?)[*]{2}$/.exec(u.selected);
+        if (match) {
+          u.replaceAndSelect(match[1]);
+        } else {
+          u.replaceAndSelect("**" + u.selected + "**");
+        }
+      } else {
+        u.editor.insert("****");
+        u.offsetCursor(2);
+      }
+    });
+    
+  tools.addButton('edit-italic_png',
+    function (u) {
+      if (u.multiline) return;
+
+      var newtext, match;
+      if (u.selected) {
+        match = /^[*](.+?)[*]$/.exec(u.selected);
+        if (match && (!/^[*]{2}([^*].*?)[*]{2}$/.test(u.selected) ||
+                      !/^[*]{2}(.*?[^*])[*]{2}$/.test(u.selected))) {
+          u.replaceAndSelect(match[1]);
+        } else {
+          u.replaceAndSelect("*" + u.selected + "*");
+        }
+      } else {
+        u.editor.insert("**");
+        u.offsetCursor(1);
+      }
+    });
+    
+  tools.addButton('chain_png',
+    function (u) {
+      if (u.multiline) return;
+
+      if (u.selected) {
+        u.replaceAndOffset("[" + u.selected + "]()", -1);
+      } else {
+        u.editor.insert("[]()");
+        u.offsetCursor(1);
+      }
+    });
+    
+  tools.addButton('edit-list_png',
+    function (u) {
+      u.forSelectedLines(function (row, line) {
+        replaceRange = new Range(row, 0, row, line.length);
+        u.session.replace(replaceRange, "*   " + line);
+      });
+      u.selectRange(u.selectedLineRange());
+    });
+  
+  tools.addButton('edit-list-order_png',
+    function (u) {
+      marker = 1;
+      u.forSelectedLines(function (row, line) {
+        replaceRange = new Range(row, 0, row, line.length);
+        var markerText = marker + ".";
+        u.session.replace(replaceRange, markerText + u.repeatString(" ", 4-markerText.length) + line);
+        marker++;
+      });
+      u.selectRange(u.selectedLineRange());
+    });
+    /*
+  tools.addButton('edit-indent_png',
+    function (u) {
+      
+    });
+      
+  tools.addButton('edit-outdent_png',
+    function (u) {
+      
+    });
+    */
+  tools.addButton('edit-image_png',
+    function (u) {
+      if (u.multiline) return;
+
+      if (u.selected) {
+        u.joinReplaceAndSelect(["!<[alt](", u.selected, " \"", "title", "\")"], 3);
+      } else {
+        u.joinReplaceAndSelect(["!<[alt](", "url", " \"title\")"], 1);
+      }
+    });
+    
+  tools.addButton('edit-image-center_png',
+    function (u) {
+      if (u.multiline) return;
+
+      if (u.selected) {
+        u.joinReplaceAndSelect(["![alt](", u.selected, " \"", "title", "\")"], 3);
+      } else {
+        u.joinReplaceAndSelect(["![alt](", "url", " \"title\")"], 1);
+      }
+    });
+    
+  tools.addButton('edit-indent_png',
+    function (u) {
+      if (u.multiline) return;
+
+      if (u.selected) {
+        u.joinReplaceAndSelect(["!>[alt](", u.selected, " \"", "title", "\")"], 3);
+      } else {
+        u.joinReplaceAndSelect(["!>[alt](", "url", " \"title\")"], 1);
+      }
+    });
+    
+  tools.addButton('edit-rule_png',
+    function (u) {
+      u.replaceAndSelect("\n---\n");
+    });
+    
+  tools.addButton('edit-quotation_png',
+    function (u) {
+      if (u.multiline) return;
+      
+      var line = u.currentLine(),
+        match = /^(\>?)\s*(.*)$/.exec(line),
+        newline;
+
+      if (/^\s*$/.test(line)) {
+        newline = "> \n"
+        u.session.replace(u.selectedLineRange(), newline);
+        u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
+      } else {
+        if (match[1]) {
+          newline = match[2];
+        } else {
+          newline = "> " + match[2];
+        }
+
+        u.replaceAndSelectLine(newline);
+      }
+    });
+    
+  tools.addButton('edit-code_png',
+    function (u) {
+      var selected, match, newtext, longest, line, replaceRange;
+
+      if (u.multiline) {
+        var min_indent = 40000;
+        u.forSelectedLines(function (i, row) {
+          match = /^[ ]*/.exec(row);
+          if (match[0].length < min_indent) {
+            min_indent = match[0].length;
+          }
+        });
+        
+        u.forSelectedLines(function (i, row) {
+          if (min_indent > 3) {
+            replaceRange = new Range(i, 0, i, min_indent);
+            u.session.replace(replaceRange, "");
+          } else {
+            replaceRange = new Range(i, 0, i, 0);
+            u.session.replace(replaceRange, new Array(5 - min_indent).join(" "));
+          }
+        });
+
+        u.selectRange(u.selectedLineRange());
+
+      } else {
+        selected = u.selected;
+        line = u.currentLine();
+        if (selected === "") {
+          if (/^\s*$/.test(line)) {
+            newtext = "    ";
+            u.session.replace(u.selectedLineRange(), newtext);
+            u.selectRange(new Range(u.selection.start.row, 4, u.selection.start.row, 4));
+          } else {
+            u.editor.insert("``");
+            u.offsetCursor(1);
+          }
+        } else {
+          match = /^(`+)(.+?)\1$/.exec(selected);
+          if (match) {
+            newtext = match[2];
+          } else {
+            match = selected.match(/`+/g);
+            longest = "";
+            if (match) {
+              $.each(match, function (i, match) {
+                if (match.length > longest.length) {
+                  longest = match;
+                }
+              });
+            }
+            newtext = "`" + longest + selected + longest + "`";
+          }
+          u.replaceAndSelect(newtext);
+        }
+      }
+    });
+    
+  tools.addButton('edit-mathematics_png',
+    function (u) {
+      if (u.selection.start.row !== u.selection.end.row) {
+        return;
+      }
+      var line = u.currentLine(), match;
+
+      if (line === u.selected) {
+        match = /^[$]{2}(.*?)[$]{2}$/.exec(u.selected);
+        if (match) {
+          newline = match[1];
+        } else {
+          newline = "$$" + u.selected + "$$";
+        }
+        u.replaceAndSelectLine(newline);
+        u.offsetCursor(2);
+      } else if (/^\s*$/.test(line)) {
+        newline = "$$$$\n"
+        u.session.replace(u.selectedLineRange(), newline);
+        u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
+      } else if (u.selected) {
+        match = /^[%]{2}(.*?)[%]{2}$/.exec(u.selected);
+        if (match) {
+          newtext = match[1];
+        } else {
+          newtext = "%%" + u.selected + "%%";
+        }
+        u.replaceAndSelect(newtext);
+      } else {
+        u.editor.insert("%%%%");
+        u.offsetCursor(2);
+      }
+    });
+    
+  tools.addButton('edit-signiture_png',
+    function (u) {
+      $("#ace").css("font-size", parseInt($("#ace").css("font-size"),10) + 2);
+    }, true);
+    
+  tools.addButton('edit-size-up_png',
+    function (u) {
+      $("#ace").css("font-size", parseInt($("#ace").css("font-size"),10) - 2);
+    }, true);
+    
+  return tools;
+}
+define('notepages/notify', function(require, exports, module) {
+
+function Notify(element) {
+  this.element = element;
+  this.timer = null;
+  this.cancel = null;
+  this.ondisplay = null;
+}
+
+(function () {
+  
+  this.setFade = function (delay) {
+    var self = this;
+    this.timer = setTimeout(function () {
+      self.element.hide("slide", {direction:"up"});
+      self.timer = null;
+    }, delay);
+  }
+  
+  this.onDisplay = function (callback) {
+    this.ondisplay = callback;
+  }
+  
+  this.display = function (cssclass, contents, on_display) {
+    var self = this;
+    
+    this.conceal();
+    this.element.empty().removeClass().addClass(cssclass);
+    
+    this.ondisplay.call(this.element);
+      
+    $.each(contents, function (i, el) {
+      self.element.append(el);
+    });
+    
+    if (this.element.is(":visible")) {
+      this.element.stop(true, true).show();
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      if (on_display) {
+        on_display();
+      }
+    } else {
+      this.element.show("slide", {direction: "up"}, function () {
+        if (on_display) {
+          on_display();
+        }
+      });
+    }
+  }
+  
+  this.conceal = function () {
+    if (this.cancel) {
+      this.cancel();
+      this.cancel = null;
+    }
+    this.element.hide();
+    return this;
+  }
+  
+  this.showMessage = function (text, icon) {
+    var self = this;
+    this.display(icon, $("<span class=\"message\"></span>").text(text), function () {
+      self.setFade(1500);
+    });
+  }
+  
+  this.showConfirm = function (text, confirm_cb, cancel_cb) {
+    var self = this;
+    var confirm = $('<input type="submit" value="continue"></input>')
+        .click(function (e) {
+          e.preventDefault();
+          
+          self.setFade(0);
+          if (confirm_cb) {
+            confirm_cb();
+          }
+        }),
+      cancel = $('<input type="button" value="cancel"></input>')
+        .click(function (e) {
+          e.preventDefault();
+          
+          self.setFade(0);
+          if (cancel_cb) {
+            cancel_cb();
+          }
+        }),
+      form = $('<form>').append(cancel).append(confirm),
+      buttons = $('<span class="buttons"></span>').append(form),
+      content = $("<span class=\"confirm\"></span>")
+        .text(text);
+        
+    this.display("help", [content, buttons], function () {
+      confirm.focus();
+    });
+    confirm.focus();
+    
+    this.cancel = function () {
+      if (cancel_cb) {
+        cancel_cb();
+      }
+    }
+  }  
+}).call(Notify.prototype);
+
+exports.Notify = Notify;
+});
+// In a given context, make sure all images (skipping MathJax related images)
+// Are no wider than the page width.
+function size_image(obj) {
+  setTimeout(function () {
+    obj = $(obj);
+    if (obj.width() > 640) {
+      var scale = 640 / obj.width();
+      obj.width(obj.width() * scale);
+    }
+  }, 0);
+}
+
+function size_images(context) {
+  $("img", context).not(".MathJax_strut").each(function (i, obj) {
+    size_image(obj);
+  });
+}
+
+// Check all output images once the page has loaded.
+$(window).load(function () {
+  size_images($("#output")[0]);
+});
+
+// Setup a filter for comparing mathInline spans.
+$.fn.quickdiff("filter", "mathSpanInline",
+  function (node) { return (node.nodeName === "SPAN"
+                            && $(node).hasClass("mathInline")); },
+  function (a, b) {
+    var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+    return ("%%" + aHTML + "%%") !== bHTML;
+  });
+
+// Setup a filter for comparing math spans.
+$.fn.quickdiff("filter", "mathSpan",
+  function (node) { return (node.nodeName === "SPAN"
+                            && $(node).hasClass("math")); },
+  function (a, b) {
+    var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+    return ("$$" + aHTML + "$$") !== bHTML;
+  });
+  
+// Filter for highlighted code segments;
+$.fn.quickdiff("filter", "codePre",
+  function (node) { return node.nodeName === "PRE"; },
+  function (a, b) {
+    if ($(a).data("highlighter")) {
+      var aValue = $.trim($(a).data("highlighter").getValue());
+      
+      // Hack to update mode.
+      $(a).data("highlighter").setMode($("code", b).attr("class"));
+    } else {
+      var aValue = $.trim($(a).text());
+    }
+    bValue = $.trim($(b).text());
+    return aValue !== bValue;
+  });
+  
+$.fn.quickdiff("attributes", {
+  "td" : ["align"],
+  "th" : ["align"],
+  "img" : ["src", "alt", "title"],
+  "a" : ["href", "title"],
+  "code" : ["class"]
+});
+
+var markdown = new Showdown.converter();
+
+$.extend(markdown.config, {
+  stripHTML: true,
+  tables: true,
+  math: true,
+  figures: true,
+  refprint: true,
+  github_flavouring: true
+});
