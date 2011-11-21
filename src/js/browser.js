@@ -1,20 +1,4 @@
 $(document).ready(function () {
-  // Determine page-name, and attempt to load it.
-  var pagename = window.location.pathname;
-  if (pagename === "/") {
-    pagename = "index";
-  }
-
-  $.get("/documents/" + pagename + ".md", function (data) {
-    $("#output > div").first().empty().append(markdown.makeHtml(data));
-  }).error(function(xhr) {
-    if (xhr.status == 404) {
-      $("#output > div").first().empty().append("<h1>New page</h1>");
-    } else {
-      $("#output > div").first().empty().append("<h1>Error</h1>" + xhr.responseText);
-    }
-  });
-  
   // Ace highlighter
   
   var Highlight = require("ace/highlight").Highlight;
@@ -154,8 +138,7 @@ $(document).ready(function () {
     edittools = new MarkdownTools(editor, $("#acetools"), "/images/fugue/"),
     page = $("#page"),
     content = "",
-    newdocument = editing,
-    loaded = editing;
+    newdocument = editing;
   
   function alignPage() {
     if (page.slid) {
@@ -246,29 +229,11 @@ $(document).ready(function () {
   
   var previewing = false, modified = false, origcontent;
     
-  // Toggle editing. If we haven't loaded the content, then load it via AJAX.
+  // Toggle editing
   var toggleEditOn = function () {
     editpanel.slide(true);
     toolpanel.slide(true);
     page.slide(true);
-    if (!loaded) {
-      suppress_redraw = true;
-      editor.getSession().setValue("Loading..");
-      $.get("/documents/" + pagename + ".md", function (data) {
-        content = data;
-        editor.getSession().setValue(data);
-        editor.renderer.scrollToY(0);
-        loaded = true;
-        suppress_redraw = false;
-      }).error(function(xhr) {
-        if (xhr.status == 404) {
-          editor.getSession().setValue("# New page");
-        } else {
-          notify.showMessage(xhr.responseText, "warning");
-          editor.getSession().setValue("");
-        }
-      });
-    }
     editor.focus();
     return false;
   };
@@ -348,6 +313,30 @@ $(document).ready(function () {
     editpanel.slide(previewing, true);
     previewing = !previewing;
     return false;
+  });
+
+  // Set editor content, and force a re-render
+  function setContent(c) {
+    content = c;
+    editor.getSession().setValue(content);
+    editor.renderer.scrollToY(0);
+    redrawNeeded = true;
+  }
+
+  // Determine page-name, and attempt to load it.
+  var pagename = window.location.pathname;
+  if (pagename === "/") {
+    pagename = "index";
+  }
+
+  $.get("/documents/" + pagename + ".md", function (data) {
+    setContent(data);
+  }).error(function(xhr) {
+    if (xhr.status == 404) {
+      setContent("# New page");
+    } else {
+      setContent("# Error\n");
+    }
   });
   
   return false;
