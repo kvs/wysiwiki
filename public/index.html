@@ -84,13 +84,11 @@
         }
     });
 
-    if (!editing) {
-      MathJax.Hub.Register.StartupHook("End Typeset",  
-        function (message) {  
-          $("#toolpanel").show("slide", {direction: "up"});  
-        }  
-      );
-    }
+    MathJax.Hub.Register.StartupHook("End Typeset",
+      function (message) {
+        $("#toolpanel").show("slide", {direction: "up"});
+      }
+    );
   </script>
   <script type="text/javascript" src="/javascripts/LAB.min.js"></script>
   <script type="text/javascript">
