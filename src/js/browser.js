@@ -218,6 +218,8 @@ $(document).ready(function () {
   };
   
   var suppress_redraw = false;
+  var previewing = false, modified = false, origcontent;
+
   function refreshModified() {
     if (suppress_redraw) return;
     redrawNeeded = true;
@@ -230,8 +232,6 @@ $(document).ready(function () {
     timer = setTimeout(redraw, renderDelay);
   }
   
-  var previewing = false, modified = false, origcontent;
-    
   // Toggle editing
   var toggleEditOn = function () {
     editpanel.slide(true);
@@ -254,24 +254,7 @@ $(document).ready(function () {
     editor.renderer.scrollToY(y);
     refreshModified();
   };
-  
-  $("#cancel").click(function () {
-    if (!modified) {
-      doCancel();
-    } else {
-      notify.showConfirm("Closing editor will lose unsaved changes.", doCancel);
-    }
-    return false;
-  });
-  $("#save").click(function () {
-    refreshModified();
-    if (!modified) return false;
-    
-    notify.showConfirm("Saving.", doSave);
-    
-    return false;
-  });
-    
+
   var doSave = function () {
     var cont = editor.getSession().getValue();
     var payload = {text: cont};
@@ -291,9 +274,24 @@ $(document).ready(function () {
     
     return false;
   };
-  
-  editor.getSession().on('change', refreshModified);
-  
+
+  $("#cancel").click(function () {
+    if (!modified) {
+      doCancel();
+    } else {
+      notify.showConfirm("Closing editor will lose unsaved changes.", doCancel);
+    }
+    return false;
+  });
+  $("#save").click(function () {
+    refreshModified();
+    if (!modified) return false;
+
+    notify.showConfirm("Saving.", doSave);
+
+    return false;
+  });
+
   $("#dragger").drag("start", function (ev, dd) {
     $.data(this, 'startw', editpanel.width());
   }).drag(function(ev, dd) {
@@ -315,6 +313,8 @@ $(document).ready(function () {
     editor.renderer.scrollToY(0);
     redrawNeeded = true;
   }
+
+  editor.getSession().on('change', refreshModified);
 
   // Determine page-name, and attempt to load it.
   var pagename = window.location.pathname;
