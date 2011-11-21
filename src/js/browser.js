@@ -4,6 +4,12 @@
 $(document).ready(function () {
   "use strict";
 
+  // Determine page-name
+  var pagename = window.location.pathname;
+  if (pagename === "/") {
+    pagename = "index";
+  }
+
   // Ace highlighter
   var Highlight = require("ace/highlight").Highlight;
   
@@ -322,12 +328,7 @@ $(document).ready(function () {
 
   editor.getSession().on('change', refreshModified);
 
-  // Determine page-name, and attempt to load it.
-  var pagename = window.location.pathname;
-  if (pagename === "/") {
-    pagename = "index";
-  }
-
+  // Attempt to load Markdown-page
   $.get("/documents/" + pagename + ".md", function (data) {
     setContent(data);
   }).error(function(xhr) {
