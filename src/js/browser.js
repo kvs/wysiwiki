@@ -309,7 +309,6 @@ $(document).ready(function () {
     content = c;
     editor.getSession().setValue(content);
     editor.renderer.scrollToY(0);
-    redrawNeeded = true;
   }
 
   editor.getSession().on('change', refreshModified);
