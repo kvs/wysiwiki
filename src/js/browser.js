@@ -1,23 +1,22 @@
-/*jshint jquery:true browser:true */
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
 /*global editor require markdown MathJax ace store MarkdownTools size_image size_images */
 
 $(document).ready(function () {
   "use strict";
-  // Ace highlighter
 
+  // Ace highlighter
   var Highlight = require("ace/highlight").Highlight;
   
   // Notification script
-  
   var Notify = require("notepages/notify").Notify;
   var notify = new Notify($("#notify"));
   
   notify.onDisplay(function () {
     $(this).css({right:$("#toolpanel").width()/2 - 200});
   });
+
   
   // Render script
-  
   var redrawNeeded = false, preproc, renderDelay = 0, timer;
   
   // If draw latency sufficiently small, use a small delay on rendering.
@@ -146,8 +145,10 @@ $(document).ready(function () {
   function alignPage() {
     if (page.slid) {
       var leftMargin = (($(window).width()-panels.edit) - ($("#page").width() ))/2;
-      if (leftMargin < 10)
+      if (leftMargin < 10) {
         leftMargin = 10;
+      }
+
       page.stop()
         .css({marginLeft: $("#page").offset().left})
         .animate({marginLeft:leftMargin});
@@ -169,7 +170,9 @@ $(document).ready(function () {
       notify.conceal();
     }
   
-    if (editpanel.slid === show) return;
+    if (editpanel.slid === show) {
+      return;
+    }
     
     if (show) {
       editpanel
@@ -183,7 +186,9 @@ $(document).ready(function () {
   };
   
   toolpanel.slide = function (show) {
-    if (toolpanel.slid === show) return;
+    if (toolpanel.slid === show) {
+      return;
+    }
     
     if (show) {
       toolpanel
@@ -203,7 +208,9 @@ $(document).ready(function () {
   };
     
   page.slide = function (show) {
-    if (page.slid === show) return;
+    if (page.slid === show) {
+      return;
+    }
     page.slid = show;
     
     if (show) {
@@ -283,7 +290,9 @@ $(document).ready(function () {
   });
   $("#save").click(function () {
     refreshModified();
-    if (!modified) return false;
+    if (!modified) {
+      return false;
+    }
 
     notify.showConfirm("Saving.", doSave);
 
