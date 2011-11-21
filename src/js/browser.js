@@ -253,11 +253,11 @@ $(document).ready(function () {
     editor.getSession().setValue(content);
     editor.renderer.scrollToY(y);
     refreshModified();
-  }
+  };
   
   $("#cancel").click(function () {
     if (!modified) {
-      doCancel()
+      doCancel();
     } else {
       notify.showConfirm("Closing editor will lose unsaved changes.", doCancel);
     }
