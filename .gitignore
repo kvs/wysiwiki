@@ -1,6 +1,4 @@
 .DS_Store
 Gemfile.lock
-node_modules
 tmp
-config.ru
 public/documents
