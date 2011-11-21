@@ -72,7 +72,8 @@ copy({
 // Build project source
 copy({
     source: {
-        root: 'src/js'
+        root: 'src/js',
+        include: /\.js$/
     },
     filter: [ copy.filter.separate ],
     dest: browser_js
