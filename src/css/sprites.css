@@ -1,5 +1,5 @@
 .sprites { 
-  background-image     : url(../images/sprite.png); 
+  background-image     : url(../images/sprite.png?embed=true); 
   background-color     : transparent; 
   background-repeat    : no-repeat;
   display: inline-block;

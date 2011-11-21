@@ -269,21 +269,20 @@ a img {
   height: 70px;
   width: 400px;
   z-index: 2000;
-  background: #444 url(../images/warning1_48.png) no-repeat 11px;
+  background: #444 url(../images/warning1_48.png?embed=true) no-repeat 11px;
   display: none;
   font-family: sans-serif;
 }
 #notify.warning {
-  background: #444 url(../images/warning1_48.png) no-repeat 11px;
 }
 #notify.success {
-  background: #444 url(../images/checkmark_48.png) no-repeat 11px;
+  background: #444 url(../images/checkmark_48.png?embed=true) no-repeat 11px;
 }
 #notify.help {
-  background: #444 url(../images/help_48.png) no-repeat 11px;
+  background: #444 url(../images/help_48.png?embed=true) no-repeat 11px;
 }
 #notify.info {
-  background: #444 url(../images/info_48.png) no-repeat 11px;
+  background: #444 url(../images/info_48.png?embed=true) no-repeat 11px;
 }
 #notify span {
   position: absolute;
