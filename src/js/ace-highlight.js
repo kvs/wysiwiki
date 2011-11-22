@@ -1,6 +1,8 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
 /*global define */
-
+/*
+ * Wrap an element with a text-only Ace editor, and set syntax highlighting mode.
+ */
 define('ace/highlight', function (require, exports, module) {
 "use strict";
 
