@@ -91,8 +91,6 @@ $(document).ready(function () {
   };
   
   var MarkdownMode = require("ace/mode/markdown").Mode;
-  var TextMode = require("ace/mode/text").Mode;
-  var JavaScriptMode = require("ace/mode/javascript").Mode;
   
   window.editor = ace.edit("ace");
   editor.getSession().setUseSoftTabs(true);
