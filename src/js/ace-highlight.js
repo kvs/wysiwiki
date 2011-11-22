@@ -18,8 +18,6 @@ define('ace/highlight', function (require, exports, module) {
 
 var EditSession = require("ace/edit_session").EditSession;
 var TextLayer = require("ace/layer/text").Text;
-var TextMode = require("ace/mode/text").Mode;
-var JavaScriptMode = require("ace/mode/javascript").Mode;
 
 function Highlight(element) {
   if (/(a)|(b)/.exec("b")[1] !== undefined) {
@@ -61,9 +59,6 @@ function Highlight(element) {
 }
 
 (function () {
-  
-  this.textMode = new TextMode();
-  this.jsMode = new JavaScriptMode();
   this.twilightTheme = require("ace/theme/twilight");
   
   this.setMode = function(mode_string) {
@@ -72,11 +67,13 @@ function Highlight(element) {
     }
     
     this.mode_string = mode_string;
-    if (mode_string === "javascript") {
-      this.mode = this.jsMode;
-    } else {
-      this.mode = this.textMode;
+
+    var Mode = require('ace/mode/' + mode_string);
+    if (Mode === null) {
+      Mode = require("ace/mode/text");
     }
+
+    this.mode = new Mode.Mode();
     this.session.setMode(this.mode);
     this.update();
   };
