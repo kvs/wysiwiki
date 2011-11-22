@@ -1,6 +1,8 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true trailing:true */
 /*global require */
-
+/*
+ * Markdown editor toolbar functions
+ */
 var Range = require("ace/range").Range;
 
 function EditorTools (editor, panel, docroot) {
