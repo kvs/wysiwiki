@@ -90,11 +90,11 @@ $(document).ready(function () {
     }
   };
   
-  var MarkdownMode = require("ace/mode/markdown").Mode;
-  
+  var MarkdownPlusMode = require("ace/mode/markdownplus").Mode;
+
   window.editor = ace.edit("ace");
   editor.getSession().setUseSoftTabs(true);
-  editor.getSession().setMode(new MarkdownMode());
+  editor.getSession().setMode(new MarkdownPlusMode());
   editor.renderer.setShowGutter(false);
   editor.renderer.setHScrollBarAlwaysVisible(false);
   editor.getSession().setUseWrapMode(true);
