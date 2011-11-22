@@ -16521,8 +16521,6 @@ define('ace/highlight', function (require, exports, module) {
 
 var EditSession = require("ace/edit_session").EditSession;
 var TextLayer = require("ace/layer/text").Text;
-var TextMode = require("ace/mode/text").Mode;
-var JavaScriptMode = require("ace/mode/javascript").Mode;
 
 function Highlight(element) {
   if (/(a)|(b)/.exec("b")[1] !== undefined) {
@@ -16564,9 +16562,6 @@ function Highlight(element) {
 }
 
 (function () {
-  
-  this.textMode = new TextMode();
-  this.jsMode = new JavaScriptMode();
   this.twilightTheme = require("ace/theme/twilight");
   
   this.setMode = function(mode_string) {
@@ -16575,11 +16570,13 @@ function Highlight(element) {
     }
     
     this.mode_string = mode_string;
-    if (mode_string === "javascript") {
-      this.mode = this.jsMode;
-    } else {
-      this.mode = this.textMode;
+
+    var Mode = require('ace/mode/' + mode_string);
+    if (Mode === null) {
+      Mode = require("ace/mode/text");
     }
+
+    this.mode = new Mode.Mode();
     this.session.setMode(this.mode);
     this.update();
   };
@@ -16714,11 +16711,11 @@ $(document).ready(function () {
     }
   };
   
-  var MarkdownMode = require("ace/mode/markdown").Mode;
-  
+  var MarkdownPlusMode = require("ace/mode/markdownplus").Mode;
+
   window.editor = ace.edit("ace");
   editor.getSession().setUseSoftTabs(true);
-  editor.getSession().setMode(new MarkdownMode());
+  editor.getSession().setMode(new MarkdownPlusMode());
   editor.renderer.setShowGutter(false);
   editor.renderer.setHScrollBarAlwaysVisible(false);
   editor.getSession().setUseWrapMode(true);
@@ -16967,7 +16964,9 @@ $(document).ready(function () {
 ;
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true trailing:true */
 /*global require */
-
+/*
+ * Markdown editor toolbar functions
+ */
 var Range = require("ace/range").Range;
 
 function EditorTools (editor, panel, docroot) {
@@ -17353,6 +17352,211 @@ function MarkdownTools (editor, panel, docroot) {
     
   return tools;
 };
+;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
+/*global define */
+
+define('ace/mode/markdownplus', function (require, exports, module) {
+"use strict";
+
+var oop = require("ace/lib/oop");
+var TextMode = require("ace/mode/text").Mode;
+var Tokenizer = require("ace/tokenizer").Tokenizer;
+var MarkdownPlusHighlightRules = require("ace/mode/markdownplus_highlight_rules").MarkdownPlusHighlightRules;
+var Range = require("ace/range").Range;
+
+var Mode = function() {
+    var modes = {};
+
+    // Attempt to load all modes defined under 'ace/mode/'
+    for (var mod in define.modules) {
+        if (mod.match(/^ace\/mode\/(.+)/)) {
+            var mode = require(mod).Mode;
+            if (mode !== undefined && mod !== "ace/mode/markdownplus") {
+                modes[mod + "-"] = mode;
+            }
+        }
+    }
+
+    var highlighter = new MarkdownPlusHighlightRules();
+    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.$embeds = highlighter.getEmbeds();
+    this.createModeDelegates(modes);
+};
+oop.inherits(Mode, TextMode);
+
+(function() {
+    this.getNextLineIndent = function(state, line, tab) {
+        if (state == "listblock") {
+            var match = /^((?:.+)?)([\-+*][ ]+)/.exec(line);
+            if (match) {
+                return new Array(match[1].length + 1).join(" ") + match[2];
+            } else {
+                return "";
+            }
+        } else {
+            return this.$getIndent(line);
+        }
+    };
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
+});
+;
+;
+/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
+/*global define */
+
+define('ace/mode/markdownplus_highlight_rules', function (require, exports, module) {
+"use strict";
+
+var oop = require("ace/lib/oop");
+var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+
+var MarkdownPlusHighlightRules = function() {
+    // Create embedding-rules for github-style blocks.
+    var rules = [];
+    var embeds = {};
+
+    for (var mod in define.modules) {
+        var match = mod.match(/^ace\/mode\/(.+)_highlight_rules/);
+        if (match !== null && match[1] !== "markdownplus") {
+            var tag = match[1];
+            var rule = require(mod);
+            var exports = [], x;
+            for (x in rule) {
+                exports.push(x);
+            }
+
+            if (exports.length === 1) {
+                rules.push({
+                    token: "support.function",
+                    regex: "^```" + tag + "\\s*$",
+                    next:  tag + "-start"
+                });
+                embeds[tag] = rule[exports[0]];
+            }
+        }
+    }
+
+    // regexp must not have capturing parentheses
+    // regexps are ordered -> the first match is used
+    this.$rules = {
+        "start" : [ {
+            token : "empty_line",
+            regex : '^$'
+        }, { // code span `
+            token : "support.function",
+            regex : "(`+)([^\\r]*?[^`])(\\1)"
+        }, { // code block
+            token : "support.function",
+            regex : "^[ ]{4}.+"
+        }, { // h1
+            token: "markup.heading.1",
+            regex: "^=+(?=\\s*$)"
+        }, { // h2
+            token: "markup.heading.1",
+            regex: "^\\-+(?=\\s*$)"
+        }, { // header
+            token : function(value) {
+                return "markup.heading." + value.length;
+            },
+            regex : "^#{1,6}"
+        }].concat(rules).concat([
+        { // Catch-all for github-style blocks
+            token : "support.function",
+            regex : "^```[a-zA-Z]+\\s*$",
+            next  : "githubblock"
+        }, { // block quote
+            token : "string",
+            regex : "^>[ ].+$",
+            next  : "blockquote"
+        }, { // reference
+            token : ["text", "constant", "text", "url", "string", "text"],
+            regex : "^([ ]{0,3}\\[)([^\\]]+)(\\]:\\s*)([^ ]+)(\\s*(?:[\"][^\"]+[\"])?\\s*)$"
+        }, { // link by reference
+            token : ["text", "string", "text", "constant", "text"],
+            regex : "(\\[)((?:[[^\\]]*\\]|[^\\[\\]])*)(\\][ ]?(?:\\n[ ]*)?\\[)(.*?)(\\])"
+        }, { // link by url
+            token : ["text", "string", "text", "markup.underline", "string", "text"],
+            regex : "(\\[)"+
+                    "(\\[[^\\]]*\\]|[^\\[\\]]*)"+
+                    "(\\]\\([ \\t]*)"+
+                    "(<?(?:(?:[^\\(]*?\\([^\\)]*?\\)\\S*?)|(?:.*?))>?)"+
+                    "((?:[ \t]*\"(?:.*?)\"[ \\t]*)?)"+
+                    "(\\))"
+        }, { // HR *
+            token : "constant",
+            regex : "^[ ]{0,2}(?:[ ]?\\*[ ]?){3,}\\s*$"
+        }, { // HR -
+            token : "constant",
+            regex : "^[ ]{0,2}(?:[ ]?\\-[ ]?){3,}\\s*$"
+        }, { // HR _
+            token : "constant",
+            regex : "^[ ]{0,2}(?:[ ]?\\_[ ]?){3,}\\s*$"
+        }, { // list
+            token : "markup.list",
+            regex : "^\\s{0,3}(?:[*+-]|\\d+\\.)\\s+",
+            next  : "listblock"
+        }, { // strong ** __
+            token : "string",
+            regex : "([*]{2}|[_]{2}(?=\\S))([^\\r]*?\\S[*_]*)(\\1)"
+        }, { // emphasis * _
+            token : "string",
+            regex : "([*]|[_](?=\\S))([^\\r]*?\\S[*_]*)(\\1)"
+        }, { //
+            token : ["text", "url", "text"],
+            regex : "(<)("+
+                      "(?:https?|ftp|dict):[^'\">\\s]+"+
+                      "|"+
+                      "(?:mailto:)?[-.\\w]+\\@[-a-z0-9]+(?:\\.[-a-z0-9]+)*\\.[a-z]+"+
+                    ")(>)"
+        }, {
+            token : "text",
+            regex : "[^\\*_%$`\\[#<>]+"
+        } ]),
+        
+        "listblock" : [ { // Lists only escape on completely blank lines.
+            token : "empty_line",
+            regex : "^$",
+            next  : "start"
+        }, {
+            token : "markup.list",
+            regex : ".+"
+        } ],
+        
+        "blockquote" : [ { // BLockquotes only escape on blank lines.
+            token : "empty_line",
+            regex : "^\\s*$",
+            next  : "start"
+        }, {
+            token : "string",
+            regex : ".+"
+        } ],
+        
+        "githubblock" : [ {
+            token : "support.function",
+            regex : "^```",
+            next  : "start"
+        }, {
+            token : "support.function",
+            regex : ".+"
+        } ]
+    };
+
+    for (var embed in embeds) {
+        var rule_ = embeds[embed];
+        this.embedRules(rule_, embed + '-', [{
+            token : "support.function",
+            regex : "^```",
+            next  : "start"
+        }]);
+    }
+};
+oop.inherits(MarkdownPlusHighlightRules, TextHighlightRules);
+
+exports.MarkdownPlusHighlightRules = MarkdownPlusHighlightRules;
+});;
 ;
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true strict:true undef:true trailing:true */
 /*global define */
