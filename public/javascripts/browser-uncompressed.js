@@ -16503,7 +16503,9 @@ if (typeof module != 'undefined') { module.exports = store }
 ;
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
 /*global define */
-
+/*
+ * Wrap an element with a text-only Ace editor, and set syntax highlighting mode.
+ */
 define('ace/highlight', function (require, exports, module) {
 "use strict";
 
@@ -16713,8 +16715,6 @@ $(document).ready(function () {
   };
   
   var MarkdownMode = require("ace/mode/markdown").Mode;
-  var TextMode = require("ace/mode/text").Mode;
-  var JavaScriptMode = require("ace/mode/javascript").Mode;
   
   window.editor = ace.edit("ace");
   editor.getSession().setUseSoftTabs(true);
@@ -17063,10 +17063,10 @@ EditorTools.prototype.callback = function (callback) {
   };
 };
 
-EditorTools.prototype.addButton = function (path, callback, float) {
+EditorTools.prototype.addButton = function (path, callback, float_) {
   var element = $('<div class="button_container"><div class="sprites" id="' + path + '"></div></div>').click(this.callback(callback));
-  if (float) {
-    element.css({float:"right"});
+  if (float_) {
+    element.css({float_:"right"});
   }
   this.panel.append(element);
 };
