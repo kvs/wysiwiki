@@ -96,10 +96,10 @@ EditorTools.prototype.callback = function (callback) {
   };
 };
 
-EditorTools.prototype.addButton = function (path, callback, float) {
+EditorTools.prototype.addButton = function (path, callback, float_) {
   var element = $('<div class="button_container"><div class="sprites" id="' + path + '"></div></div>').click(this.callback(callback));
-  if (float) {
-    element.css({float:"right"});
+  if (float_) {
+    element.css({float_:"right"});
   }
   this.panel.append(element);
 };
