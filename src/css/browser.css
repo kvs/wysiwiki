@@ -1,10 +1,14 @@
+html * {
+  color-profile: sRGB;
+}
+
 body {
   margin: 0;
   padding: 0;
   background: #ccc;
   font-family: 'Crimson Text', "Georgia", "Times", "Times New Roman", serif, sans-serif;
   font-size: 1em;
-  color: #333;
+  color: #839496;
 }
 
 .drop-shadow {
@@ -23,6 +27,14 @@ a img {
   border: none;
 }
 
+a, a:active, a:visited {
+  color: #268bd2;
+}
+
+a:hover {
+  color: #2aa198;
+}
+
 #output {
   padding: 40px;
 }
@@ -33,10 +45,17 @@ a img {
   margin-bottom: 0;
 }
 
+#page {
+  width: 720px;
+  background: #fdf6e3;
+  margin: 30px auto;
+}
+
 #page h1, #page h2, #page h3, #page h4, #page h5, #page h6 {
   font-weight: bold;
   margin-top: 2em;
   margin-bottom: 0.5em;
+  color: #b58900;
 }
 #page h1 {
   font-size: 2.5em;
@@ -169,12 +188,6 @@ a img {
   right: 10px;
   resize: none;
   background: #fff;
-}
-
-#page {
-  width: 720px;
-  background: #fff;
-  margin: 30px auto;
 }
 
 #toolpanel {
