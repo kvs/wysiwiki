@@ -59,7 +59,7 @@ function Highlight(element) {
 }
 
 (function () {
-  this.twilightTheme = require("ace/theme/twilight");
+  this.twilightTheme = require("ace/theme/solarized_dark");
   
   this.setMode = function(mode_string) {
     if (mode_string === this.mode_string) {
