@@ -9,7 +9,7 @@ namespace :juicer do
   end
 
   desc 'Merges stylesheets'
-  task :css => :"juicer:js" do
+  task :css do
     src = ['src/css/browser.css',
            'src/css/universal.css',
            'src/css/ace-twilight.css',
