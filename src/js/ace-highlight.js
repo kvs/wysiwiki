@@ -33,7 +33,7 @@ function Highlight(element) {
   this.width = this.element.width();
   
   this.highlightDiv = $("<div>")
-    .addClass("acecode ace_editor " + this.twilightTheme.cssClass)
+    .addClass("acecode ace_editor " + this.highlightTheme.cssClass)
     .css({ position: "static" });
     
   this.element.append(this.highlightDiv);
@@ -59,7 +59,7 @@ function Highlight(element) {
 }
 
 (function () {
-  this.twilightTheme = require("ace/theme/solarized_dark");
+  this.highlightTheme = require("ace/theme/solarized_dark");
   
   this.setMode = function(mode_string) {
     if (mode_string === this.mode_string) {
