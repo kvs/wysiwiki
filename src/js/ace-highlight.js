@@ -98,8 +98,10 @@ function Highlight(element) {
   this.update = function() {
     var lineHeight = this.textlayer.getLineHeight();
     var numRows = this.rowCount();
-    var height = (numRows-1) * lineHeight;
-    
+    if ( this.session.doc.getLine(numRows - 1) === "" ) {
+      numRows -= 1;
+    }
+    var height = numRows * lineHeight;
     this.textlayer.update({
       firstRow: 0,
       lastRow: this.session.getLength(),
