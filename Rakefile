@@ -38,7 +38,7 @@ namespace :juicer do
 
     # Source to minify
     minify = ["vendor/quickdiff/quickdiff.js",
-              "vendor/mdext/src/showdown.js",
+              "vendor/Markdown.js/lib/markdown.js",
               "vendor/store.js/json.js",
               "vendor/store.js/store.js"
              ] + SOURCES
