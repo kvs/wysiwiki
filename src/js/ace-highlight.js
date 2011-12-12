@@ -45,7 +45,7 @@ function Highlight(element) {
     width: this.width
   });
   
-  this.setMode($("code", this.element).attr("class"));
+  this.setMode($(this.element, "code").attr("class"));
   this.session.adjustWrapLimit(Math.floor(this.width / this.textlayer.getCharacterWidth()));
   
   this.update();
