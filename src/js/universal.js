@@ -68,14 +68,3 @@ $.fn.quickdiff("attributes", {
   "a" : ["href", "title"],
   "code" : ["class"]
 });
-
-var markdown = new Showdown.converter();
-
-$.extend(markdown.config, {
-  stripHTML: true,
-  tables: true,
-  math: true,
-  figures: true,
-  refprint: true,
-  github_flavouring: true
-});

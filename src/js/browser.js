@@ -1,5 +1,5 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
-/*global editor require markdown MathJax ace store MarkdownTools size_image size_images */
+/*global editor require MathJax ace store MarkdownTools size_image size_images */
 
 $(document).ready(function () {
   "use strict";
@@ -16,6 +16,8 @@ $(document).ready(function () {
   // Notification script
   var Notify = require("notepages/notify").Notify;
   var notify = new Notify($("#notify"));
+
+  var markdown = window.markdown;
   
   notify.onDisplay(function () {
     $(this).css({right:$("#toolpanel").width()/2 - 200});
@@ -44,7 +46,7 @@ $(document).ready(function () {
     }
 
     var startTime = (new Date()).getTime();
-    preproc = $("<div></div>").html(markdown.makeHtml(editor.getSession().getValue()));
+    preproc = $("<div></div>").html(markdown.toHTML(editor.getSession().getValue(), 'Instiki'));
     var patch = $("#output > div").quickdiff("diff", preproc, ["mathSpan", "mathSpanInline", "codePre"]);
     
     if (patch.type === "identical") {
