@@ -1,5 +1,4 @@
-(function ($) {
-
+require(['jquery'], function($) {
   var filters = {};
   var attributes = {};
 
@@ -10,7 +9,7 @@
       root = root.childNodes[path.shift()];
     }
     return root;
-  }
+  };
 
   // Return the shared elements of 2 arrays from the beginning.
   var arrayPrefix = function (a, b) {
@@ -25,13 +24,13 @@
       return i;
     }
     return true;
-  }
+  };
 
   var cons = function (arr, c) {
     var n = arr.slice(0);
     n.push(c);
     return n;
-  }
+  };
 
   var checkFilters = function (selectedFilters, a, b) {
     for (f = 0; f < selectedFilters.length; f++) {
@@ -44,7 +43,7 @@
       }
     }
     return undefined;
-  }
+  };
 
   var checkAttributes = function (a, b) {
     var attrs;
@@ -57,7 +56,7 @@
       }
     }
     return false;
-  }
+  };
 
   // Scan over two DOM trees a, b and return the first path at which they differ.
   var forwardScan = function (a, b, apath, selectedFilters) {
@@ -105,7 +104,7 @@
     } else {
       return false;
     }
-  }
+  };
 
   // Scan backwards over two DOM trees a, b and return the paths where they differ
   var reverseScan = function (a, b, apath, bpath, selectedFilters) {
@@ -154,7 +153,7 @@
     } else {
       return false;
     }
-  }
+  };
 
   // Return a slice of childNodes from a parent.
   var childNodesSlice = function (parentNode, start, end) {
@@ -169,7 +168,7 @@
       i += 1;
     }
     return arr;
-  }
+  };
 
   // Find the difference between two DOM trees, and the operation to change a to b
   var scanDiff = function (a, b, filters) {
@@ -212,7 +211,7 @@
       }
     }
     return {type: "replace", source: sourceSegment, replace: destSegment};
-  }
+  };
   
   // Use the scan result to patch one DOM tree into the other.
   // This is the only part of the code dependent upon jQuery (as it removes nodes,
@@ -236,14 +235,14 @@
       $(patch.source[patch.source.length - 1]).after(patch.replace);
       $(patch.source).remove();
     }
-  }
+  };
   
   var methods = {
     diff: function (targetDOM, filters) {
       var patch = scanDiff(this.get(0), targetDOM.get(0), filters);
       patch.patch = function () {
         executePatch(patch);
-      }
+      };
       return patch;
     },
     patch: function (targetDOM, filters) {
@@ -265,7 +264,7 @@
         attributes = newAttributes;
       }
     }
-  }
+  };
   
   $.fn.quickdiff = function( method ) {
     // Method calling logic
@@ -277,5 +276,4 @@
       $.error( 'Method ' +  method + ' does not exist on jQuery.quickdiff' );
     }
   };
-
-})(jQuery);
+});
