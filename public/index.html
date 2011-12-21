@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/stylesheets/browser.css" />
   <link rel="stylesheet" href="/stylesheets/print.css" media="print" />
   <link rel="shortcut icon" href="/favicon.ico" />
+  <script data-main="javascripts/main" src="javascripts/require.js"></script>
 </head>
 <body>
   <div id="notify" class="drop-shadow"><span class="message"></span></div>
@@ -32,9 +33,6 @@
     <div id="acetools"></div>
     <div id="ace"></div>
     <div id="settings">
-<!--
-      <select><optgroup label="Editor Mode"><option>Markdown</option></optgroup></select>
--->
       <select id="themeselect">
         <optgroup label="Editor Themes">
           <option value="ace/theme/clouds">Clouds</option>
@@ -89,14 +87,6 @@
         $("#toolpanel").show("slide", {direction: "up"});
       }
     );
-  </script>
-  <script type="text/javascript" src="/javascripts/LAB.min.js"></script>
-  <script type="text/javascript">
-    $LAB
-    .script("//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js")
-    .script("//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js").wait()
-    .script("/javascripts/browser-uncompressed.js")
-    .script("//d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js");
   </script>
 </body>
 </html>

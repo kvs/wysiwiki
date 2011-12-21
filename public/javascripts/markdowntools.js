@@ -1,9 +1,10 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true trailing:true */
-/*global require */
+/*global define */
 /*
  * Markdown editor toolbar functions
  */
-var Range = require("ace/range").Range;
+
+define(['ace/range'], function(Range) {
 
 function EditorTools (editor, panel, docroot) {
   "use strict";
@@ -22,16 +23,16 @@ EditorTools.prototype.utils = {
   replaceAndSelect: function(newtext) {
     this.session.replace(this.selection, newtext);
     this.editor.selection.setSelectionRange(
-      new Range(this.selection.start.row, this.selection.start.column,
+      new Range.Range(this.selection.start.row, this.selection.start.column,
                 this.selection.start.row, this.selection.start.column + newtext.length));
   },
   replaceAndSelectLine: function(newline) {
     this.session.replace(
-      new Range(this.selection.start.row, 0,
+      new Range.Range(this.selection.start.row, 0,
                 this.selection.start.row, this.currentLine().length),
       newline);
     this.editor.selection.setSelectionRange(
-      new Range(this.selection.start.row, 0,
+      new Range.Range(this.selection.start.row, 0,
                 this.selection.start.row, newline.length));
   },
   currentLine: function () {
@@ -39,7 +40,7 @@ EditorTools.prototype.utils = {
   },
   offsetCursor: function (offset) {
     this.editor.selection.setSelectionRange(
-      new Range(this.selection.start.row, this.selection.start.column+offset,
+      new Range.Range(this.selection.start.row, this.selection.start.column+offset,
                 this.selection.start.row, this.selection.start.column+offset));
   },
   joinReplaceAndSelect: function (arr, selectedIndex) {
@@ -48,7 +49,7 @@ EditorTools.prototype.utils = {
       if (i != selectedIndex) {
         sum_length += arr[i].length;
       } else {
-        to_select = new Range(this.selection.start.row, this.selection.start.column + sum_length,
+        to_select = new Range.Range(this.selection.start.row, this.selection.start.column + sum_length,
                               this.selection.start.row, this.selection.start.column + sum_length + arr[i].length);
       }
       joined += arr[i];
@@ -60,11 +61,11 @@ EditorTools.prototype.utils = {
     this.session.replace(this.selection, newtext);
     if (offset >= 0) {
       this.editor.selection.setSelectionRange(
-        new Range(this.selection.start.row, this.selection.start.column + offset,
+        new Range.Range(this.selection.start.row, this.selection.start.column + offset,
                   this.selection.start.row, this.selection.start.column + offset));
     } else {
       this.editor.selection.setSelectionRange(
-        new Range(this.selection.start.row, this.selection.start.column + newtext.length + offset,
+        new Range.Range(this.selection.start.row, this.selection.start.column + newtext.length + offset,
                   this.selection.start.row, this.selection.start.column + newtext.length + offset));
     }
   },
@@ -76,7 +77,7 @@ EditorTools.prototype.utils = {
     });
   },
   selectedLineRange: function () {
-    return new Range(this.selection.start.row, 0, this.selection.end.row, this.session.getLine(this.selection.end.row).length);
+    return new Range.Range(this.selection.start.row, 0, this.selection.end.row, this.session.getLine(this.selection.end.row).length);
   },
   selectRange: function (range) {
     this.editor.selection.setSelectionRange(range);
@@ -187,7 +188,7 @@ function MarkdownTools (editor, panel, docroot) {
   tools.addButton('edit-list_png',
     function (u) {
       u.forSelectedLines(function (row, line) {
-        var replaceRange = new Range(row, 0, row, line.length);
+        var replaceRange = new Range.Range(row, 0, row, line.length);
         u.session.replace(replaceRange, "*   " + line);
       });
       u.selectRange(u.selectedLineRange());
@@ -197,7 +198,7 @@ function MarkdownTools (editor, panel, docroot) {
     function (u) {
       var marker = 1;
       u.forSelectedLines(function (row, line) {
-        var replaceRange = new Range(row, 0, row, line.length);
+        var replaceRange = new Range.Range(row, 0, row, line.length);
         var markerText = marker + ".";
         u.session.replace(replaceRange, markerText + u.repeatString(" ", 4-markerText.length) + line);
         marker++;
@@ -272,7 +273,7 @@ function MarkdownTools (editor, panel, docroot) {
       if (/^\s*$/.test(line)) {
         newline = "> \n";
         u.session.replace(u.selectedLineRange(), newline);
-        u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
+        u.selectRange(new Range.Range(u.selection.start.row, 2, u.selection.start.row, 2));
       } else {
         if (match[1]) {
           newline = match[2];
@@ -299,10 +300,10 @@ function MarkdownTools (editor, panel, docroot) {
         
         u.forSelectedLines(function (i, row) {
           if (min_indent > 3) {
-            replaceRange = new Range(i, 0, i, min_indent);
+            replaceRange = new Range.Range(i, 0, i, min_indent);
             u.session.replace(replaceRange, "");
           } else {
-            replaceRange = new Range(i, 0, i, 0);
+            replaceRange = new Range.Range(i, 0, i, 0);
             u.session.replace(replaceRange, new Array(5 - min_indent).join(" "));
           }
         });
@@ -316,7 +317,7 @@ function MarkdownTools (editor, panel, docroot) {
           if (/^\s*$/.test(line)) {
             newtext = "    ";
             u.session.replace(u.selectedLineRange(), newtext);
-            u.selectRange(new Range(u.selection.start.row, 4, u.selection.start.row, 4));
+            u.selectRange(new Range.Range(u.selection.start.row, 4, u.selection.start.row, 4));
           } else {
             u.editor.insert("``");
             u.offsetCursor(1);
@@ -361,7 +362,7 @@ function MarkdownTools (editor, panel, docroot) {
       } else if (/^\s*$/.test(line)) {
         newline = "$$$$\n";
         u.session.replace(u.selectedLineRange(), newline);
-        u.selectRange(new Range(u.selection.start.row, 2, u.selection.start.row, 2));
+        u.selectRange(new Range.Range(u.selection.start.row, 2, u.selection.start.row, 2));
       } else if (u.selected) {
         match = /^[%]{2}(.*?)[%]{2}$/.exec(u.selected);
         if (match) {
@@ -387,4 +388,7 @@ function MarkdownTools (editor, panel, docroot) {
     }, true);
     
   return tools;
-}
+};
+
+return MarkdownTools;
+});

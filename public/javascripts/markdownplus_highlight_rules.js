@@ -1,7 +1,7 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
 /*global define */
 
-define('ace/mode/markdownplus_highlight_rules', function (require, exports, module) {
+define(function (require, exports, module) {
 "use strict";
 
 var oop = require("ace/lib/oop");

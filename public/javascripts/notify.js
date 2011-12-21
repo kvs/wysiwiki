@@ -1,7 +1,7 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true strict:true undef:true trailing:true */
 /*global define */
 
-define('notepages/notify', function(require, exports, module) {
+define('notify', function(require, exports, module) {
 "use strict";
 
 function Notify(element) {

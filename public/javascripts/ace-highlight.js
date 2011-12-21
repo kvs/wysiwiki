@@ -1,9 +1,9 @@
-/*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
+/*jshint browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
 /*global define */
 /*
  * Wrap an element with a text-only Ace editor, and set syntax highlighting mode.
  */
-define('ace/highlight', function (require, exports, module) {
+define(['require', 'jquery', 'ace/edit_session', 'ace/layer/text', 'ace/theme/solarized_dark'], function (require, $, EditSession, TextLayer, Theme) {
 "use strict";
 
 // Add a removal event
@@ -16,16 +16,13 @@ define('ace/highlight', function (require, exports, module) {
   };
 })();
 
-var EditSession = require("ace/edit_session").EditSession;
-var TextLayer = require("ace/layer/text").Text;
-
 function Highlight(element) {
   if (/(a)|(b)/.exec("b")[1] !== undefined) {
     return;
   }
   
   this.element = $(element);
-  this.session = new EditSession("");
+  this.session = new EditSession.EditSession("");
   this.session.setUseWorker(false);
   this.session.setValue(this.element.text());
   this.session.setUseWrapMode(true);
@@ -39,7 +36,7 @@ function Highlight(element) {
   this.element.append(this.highlightDiv);
   $("code", this.element).hide();
   
-  this.textlayer = new TextLayer(this.highlightDiv.get(0));
+  this.textlayer = new TextLayer.Text(this.highlightDiv.get(0));
   this.textlayer.setSession(this.session);
   $(this.textlayer.element).addClass("ace_scroller").css({
     width: this.width
@@ -59,7 +56,7 @@ function Highlight(element) {
 }
 
 (function () {
-  this.highlightTheme = require("ace/theme/solarized_dark");
+  this.highlightTheme = Theme;
   
   this.setMode = function(mode_string) {
     if (mode_string === this.mode_string) {
@@ -68,14 +65,15 @@ function Highlight(element) {
     
     this.mode_string = mode_string;
 
-    var Mode = require('ace/mode/' + mode_string);
-    if (Mode === null) {
-      Mode = require("ace/mode/text");
-    }
-
-    this.mode = new Mode.Mode();
-    this.session.setMode(this.mode);
-    this.update();
+    require(['ace/mode/' + mode_string], function(Mode) {
+      if (Mode === null) {
+        this.setMode('text');
+      } else {
+        this.mode = new Mode.Mode();
+        this.session.setMode(this.mode);
+        this.update();
+      }
+    });
   };
   
   this.setValue = function(newcontent) {
@@ -115,5 +113,5 @@ function Highlight(element) {
   
 }).call(Highlight.prototype);
 
-exports.Highlight = Highlight;
+return Highlight;
 });

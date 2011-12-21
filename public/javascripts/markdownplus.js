@@ -1,13 +1,13 @@
 /*jshint jquery:true browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
 /*global define */
 
-define('ace/mode/markdownplus', function (require, exports, module) {
+define(function (require, exports, module) {
 "use strict";
 
 var oop = require("ace/lib/oop");
 var TextMode = require("ace/mode/text").Mode;
 var Tokenizer = require("ace/tokenizer").Tokenizer;
-var MarkdownPlusHighlightRules = require("ace/mode/markdownplus_highlight_rules").MarkdownPlusHighlightRules;
+var MarkdownPlusHighlightRules = require("markdownplus_highlight_rules").MarkdownPlusHighlightRules;
 var Range = require("ace/range").Range;
 
 var Mode = function() {
