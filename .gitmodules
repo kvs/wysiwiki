@@ -1,6 +1,3 @@
-[submodule "vendor/mdext"]
-	path = vendor/mdext
-	url = git://github.com/fivesixty/mdext.git
 [submodule "vendor/ace"]
 	path = vendor/ace
 	url = git://github.com/ajaxorg/ace.git
@@ -10,6 +7,3 @@
 [submodule "vendor/quickdiff"]
 	path = vendor/quickdiff
 	url = git://github.com/fivesixty/quickdiff.git
-[submodule "vendor/LABjs"]
-	path = vendor/LABjs
-	url = git://github.com/getify/LABjs.git
