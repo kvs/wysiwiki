@@ -9,6 +9,10 @@ get '/documents/*' do
   halt 404
 end
 
+get '/javascripts/*' do
+  halt 404
+end
+
 # Default GET request for new pages.
 get '*' do
   content_type :html
