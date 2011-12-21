@@ -13,6 +13,3 @@
 [submodule "vendor/LABjs"]
 	path = vendor/LABjs
 	url = git://github.com/getify/LABjs.git
-[submodule "vendor/import"]
-	path = vendor/import
-	url = https://github.com/devongovett/import.git
