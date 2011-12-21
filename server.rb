@@ -4,13 +4,9 @@ require 'json'
 
 set :public_folder, File.dirname(__FILE__) + '/public'
 
-# Never return any documents - handled by webserver returning static files
-get '/documents/*' do
-  halt 404
-end
-
-get '/javascripts/*' do
-  halt 404
+# Never return any documents, javascripts or stylesheets - handled by webserver returning static files
+get %r{/(documents|javascripts|stylesheets)/.+} do
+  halt 404, "404"
 end
 
 # Default GET request for new pages.
