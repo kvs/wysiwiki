@@ -14,7 +14,7 @@ define([
   'markdownplus',
   'store/store',
   'markdowntools',
-  'libs/quickdiff/quickdiff',
+  'vendor/quickdiff/quickdiff',
   'mathjax',
   'libs/jquery-ui/jquery-ui-1.8.16.custom',
   'libs/jquery-event-drag/jquery.event.drag-2.0'

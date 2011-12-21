@@ -4,6 +4,3 @@
 [submodule "vendor/store.js"]
 	path = vendor/store.js
 	url = git://github.com/marcuswestin/store.js.git
-[submodule "vendor/quickdiff"]
-	path = vendor/quickdiff
-	url = git://github.com/fivesixty/quickdiff.git
