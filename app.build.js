@@ -15,6 +15,6 @@
 	},
 
 	packagePaths: {
-		"vendor": [ 'ace', 'store', 'markdown', 'quickdiff' ]
+		"vendor": [ 'ace', 'store', 'quickdiff' ]
 	}
 })

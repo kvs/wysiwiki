@@ -7,7 +7,7 @@ require(['ace-requirejs-text']);
 
 define([
   'jquery',
-  'markdown/markdown',
+  'libs/markdown/markdown',
   'ace/ace',
   'ace-highlight',
   'notify',
