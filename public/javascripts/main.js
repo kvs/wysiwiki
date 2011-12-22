@@ -4,7 +4,7 @@ require.config({
 		mathjax: '//d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax'
 	},
 	packagePaths: {
-		"vendor": [ 'ace', 'store' ]
+		"vendor": [ 'ace', 'store', 'markdown', 'quickdiff' ]
 	},
 	priority: [ 'jquery' ]
 });

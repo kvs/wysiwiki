@@ -7,14 +7,14 @@ require(['ace-requirejs-text']);
 
 define([
   'jquery',
-  'libs/markdown/markdown',
+  'markdown/markdown',
   'ace/ace',
   'ace-highlight',
   'notify',
   'markdownplus',
   'store/store',
   'markdowntools',
-  'vendor/quickdiff/quickdiff',
+  'quickdiff/quickdiff',
   'mathjax',
   'libs/jquery-ui/jquery-ui-1.8.16.custom',
   'libs/jquery-event-drag/jquery.event.drag-2.0',

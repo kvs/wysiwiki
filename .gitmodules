@@ -1,3 +1,6 @@
 [submodule "vendor/ace"]
 	path = vendor/ace
 	url = git://github.com/ajaxorg/ace.git
+[submodule "vendor/markdown"]
+	path = vendor/markdown
+	url = git://github.com/kvs/markdown-js.git
