@@ -1,5 +1,5 @@
 /*jshint browser:true curly:true latedef:true noarg:true noempty:true undef:true strict:true trailing:true */
-/*global define editor require MathJax store MarkdownTools size_image size_images */
+/*global define require editor MathJax */
 
 // Load custom 'ace/requirejs/text' module, which is just the RequireJS 'text'-plugin - the
 // only supplied with Ace isn't compatible with r.js
@@ -17,7 +17,8 @@ define([
   'vendor/quickdiff/quickdiff',
   'mathjax',
   'libs/jquery-ui/jquery-ui-1.8.16.custom',
-  'libs/jquery-event-drag/jquery.event.drag-2.0'
+  'libs/jquery-event-drag/jquery.event.drag-2.0',
+  'libs/markdown/instiki'
 ], function($, Markdown, ace, Highlight, Notify, MarkdownPlusMode, store, MarkdownTools) {
   'use strict';
 
