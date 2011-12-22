@@ -1,6 +1,3 @@
 [submodule "vendor/ace"]
 	path = vendor/ace
 	url = git://github.com/ajaxorg/ace.git
-[submodule "vendor/store.js"]
-	path = vendor/store.js
-	url = git://github.com/marcuswestin/store.js.git
